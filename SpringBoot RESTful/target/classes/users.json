@@ -1,0 +1,22 @@
+{
+"users":[{
+    "username": "seller1",
+    "password": "12345",
+    "radio": "seller"
+  },
+  {
+  "username": "seller2",
+  "password": "54321",
+  "radio": "seller"
+  },
+  {
+  "username": "buyer1",
+  "password": "11111",
+  "radio": "buyer"
+  },
+  {
+  "username": "buyer2",
+  "password": "22222",
+  "radio": "buyer"
+  }]
+}

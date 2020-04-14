@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>say1</title>
+    <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.js"></script>
+</head>
+<body>
+    <div>
+        <div><input type="text" value="" placeholder="id" name="id" id="id"/></div>
+        <div><input type="text" value="" placeholder="qid" name="qid" id="qid"/></div>
+        <div><button type="submit" id="submit">submit</button></div>
+    </div>
+<p id="result"></p>
+<script>
+    $(document).ready(function () {
+        $('#submit').click(function () {
+            // $.get("http://localhost:8080/hallo/"+$('#id').val()+"/?qid="+$('#qid').val(),function (data,status) {
+            //     if (status==='success'){
+            //         $('#result').html('{ id:'+data.id+', qid:'+data.qid+'}');
+            //     }
+            // })
+            $.get('http://localhost:8080/service/reader?wsdl')
+        });
+    })
+</script> 
+</body>
+</html>
+

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="keywords" content="Hallo">
+    <meta name="description" content="访问Hallo">
+    <title>Hallo访问</title>
+    <script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js">
+    </script>
+    <script>
+        $(document).ready(function(){
+            $("#submit").click(function(){
+                $("#div1").load("http://localhost:8080/hallo/"+$("#Id").val()+"?"+"qid="+$("#Qid").val(),function(responseTxt,statusTxt,xhr){
+                    // $("#div1").load("https://localhost:8080/hallo/",function(data,status){
+                    alert("数据: " + responseTxt + "\n状态: " +statusTxt);
+                    // alert($("#Id").val());
+                });
+            });
+        });
+    </script>
+</head>
+<body>
+<div>
+        <div>请输入你的id与qid</div>
+        <div>
+            <p>输入id</p>
+            <input type="text" value="1" id="Id">
+        </div>
+        <div>
+            <p>输入qid</p>
+            <input type="text" value="1" id="Qid">
+        </div>
+        <div>
+            <input type="reset"/>
+            <button id="submit">提交</button>
+        </div>
+    <div id="div1"></div>
+</div>
+</body>
+</html>
