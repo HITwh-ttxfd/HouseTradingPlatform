@@ -1,5 +1,6 @@
-package entity;
+package connector;
 
+import entity.*;
 import org.springframework.stereotype.Component;
 import connector.User;
 import java.sql.*;
