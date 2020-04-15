@@ -11,9 +11,9 @@ import java.sql.ResultSet;
 public class JdbcUserDao implements UserDao {
 
     @Override
-    public int add(User form) {
+    public void add(User form) {
         String driverClassName = "com.mysql.jdbc.Driver";	//启动驱动
-        String url = "jdbc:mysql://localhost:3306/";	//设置连接路径
+        String url = "jdbc:mysql://39.98.48.34:3306";	//设置连接路径
         String username = "root";	//数据库用户名
         String password = "mysql5117A";	//数据库连接密码
         Connection con = null;		//连接
@@ -22,23 +22,14 @@ public class JdbcUserDao implements UserDao {
         try {
             Class.forName(driverClassName); //执行驱动
             con = DriverManager.getConnection(url, username, password); //获取连接
-            if (find("phoneNumber",form.getPhone())!=null&&find("phoneNumber",form.getId())!=null){
-                return 12;
-            }
-            if (find("phoneNumber",form.getPhone())!=null){
-                return 1;
-            }
-            if (find("phoneNumber",form.getId())!=null){
-                return 2;
-            }
-            String sql = "INSERT INTO noob.users VALUES(?,?,?,?,?,?)"; //设置的预编译语句格式
+            String sql = "INSERT INTO users VALUES(?,?,?,?,?,?)"; //设置的预编译语句格式
             pstmt = con.prepareStatement(sql);
             pstmt.setString(1, form.getUsername());
             pstmt.setString(2, form.getPassword());
             pstmt.setString(3, form.getRealname());
-            pstmt.setString(4, form.getPhone());
-            pstmt.setString(5, form.getId());
-            pstmt.setBoolean(6, form.getType().equals("buyer"));
+            pstmt.setString(4, form.getId());
+            pstmt.setString(5, form.getPhone());
+            pstmt.setString(6, form.getType());
             pstmt.executeUpdate();
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -51,13 +42,12 @@ public class JdbcUserDao implements UserDao {
                 e.printStackTrace();
             }
         }
-        return 0;
     }
 
     @Override
     public User find(String type,String key) {
         String driverClassName = "com.mysql.jdbc.Driver";
-        String url = "jdbc:mysql://localhost:3306";
+        String url = "jdbc:mysql://39.98.48.34:3306";
         String mysqlusername = "root";
         String password = "mysql5117A";
         Connection con = null;
@@ -69,7 +59,7 @@ public class JdbcUserDao implements UserDao {
             con = DriverManager.getConnection(url, mysqlusername, password);
 
 
-            String sql = "SELECT * FROM noob.users WHERE "+type+"=?";
+            String sql = "SELECT * FROM users WHERE "+type+"=?";
             pstmt = con.prepareStatement(sql);
             pstmt.setNString(1, key);
 

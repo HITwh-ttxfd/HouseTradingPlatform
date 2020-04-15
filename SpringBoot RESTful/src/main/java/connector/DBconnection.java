@@ -9,7 +9,7 @@ import java.util.ArrayList;
 @Component
 public class DBconnection {
     String driver = "com.mysql.cj.jdbc.Driver";
-    String url = "jdbc:mysql://localhost:3306/requestsbase";
+    String url = "jdbc:mysql://39.98.48.34/htpbase";
     String user = "root";
     String password = "2296026";
     Connection connection = null;

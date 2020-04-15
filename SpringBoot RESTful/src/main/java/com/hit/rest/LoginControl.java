@@ -33,22 +33,23 @@ public class LoginControl<Allow> {
         UserDao dao = new JdbcUserDao();
         User searchByPhone=dao.find("phoneNumber", phone);
         User searchById=dao.find("id", id);
-        if ((searchByPhone == null || !searchByPhone.getType().equals(type)) && (searchById == null || !searchById.getType().equals(type))) {
+        if (searchByPhone == null && searchById == null) {
             return new res(null, null, "available");
-        } else if (!(searchByPhone == null || !searchByPhone.getType().equals(type))) {
+        } else if (! (searchByPhone == null) ) {
             return new res(null, null, "phoneNumber engaged");
         } else {
             return new res(null, null, "id engaged");
         }
     }
     @RequestMapping(value = "/register",method = RequestMethod.GET)
-    public void register(@RequestParam(value = "username",required = true)String username,
+    public int register(@RequestParam(value = "username",required = true)String username,
                         @RequestParam(value = "password",required = true)String password,
                         @RequestParam(value = "realName",required = true)String realName,
                         @RequestParam(value = "phone",required = true)String phone,
                         @RequestParam(value = "id",required = true)String id,
                          @RequestParam(value = "type",required = true)String type) {
         new JdbcUserDao().add(new User(username, password, realName, id, phone,type));
+        return 0;
     }
 
 }

@@ -4,7 +4,7 @@
       <div class="ms-title">二手房交易系统</div>
       <el-form :model="param" :rules="rules" ref="login" label-width="0px" class="ms-content">
         <el-form-item prop="username">
-          <el-input v-model="param.username" placeholder="请输入用户名" @keyup.enter.native="submitForm()">
+          <el-input v-model="param.username" placeholder="请输入身份证号或手机号" @keyup.enter.native="submitForm()">
             <el-button slot="prepend" icon="el-icon-user"/>
           </el-input>
         </el-form-item>
@@ -27,7 +27,7 @@
         <el-dialog title="注册信息" :visible.sync="dialogFormVisible">
           <el-form :model="registration">
             <el-form-item label="用户名" :label-width="formLabelWidth">
-              <el-tooltip class="item" effect="dark" content="4到16位字母,数字,下划线或减号" placement="top">
+              <el-tooltip class="item" effect="dark" content="3到16位字母,数字,汉字" placement="top">
               <el-input v-model="registration.username" placeholder="请输入用户名"></el-input>
               </el-tooltip>
             </el-form-item>
@@ -47,8 +47,8 @@
             </el-form-item>
             <el-form-item label="我是:" :label-width="formLabelWidth">
               <div class="radio">
-                <el-radio v-model="registration.radio" label="0">卖家</el-radio>
-                <el-radio v-model="registration.radio" label="1">买家</el-radio>
+                <el-radio v-model="registration.radio" label="seller">卖家</el-radio>
+                <el-radio v-model="registration.radio" label="buyer">买家</el-radio>
               </div>
             </el-form-item>
           </el-form>
@@ -100,13 +100,13 @@
               url: "http://localhost:8080/login/"+params.loginName+"?password="+params.password,
               method: "GET"
             }).then(response=>{
-                if (response.data.message==="登陆成功") {
-                  this.$message.success(response.data.message);
+                if (response.data.message==="success") {
+                  this.$message.success("登陆成功");
                   window.localStorage["username"]= response.data.username;
                   window.localStorage["radio"]= response.data.radio;
                   this.$router.push(window.localStorage["radio"]);
                 } else {
-                  this.$message.error(response.data.message);
+                  this.$message.error("用户名或密码错误");
                 }
               })
               .catch(error=>{
@@ -123,7 +123,7 @@
       },
       register(){
         let regs=this.registration;
-        let regUsrName=/^[-_a-zA-Z0-9]{4,16}$/;
+        let regUsrName=/^[\u4e00-\u9fff\w]{3,16}$/;
         let regPassword=/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[^]{8,16}$/;
         let regName=/^[\u4E00-\u9FA5]{2,4}$/;
         let regPhoneNUmber=/^1([38][0-9]|4[579]|5[0-3,5-9]|6[6]|7[0135678]|9[89])\d{8}$/;
@@ -164,7 +164,7 @@
               type: regs.radio
             }
           }).then(res => {
-            if (res.data.message === "success") {
+            if (res.data.message === "available") {
               this.$axios({
                 url: 'https://zidv2.market.alicloudapi.com/idcard/VerifyIdcardv2',
                 headers: {
@@ -179,9 +179,9 @@
                 let res = response.data;
                 if (res['error_code'] === 0) {
                   console.log(res);
+                  this.addUser();
                   this.closeForm();
                   this.$message.success("注册成功");
-                  this.addUser();
                 } else if (res['error_code'] === 206501) {
                   this.$message.error("姓名或身份证号错误");
                 } else {
