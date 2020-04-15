@@ -18,11 +18,7 @@ public class LoginControl<Allow> {
             user=dao.find("id",id);
         if (user!=null&& user.getPassword().equals(password)){
             String radio;
-            if (user.getBuyer())
-                radio="buyer";
-            else
-                radio="seller";
-            return new res(user.getUsername(),radio,"登陆成功");
+            return new res(user.getUsername(),user.getType(),"登陆成功");
         } else {
           return new res(null,null,"用户名或密码错误");
         }
