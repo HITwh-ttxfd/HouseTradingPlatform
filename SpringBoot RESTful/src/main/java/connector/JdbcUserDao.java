@@ -22,10 +22,10 @@ public class JdbcUserDao implements UserDao {
         try {
             Class.forName(driverClassName); //执行驱动
             con = DriverManager.getConnection(url, username, password); //获取连接
-            if (find("phoneNumber",form.getPhoneNumber())!=null&&find("phoneNumber",form.getId())!=null){
+            if (find("phoneNumber",form.getPhone())!=null&&find("phoneNumber",form.getId())!=null){
                 return 12;
             }
-            if (find("phoneNumber",form.getPhoneNumber())!=null){
+            if (find("phoneNumber",form.getPhone())!=null){
                 return 1;
             }
             if (find("phoneNumber",form.getId())!=null){
@@ -35,10 +35,10 @@ public class JdbcUserDao implements UserDao {
             pstmt = con.prepareStatement(sql);
             pstmt.setString(1, form.getUsername());
             pstmt.setString(2, form.getPassword());
-            pstmt.setString(3, form.getName());
-            pstmt.setString(4, form.getPhoneNumber());
+            pstmt.setString(3, form.getRealname());
+            pstmt.setString(4, form.getPhone());
             pstmt.setString(5, form.getId());
-            pstmt.setBoolean(6, form.getBuyer());
+            pstmt.setBoolean(6, form.getType().equals("buyer"));
             pstmt.executeUpdate();
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -78,7 +78,7 @@ public class JdbcUserDao implements UserDao {
                 return null;
             }
             if(rs.next()) {
-                return new User(rs.getString("username"),rs.getString("password"), rs.getString("name"), rs.getString("phoneNumber"), rs.getString("id"), rs.getBoolean("isBuyer"));
+                return new User(rs.getString("username"),rs.getString("password"), rs.getString("name"), rs.getString("phoneNumber"), rs.getString("id"), rs.getBoolean("isBuyer")?"buyer":"seller");
             } else {
                 return null;
             }
