@@ -1,6 +1,6 @@
 package entity;
 
-public class Seller extends connector.User {
+public class Seller extends User {
     public Seller(){}
 
     public Seller(String username,String password,String realname,String id,String phone){

@@ -2,7 +2,7 @@ package connector;
 
 import entity.*;
 import org.springframework.stereotype.Component;
-import connector.User;
+
 import java.sql.*;
 import java.util.ArrayList;
 
@@ -202,7 +202,7 @@ public class DBconnection {
     }
     //下传评价至用户
     public ArrayList<Comment> selectComments(Buyer buyer){
-        String id = buyer.getId();
+        String id = buyer.getPhone();
         String sql = "select * from comments where authorID='"+id+"'";
         ArrayList<Comment> comments = new ArrayList<Comment>();
         try {
@@ -265,8 +265,6 @@ public class DBconnection {
         String id = user.getPhone();
         String sql = "select * from messages where senderID='"+id+"' or receiverID='"+id+"'";
         ArrayList<Message> messages = new ArrayList();
-        //Message message;
-        //ArrayList<Message> messages = new ArrayList<Message>();
         try {
             Statement statement = this.connection.createStatement();
             ResultSet resultSet = statement.executeQuery(sql);
