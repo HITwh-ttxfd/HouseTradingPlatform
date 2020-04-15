@@ -13,9 +13,10 @@ public class JdbcUserDao implements UserDao {
     @Override
     public void add(User form) {
         String driverClassName = "com.mysql.jdbc.Driver";	//启动驱动
-        String url = "jdbc:mysql://39.98.48.34:3306";	//设置连接路径
+        String url = "jdbc:mysql://39.98.48.34:3306/htpbase?serverTimezone=UTC";	//设置连接路径
         String username = "root";	//数据库用户名
-        String password = "mysql5117A";	//数据库连接密码
+        String password = "2296026";
+        //String password = "mysql5117A";	//数据库连接密码
         Connection con = null;		//连接
         PreparedStatement pstmt = null;	//使用预编译语句
         ResultSet rs = null;	//获取的结果集
