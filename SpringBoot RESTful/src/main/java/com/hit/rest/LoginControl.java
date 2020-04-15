@@ -18,15 +18,37 @@ public class LoginControl<Allow> {
             user=dao.find("id",id);
         if (user!=null&& user.getPassword().equals(password)){
             String radio;
-            return new res(user.getUsername(),user.getType(),"登陆成功");
+            return new res(user.getUsername(),user.getType(),"success");
         } else {
-          return new res(null,null,"用户名或密码错误");
+          return new res(null,null,"error");
         }
     }
-    @RequestMapping(value = "/register",method = RequestMethod.POST)
-    public res register(@RequestParam(value = "form",required = true)JSON form){
-        return null;
+    @RequestMapping(value = "/verify",method = RequestMethod.GET)
+    public res verify(@RequestParam(value = "username",required = true)String username,
+                        @RequestParam(value = "password",required = true)String password,
+                        @RequestParam(value = "realName",required = true)String realName,
+                        @RequestParam(value = "phone",required = true)String phone,
+                        @RequestParam(value = "id",required = true)String id,
+                      @RequestParam(value = "type",required = true)String type) {
+        UserDao dao = new JdbcUserDao();
+        User searchByPhone=dao.find("phoneNumber", phone);
+        User searchById=dao.find("id", id);
+        if ((searchByPhone == null || !searchByPhone.getType().equals(type)) && (searchById == null || !searchById.getType().equals(type))) {
+            return new res(null, null, "available");
+        } else if (!(searchByPhone == null || !searchByPhone.getType().equals(type))) {
+            return new res(null, null, "phoneNumber engaged");
+        } else {
+            return new res(null, null, "id engaged");
+        }
     }
-
+    @RequestMapping(value = "/register",method = RequestMethod.GET)
+    public void register(@RequestParam(value = "username",required = true)String username,
+                        @RequestParam(value = "password",required = true)String password,
+                        @RequestParam(value = "realName",required = true)String realName,
+                        @RequestParam(value = "phone",required = true)String phone,
+                        @RequestParam(value = "id",required = true)String id,
+                         @RequestParam(value = "type",required = true)String type) {
+        new JdbcUserDao().add(new User(username, password, realName, id, phone,type));
+    }
 
 }

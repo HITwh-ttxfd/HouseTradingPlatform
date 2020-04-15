@@ -1,5 +1,7 @@
 package entity;
 
+import connector.UserDao;
+
 import java.util.Date;
 
 public class User {

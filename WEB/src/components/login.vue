@@ -122,8 +122,6 @@
         });
       },
       register(){
-        this.addUser();
-        return;
         let regs=this.registration;
         let regUsrName=/^[-_a-zA-Z0-9]{4,16}$/;
         let regPassword=/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[^]{8,16}$/;
@@ -155,32 +153,51 @@
         }
         else {
           this.$axios({
-            url: 'https://zidv2.market.alicloudapi.com/idcard/VerifyIdcardv2',
-            headers:{
-              Authorization:'APPCODE c564c14eb27642c4858d05f0290d2d06'
-            },
-            method:'GET',
+            url: "http://localhost:8080/verify",
+            method: 'GET',
             params: {
-              cardNo: regs.id,
-              realName: regs.name
+              username: regs.username,
+              password: regs.password,
+              realName: regs.name,
+              id: regs.id,
+              phone: regs.phoneNumber,
+              type: regs.radio
             }
-          }).then(response=>{
-            let res=response.data;
-            if (res['error_code']===0){
-              console.log(res);
-              this.closeForm();
-              this.$message.success("注册成功");
-              this.addUser();
+          }).then(res => {
+            if (res.data.message === "success") {
+              this.$axios({
+                url: 'https://zidv2.market.alicloudapi.com/idcard/VerifyIdcardv2',
+                headers: {
+                  Authorization: 'APPCODE c564c14eb27642c4858d05f0290d2d06'
+                },
+                method: 'GET',
+                params: {
+                  cardNo: regs.id,
+                  realName: regs.name
+                }
+              }).then(response => {
+                let res = response.data;
+                if (res['error_code'] === 0) {
+                  console.log(res);
+                  this.closeForm();
+                  this.$message.success("注册成功");
+                  this.addUser();
+                } else if (res['error_code'] === 206501) {
+                  this.$message.error("姓名或身份证号错误");
+                } else {
+                  console.log(res);
+                }
+              }).catch(e => {
+                this.$message.error("服务器开小差了");
+              })
+            } else if (res.data.message === "phoneNumber engaged") {
+              this.$message.error("电话号码已被占用");
+            } else {
+              this.$message.error("身份证号已被占用");
             }
-            else if(res['error_code']===206501){
-              this.$message.error("找不到这个人哦");
-            }
-            else {
-              console.log(res);
-            }
-          }).catch(e=>{
+          }).catch(e => {
             this.$message.error("服务器开小差了");
-          })
+          });
         }
       },
       closeForm(){
@@ -196,9 +213,14 @@
       addUser(){
         this.$axios({
           url:'http://localhost:8080/register/',
-          method: 'POST',
-          data:{
-            form: this.registration
+          method: 'GET',
+          params:{
+            username: this.registration.username,
+            password: this.registration.password,
+            realName: this.registration.name,
+            id: this.registration.id,
+            phone: this.registration.phoneNumber,
+            type: this.registration.radio
           }
         }).then(res=>{
           console.log(res.data);
