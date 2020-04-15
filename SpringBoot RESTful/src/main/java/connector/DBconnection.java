@@ -7,12 +7,7 @@ import java.sql.*;
 import java.util.ArrayList;
 
 @Component
-public class DBconnection {
-    String driver = "com.mysql.cj.jdbc.Driver";
-    String url = "jdbc:mysql://39.98.48.34:3306/htpbase?serverTimezone=UTC";
-    String user = "root";
-    String password = "2296026";
-    Connection connection = null;
+public class DBconnection extends DBConnector {
 
     //上传请求
     public void addRequests(Request request){
@@ -284,26 +279,10 @@ public class DBconnection {
         }
         return messages;
     }
-
+    
     //加载驱动程序
     public DBconnection(){
-        try {
-            Class.forName(driver);
-            connection=(Connection) DriverManager.getConnection(url,user,password);
-            if(!connection.isClosed()){
-                System.out.println("Successfully connected.");
-            }
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-    }
-    //关闭数据库
-    public void close(){
-        try {
-            this.connection.close();
-        }catch (Exception e){
-            e.printStackTrace();
-        }
+        super();
     }
 
 }
