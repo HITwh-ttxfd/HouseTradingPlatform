@@ -13,7 +13,7 @@ public class LoginControl<Allow> {
     @RequestMapping(value = "/login/{id}",method = RequestMethod.GET)
     public res verify(@RequestParam(value = "password",required = true)String password, @PathVariable("id")String id){
         UserDao dao=new JdbcUserDao();
-        User user=dao.find("phoneNumber",id);
+        User user=dao.find("phone",id);
         if (user==null)
             user=dao.find("id",id);
         if (user!=null&& user.getPassword().equals(password)){
@@ -31,7 +31,7 @@ public class LoginControl<Allow> {
                         @RequestParam(value = "id",required = true)String id,
                       @RequestParam(value = "type",required = true)String type) {
         UserDao dao = new JdbcUserDao();
-        User searchByPhone=dao.find("phoneNumber", phone);
+        User searchByPhone=dao.find("phone", phone);
         User searchById=dao.find("id", id);
         if (searchByPhone == null && searchById == null) {
             return new res(null, null, "available");

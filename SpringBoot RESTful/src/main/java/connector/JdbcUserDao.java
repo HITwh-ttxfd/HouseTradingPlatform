@@ -48,9 +48,9 @@ public class JdbcUserDao implements UserDao {
     @Override
     public User find(String type,String key) {
         String driverClassName = "com.mysql.jdbc.Driver";
-        String url = "jdbc:mysql://39.98.48.34:3306";
-        String mysqlusername = "root";
-        String password = "mysql5117A";
+        String url = "jdbc:mysql://39.98.48.34:3306/htpbase?serverTimezone=UTC";	//设置连接路径
+        String mysqlusername = "root";	//数据库用户名
+        String password = "2296026";
         Connection con = null;
         PreparedStatement pstmt = null;
         ResultSet rs = null;
@@ -69,7 +69,9 @@ public class JdbcUserDao implements UserDao {
                 return null;
             }
             if(rs.next()) {
-                return new User(rs.getString("username"),rs.getString("password"), rs.getString("name"), rs.getString("phoneNumber"), rs.getString("id"), rs.getBoolean("isBuyer")?"buyer":"seller");
+                return new User(rs.getString("username"),rs.getString("password"),
+                        rs.getString("realname"), rs.getString("phone"),
+                        rs.getString("id"), rs.getString("type"));
             } else {
                 return null;
             }
