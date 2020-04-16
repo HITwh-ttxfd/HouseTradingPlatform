@@ -14,10 +14,10 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
       '/api':{
-        target: '',
+        target: 'http://localhost:8090/Apache_CXF_war_exploded/',
         changeOrigin: true,
         pathRewrite: {
-          '/api':'http://localhost:8090/Apache_CXF_war_exploded/'
+          '/api':''
         }
       }
     },
