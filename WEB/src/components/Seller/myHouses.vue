@@ -38,7 +38,7 @@
       //   console.log(e);
       // })
       let xmlhttp = new XMLHttpRequest();
-      let URL = "api/Apache_CXF_war_exploded/service/readerService2?wsdl";
+      let URL = "api/service/readerService2?wsdl";
       xmlhttp.open("POST", URL, false);
       xmlhttp.setRequestHeader("Content-Type", "text/xml; charset=utf-8"); //SOAP 1.1为text/xml ； 1.2为 application/soap+xml
       xmlhttp.send(data);

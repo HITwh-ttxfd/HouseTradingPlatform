@@ -49,7 +49,7 @@ public class HouseDBconnection {
     }
 
     public List<House> getHouse() {
-        //
         return null;
+        //
     }
 }

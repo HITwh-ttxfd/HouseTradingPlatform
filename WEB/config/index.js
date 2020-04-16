@@ -17,7 +17,7 @@ module.exports = {
         target: '',
         changeOrigin: true,
         pathRewrite: {
-          '/api':''
+          '/api':'http://localhost:8090/Apache_CXF_war_exploded/'
         }
       }
     },

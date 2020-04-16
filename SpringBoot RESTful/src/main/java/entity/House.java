@@ -17,6 +17,10 @@ public class House {
         this.locationY = locationY;
     }
 
+    public House() {
+
+    }
+
     public String getSellerID() {
         return sellerID;
     }
