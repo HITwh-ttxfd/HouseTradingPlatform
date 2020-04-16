@@ -1,6 +1,7 @@
 package connector;
 
 import entity.House;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -108,5 +109,17 @@ public class HouseDBconnection {
             e.printStackTrace();
         }
         return houses;
+    }
+    //修改房源价格
+    public void changeHousePrice(String houseID,double price){
+        String sql="UPDATE house SET price = "+price+"WHERE houseID = "+houseID;
+        try {
+            PreparedStatement preparedStatement = (PreparedStatement)this.connection.prepareStatement(sql);
+            preparedStatement.executeUpdate();
+            System.out.println("change successfully.");
+            preparedStatement.close();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 }
