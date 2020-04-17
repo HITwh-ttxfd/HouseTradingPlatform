@@ -18,20 +18,26 @@
       <el-aside width="200px">
         <el-menu
           default-active="$route.path"
-          background-color="#545c64"
-          text-color="#fff"
-          active-text-color="#ffd04b"
+          background-color="#324157"
+          text-color="#bfcbd9"
+          active-text-color="#20a0ff"
           router
           unique-opened>
           <el-menu-item index="myHouses">
+            <i class="el-icon-s-home"></i>
             <span slot="title">我的房源</span>
           </el-menu-item>
           <el-submenu index="info">
             <template slot="title">
+              <i class="el-icon-s-unfold"></i>
               <span>消息中心</span>
             </template>
-            <el-menu-item index="requests">看房请求</el-menu-item>
-            <el-menu-item index="conversations">会话</el-menu-item>
+            <el-menu-item index="requests">
+              <span slot="title">看房请求</span>
+            </el-menu-item>
+            <el-menu-item index="conversations">
+              <span slot="title">会话</span>
+            </el-menu-item>
           </el-submenu>
         </el-menu>
       </el-aside>
@@ -50,7 +56,7 @@
 
 <style scoped>
   .el-header{
-    background-color: #414850;
+    background-color: #242f42;
     color: #E9EEF3;
     text-align: left;
     line-height: 60px;
@@ -59,13 +65,12 @@
     float: right;
   }
   .el-main {
-    /*background-color: #E9EEF3;*/
-    color: #333;
+    background-color: #E9EEF3;
     text-align: center;
-    line-height: 160px;
+    line-height: 20px;
   }
   .el-aside{
-    background: #545c64;
+    background: #324157;
     border-right: none;
   }
   .el-menu{

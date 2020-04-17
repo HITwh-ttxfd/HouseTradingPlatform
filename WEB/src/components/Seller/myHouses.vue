@@ -1,54 +1,89 @@
 <template>
-  <p>
-    {{context}}
-  </p>
+  <el-table stripe :data="conversations" >
+    <el-table-column
+            prop="location"
+            label="位置"
+            align="center">
+    </el-table-column>
+    <el-table-column
+            prop="size"
+            label="面积"
+            align="center">
+    </el-table-column>
+    <el-table-column
+            prop="price"
+            label="价格"
+            align="center">
+    </el-table-column>
+    <el-table-column
+            align="center">
+      <template slot="header" slot-scope="scope" style="align-content: center">
+        <el-button
+                size="mini"
+                type="primary"
+                style="width: 40%;"
+                @click="add()">添加房源</el-button>
+      </template>
+      <template slot-scope="scope">
+        <el-button
+                size="mini"
+                @click="detail(scope.$index, scope.row)">详情</el-button>
+        <el-button
+                size="mini"
+                type="danger"
+                @click="delete(scope.$index, scope.row)">删除</el-button>
+      </template>
+    </el-table-column>
+  </el-table>
 </template>
 
 <script>
-
   export default {
-    name: "myHouses",
-    data() {
-      return {
-        houses: [],
-        context:""
+    name: "myHouse",
+    data(){
+      return{
+        searchInfo:'',
+        conversations:[{
+          location:'山东省威海市文化西路2号',
+          size:'150平米',
+          price:'1500000元'
+        }],
+        conversation:{
+          receiverID:'',
+          date:'',
+          recentMessage:''
+        }
+      }
+    },
+    methods:{
+      load(){
+
+      },
+      add(){
+
+      },
+      detail(index,row){
+
+      },
+      delete(index,row){
+
       }
     },
     mounted() {
-      let data;
-      //SOAP 1.1 请求报文格式，1.2在网上可以找到
-      data = '<?xml version="1.0" encoding="utf-8"?>';
-      data = data + '<soap:Envelope  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  xmlns:xsd="http://www.w3.org/2001/XMLSchema"  xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">';
-      data = data + '<soap:Body>';
-      data = data + '<helloWorld xmlns="http://hit.com/">';//这里就是发布的方法名和xml文档中的命名空间地址
-      data = data + '</helloWorld>';
-      data = data + '</soap:Body>';
-      data = data + '</soap:Envelope>';
-
-      // this.$axios({
-      //   url:"api/Apache_CXF_war_exploded/service/readerService2?wsdl",
-      //   method: "GET",
-      //   param: data,
-      //   headers: {
-      //     "Content-Type": "text/xml; charset=utf-8"
-      //   }
-      // }).then(response=>{
-      //   this.context=response.data;
-      // }).catch(e=>{
-      //   console.log(e);
-      // })
-      let xmlhttp = new XMLHttpRequest();
-      let URL = "api/service/readerService2?wsdl";
-      xmlhttp.open("POST", URL, false);
-      xmlhttp.setRequestHeader("Content-Type", "text/xml; charset=utf-8"); //SOAP 1.1为text/xml ； 1.2为 application/soap+xml
-      xmlhttp.send(data);
-
-
-      this.context=xmlhttp.responseText;
+      // load();
     }
   }
 </script>
 
 <style scoped>
-
+  .el-table__header tr,
+  .el-table__header th {
+    padding: 0;
+    height: 40px;
+  }
+  .el-table__body tr,
+  .el-table__body td {
+    padding: 0;
+    height: 40px;
+  }
 </style>
