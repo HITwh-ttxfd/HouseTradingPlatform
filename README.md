@@ -1,2 +1,2 @@
-# HouseTradingPlatform
+# 二手房交易系统
 面向服务的软件系统课程设计
