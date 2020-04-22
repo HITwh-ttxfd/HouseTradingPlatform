@@ -44,104 +44,42 @@
                 <template slot="header" slot-scope="scope">
                     <el-button
                             @click="select()"
-                            size="mini"
+                            size="small"
                             type="primary"><i class="el-icon-setting"> 筛选</i>
                     </el-button>
                 </template>
                 <template slot-scope="scope">
                     <el-button
                             @click="detail(scope.row.id)"
-                            size="mini">详情
+                            size="small">详情
+                    </el-button>
+                    <el-button
+                            type="success"
+                            @click="request(scope.row.id)"
+                            size="small">看房
                     </el-button>
                 </template>
             </el-table-column>
         </el-table>
-        <el-dialog :visible.sync="dialogVisible" title="详细信息">
-            <template>
-                <div class="route-content">
-                    <div class="head">
-                        <div class="block">
-                            <el-carousel height="200px">
-                                <el-carousel-item :key="img" v-for="img in houseDetail.imgs">
-                                    <h3 class="small">
-                                        <el-image :src="img" fit="contain">
-                                            <div class="image-slot" slot="error">
-                                                <i class="el-icon-picture-outline"></i>
-                                            </div>
-                                        </el-image>
-                                    </h3>
-                                </el-carousel-item>
-                            </el-carousel>
-                        </div>
-                    </div>
-                    <div class="infoBlock">
-                        <p class="title">基本属性</p>
-                        <div class="info">
-                            <div class="infoLine">
-                                <p class="content label">房屋户型:</p>
-                                <p class="content">{{houseDetail.roomType}}</p>
-                            </div>
-                            <div class="infoLine">
-                                <p class="content label">建筑面积:</p>
-                                <p class="content">{{houseDetail.outerSize}}</p>
-                            </div>
-                            <div class="infoLine">
-                                <p class="content label">套内面积:</p>
-                                <p class="content">{{houseDetail.innerSize}}</p>
-                            </div>
-                            <div class="infoLine">
-                                <p class="content label">房屋朝向:</p>
-                                <p class="content">{{houseDetail.decoration}}</p>
-                            </div>
-                            <div class="infoLine">
-                                <p class="content label">装修情况:</p>
-                                <p class="content">{{houseDetail.decoration}}</p>
-                            </div>
-                            <div class="infoLine">
-                                <p class="content label">供暖方式:</p>
-                                <p class="content">{{houseDetail.warmth}}</p>
-                            </div>
-                        </div>
-                        <div class="info">
-                            <div class="infoLine">
-                                <p class="content label">所在楼层:</p>
-                                <p class="content">{{houseDetail.floor}}</p>
-                            </div>
-                            <div class="infoLine">
-                                <p class="content label">户型结构:</p>
-                                <p class="content">{{houseDetail.roomStructure}}</p>
-                            </div>
-                            <div class="infoLine">
-                                <p class="content label">建筑类型:</p>
-                                <p class="content">{{houseDetail.architectureType}}</p>
-                            </div>
-                            <div class="infoLine">
-                                <p class="content label">建筑结构:</p>
-                                <p class="content">{{houseDetail.architectureStructure}}</p>
-                            </div>
-                            <div class="infoLine">
-                                <p class="content label">梯户比例:</p>
-                                <p class="content">{{houseDetail.neighborType}}</p>
-                            </div>
-                            <div class="infoLine">
-                                <p class="content label">配备电梯:</p>
-                                <p class="content">{{houseDetail.lift}}</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div id="AMap"></div>
-                </div>
-            </template>
+        <el-dialog :visible.sync="dialogVisible" title="详细信息" @closed="destroyMap">
+            <detail></detail>
+        </el-dialog>
+        <el-dialog :visible.sync="requestVisible" title="预约看房" destroy-on-close>
+            <request @close="closeRequest"></request>
         </el-dialog>
     </div>
 </template>
 
 <script>
+    import Detail from "./detail";
+    import Request from "./request";
     let map;
     export default {
         name: "buyerHouses",
+        components: {Request, Detail},
         data() {
             return {
+                requestVisible: false,
                 dialogVisible: false,
                 houses: [{
                     id: 0,
@@ -197,10 +135,19 @@
                         position: [116.481181, 39.989792]
                     })
                     map.add(marker);
-                }, 300);
+                }, 30);
+            },
+            request(id){
+                this.requestVisible=true;
+            },
+            closeRequest(){
+                this.requestVisible=false;
             },
             load() {
 
+            },
+            destroyMap(){
+                map.destroy( );
             }
         },
         mounted() {
