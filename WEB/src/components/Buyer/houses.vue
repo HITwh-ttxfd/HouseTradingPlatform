@@ -67,18 +67,23 @@
         <el-dialog :visible.sync="requestVisible" title="预约看房" destroy-on-close>
             <request @close="closeRequest"></request>
         </el-dialog>
+        <el-dialog :visible.sync="filterVisible" title="筛选" destroy-on-close>
+            <search @close="closeFilter"></search>
+        </el-dialog>
     </div>
 </template>
 
 <script>
     import Detail from "./detail";
     import Request from "./request";
+    import search from "./search";
     let map;
     export default {
         name: "buyerHouses",
-        components: {Request, Detail},
+        components: {search, Request, Detail},
         data() {
             return {
+                filterVisible: false,
                 requestVisible: false,
                 dialogVisible: false,
                 houses: [{
@@ -120,7 +125,7 @@
         },
         methods: {
             select() {
-
+                this.filterVisible=true;
             },
             detail(id) {
                 this.dialogVisible = true;
@@ -145,6 +150,9 @@
             },
             load() {
 
+            },
+            closeFilter(){
+                this.filterVisible=false;
             },
             destroyMap(){
                 map.destroy( );

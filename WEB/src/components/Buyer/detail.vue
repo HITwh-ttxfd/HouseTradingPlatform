@@ -42,10 +42,6 @@
                     <p class="content label">供暖方式:</p>
                     <p class="content">{{houseDetail.warmth}}</p>
                 </div>
-                <div class="infoLine">
-                    <p class="content label">建成时间:</p>
-                    <p class="content">{{houseDetail.builtTime}}</p>
-                </div>
             </div>
             <div class="info">
                 <div class="infoLine">
@@ -71,10 +67,6 @@
                 <div class="infoLine">
                     <p class="content label">配备电梯:</p>
                     <p class="content">{{houseDetail.lift}}</p>
-                </div>
-                <div class="infoLine">
-                    <p class="content label">发布时间:</p>
-                    <p class="content">{{houseDetail.postTime}}</p>
                 </div>
             </div>
         </div>
