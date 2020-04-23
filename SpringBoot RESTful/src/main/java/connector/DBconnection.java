@@ -18,11 +18,12 @@ public class DBconnection extends DBConnector {
         String senderID = request.getSenderID();
         String receiverID = request.getReceiverID();
         String houseID = request.getHouseID();
+        String phone = request.getPhone();
         String date = request.getDate();
         String time = request.getTime();
         String sendTime = request.getSendTime();
-        String sql="insert into requests(senderID,receiverID,houseID,date,time,sendTime) " +
-                "values('"+senderID+"','"+receiverID+"','"+houseID+"','"+date+"','"+time+"','"+sendTime+"');";
+        String sql="insert into requests(senderID,receiverID,houseID,phone,date,time,sendTime) " +
+                "values('"+senderID+"','"+receiverID+"','"+houseID+"','"+phone+"','"+date+"','"+time+"','"+sendTime+"');";
         try {
             PreparedStatement preparedStatement = (PreparedStatement)this.connection.prepareStatement(sql);
             preparedStatement.executeUpdate();
@@ -55,7 +56,8 @@ public class DBconnection extends DBConnector {
                 String houseID = resultSet.getString("houseID");
                 String date = resultSet.getString("date");
                 String time = resultSet.getString("time");
-                requests.add(new Request(houseID,senderID,receiverID,date,time));
+                String phone = resultSet.getString("phone");
+                requests.add(new Request(houseID,senderID,receiverID,date,time,phone));
             }
             System.out.println("Return requests successfully.");
         }catch (Exception e){

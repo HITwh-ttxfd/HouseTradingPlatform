@@ -3,31 +3,38 @@ package entity;
 import java.util.Date;
 
 public class Request {
-    private String houseID;
-    private String date;
-    private String time;
     private String senderID;
     private String receiverID;
+    private String houseID;
+    private String phone;
+    private String date;
+    private String time;
     private String sendTime;
 
     public Request(){}
 
-    public Request(String houseID, String senderID, String receiverID, String date, String time,String sendTime) {
+    public Request(String houseID, String senderID, String receiverID, String date, String time,String sendTime,String phone) {
         this.houseID = houseID;
         this.senderID = senderID;
         this.receiverID = receiverID;
         this.date = date;
         this.time = time;
         this.sendTime = sendTime;
+        this.phone = phone;
     }
 
-    public Request(String houseID, String senderID, String receiverID, String date, String time) {
+    public Request(String houseID, String senderID, String receiverID, String date, String time,String phone) {
         this.houseID = houseID;
         this.senderID = senderID;
         this.receiverID = receiverID;
         this.date = date;
         this.time = time;
         this.sendTime=new Date().toString();
+        this.phone=phone;
+    }
+
+    public String getPhone() {
+        return phone;
     }
 
     public String getSendTime() {
