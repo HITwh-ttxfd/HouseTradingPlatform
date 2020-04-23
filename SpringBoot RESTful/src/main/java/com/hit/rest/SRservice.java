@@ -101,14 +101,15 @@ public class SRservice {
     // request相关--测试成功
     @RequestMapping(value = "/sendRequest/{senderID}/{receiverID}/{houseID}/{phone}", method = RequestMethod.GET)
     public void sendRequeset(@PathVariable("senderID")String senderID, @PathVariable("receiverID")String receiverID,
-                             @PathVariable(value = "houseID")String houseID,@PathVariable("phone")String phone,@RequestParam("location")String location,
+                             @PathVariable(value = "houseID")String houseID,@PathVariable("phone")String phone,
                              @RequestParam(value = "date")String date,@RequestParam(value = "time")String time){
         User u1 = db.selectUser(senderID);
         User u2 = db.selectUser(receiverID);
         Buyer buy = new Buyer(u1.getUsername(),u1.getPassword(),u1.getRealname(),u1.getId(),u1.getPhone());
         Seller sell = new Seller(u2.getUsername(),u2.getPassword(),u2.getRealname(),u2.getId(),u2.getPhone());
-        // 采取另一个DBconnection类
         House house = hdb.getHouse(houseID);
+        String location = house.getHouseID(); // getLocation
+        // 采取另一个DBconnection类
         Request request = buy.sendRequest(house,sell,date,time,phone,location);
         db.addRequests(request);
     }
@@ -131,8 +132,10 @@ public class SRservice {
     }
     @RequestMapping(value = "/delRequest/{senderID}/{receiverID}/{houseID}/{phone}")
     public void delRequest(@PathVariable("senderID")String senderID,@PathVariable("receiverID")String receiverID,
-                           @PathVariable("houseID")String houseID,@PathVariable("phone")String phone,@RequestParam("location")String location,
+                           @PathVariable("houseID")String houseID,@PathVariable("phone")String phone,
                            @RequestParam(value =  "date")String date, @RequestParam(value = "time")String time) {
+        House house = hdb.getHouse(houseID);
+        String location = null; // getlocation
         Request request = new Request(houseID,senderID,receiverID,date,time,phone,location);
         db.delRequests(request);
     }
