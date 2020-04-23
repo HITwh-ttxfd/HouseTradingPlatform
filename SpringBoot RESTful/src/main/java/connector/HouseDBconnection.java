@@ -14,15 +14,10 @@ import java.util.Date;
 
 public class HouseDBconnection {
     //上传项目专用
-//    String driver = "com.mysql.cj.jdbc.Driver";
-//    String url = "jdbc:mysql://39.98.48.34:3306/htpbase?serverTimezone=UTC";
-//    String user = "root";
-//    String password = "2296026";
-//    Connection connection = null;
     String driver = "com.mysql.cj.jdbc.Driver";
-    String url = "jdbc:mysql://localhost:3306/secondcompany?serverTimezone=UTC";
+    String url = "jdbc:mysql://39.98.48.34:3306/htpbase?serverTimezone=UTC";
     String user = "root";
-    String password = "Sunbz241290";
+    String password = "2296026";
     Connection connection = null;
 
 
