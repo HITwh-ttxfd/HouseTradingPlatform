@@ -1,6 +1,7 @@
 package com.hit.rest;
 
 import connector.DBconnection;
+import connector.HouseDBconnection;
 import entity.*;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,6 +13,7 @@ import java.util.List;
 public class SRservice {
     //@Autowired
     private DBconnection db = new DBconnection();
+    private HouseDBconnection hdb = new HouseDBconnection();
     private User user;
     // 返回用户 ||测试成功
     @RequestMapping(value="/registerBuyer/{id}", method = RequestMethod.GET)
@@ -97,29 +99,28 @@ public class SRservice {
         return messages;
     }
 
-    // request相关
-    @RequestMapping(value = "/sendRequest/{senderID}/{receiverID}", method = RequestMethod.GET)
-    public void sendRequeset(@PathVariable("senderID")String senderID, @PathVariable("recevierID")String receiverID,
-                             @RequestParam(value = "houseID")String houseID){
+    // request相关--测试成功
+    @RequestMapping(value = "/sendRequest/{senderID}/{receiverID}/{houseID}/{date}/{time}", method = RequestMethod.GET)
+    public void sendRequeset(@PathVariable("senderID")String senderID, @PathVariable("receiverID")String receiverID,
+                             @PathVariable(value = "houseID")String houseID,@PathVariable("date")String date,@PathVariable("time")String time){
         User u1 = db.selectUser(senderID);
         User u2 = db.selectUser(receiverID);
         Buyer buy = new Buyer(u1.getUsername(),u1.getPassword(),u1.getRealname(),u1.getId(),u1.getPhone());
         Seller sell = new Seller(u2.getUsername(),u2.getPassword(),u2.getRealname(),u2.getId(),u2.getPhone());
-        // 房源在另一个数据库，应采取另一个DBconnection类
-        House house = new House();
-        Request request = buy.sendRequest(house,sell);
+        // 采取另一个DBconnection类
+        House house = hdb.getHouse(houseID);
+        Request request = buy.sendRequest(house,sell,date,time);
         db.addRequests(request);
-        //sell.receiveRequests(db.selectRequests(sell)); //收取不应该在这里
     }
-    @RequestMapping(value = "/receiverRequests/{id}", method = RequestMethod.GET)
-    public ArrayList<Request> receiveRequests(@PathVariable("receiverID")String receiverID){
+    @RequestMapping(value = "/receiveRequests/{id}", method = RequestMethod.GET)
+    public ArrayList<Request> receiveRequests(@PathVariable("id")String receiverID){
         User u = db.selectUser(receiverID);
         ArrayList<Request> requests = new ArrayList<Request>();
         if(u.getType().equals("seller")){
             Seller sell = new Seller(u.getUsername(),u.getPassword(),u.getRealname(),u.getId(),u.getPhone());
             requests = db.selectRequests(sell);
 
-        }else if(u.getType()=="buyer"){
+        }else if(u.getType().equals("buyer")){
             Buyer buy = new Buyer(u.getUsername(),u.getPassword(),u.getRealname(),u.getId(),u.getPhone());
             requests = db.selectRequests(buy);
         }else{
@@ -128,10 +129,10 @@ public class SRservice {
         }
         return requests;
     }
-    @RequestMapping(value = "/delRequest/{senderID}/{receiverID}/{houseID}")
+    @RequestMapping(value = "/delRequest/{senderID}/{receiverID}/{houseID}/{date}/{time}")
     public void delRequest(@PathVariable("senderID")String senderID,@PathVariable("receiverID")String receiverID,
-                           @PathVariable("houseID")String houseID) {
-        Request request = new Request(houseID,senderID,receiverID,"");
+                           @PathVariable("houseID")String houseID,@PathVariable("date")String date, @PathVariable("time")String time) {
+        Request request = new Request(houseID,senderID,receiverID,date,time);
         db.delRequests(request);
     }
 }

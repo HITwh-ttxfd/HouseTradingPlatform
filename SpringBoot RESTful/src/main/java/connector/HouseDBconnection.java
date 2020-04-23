@@ -7,12 +7,7 @@ import java.sql.*;
 import java.util.ArrayList;
 
 
-public class HouseDBconnection {
-    String driver = "com.mysql.cj.jdbc.Driver";
-    String url = "jdbc:mysql://39.98.48.34:3306/htpbase?serverTimezone=UTC";
-    String user = "root";
-    String password = "2296026";
-    Connection connection = null;
+public class HouseDBconnection extends DBConnector{
     //增加房源
     public void addHouse(House house){
         if(house==null){
@@ -121,5 +116,8 @@ public class HouseDBconnection {
         }catch (Exception e){
             e.printStackTrace();
         }
+    }
+    public HouseDBconnection(){
+        super();
     }
 }

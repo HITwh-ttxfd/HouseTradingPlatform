@@ -18,11 +18,13 @@ public class DBconnection extends DBConnector {
         String senderID = request.getSenderID();
         String receiverID = request.getReceiverID();
         String houseID = request.getHouseID();
-        String date = request.getDate().toString();
-        String sql="insert into requests(senderID,receiverID,houseID,date) values('"+senderID+"','"+receiverID+"','"+houseID+"','"+date+"')";
+        String date = request.getDate();
+        String time = request.getTime();
+        String sendTime = request.getSendTime();
+        String sql="insert into requests(senderID,receiverID,houseID,date,time,sendTime) " +
+                "values('"+senderID+"','"+receiverID+"','"+houseID+"','"+date+"','"+time+"','"+sendTime+"');";
         try {
             PreparedStatement preparedStatement = (PreparedStatement)this.connection.prepareStatement(sql);
-            //preparedStatement.setString(1,senderID);
             preparedStatement.executeUpdate();
             System.out.println("com.company.Request insert successfully.");
             preparedStatement.close();
@@ -52,7 +54,8 @@ public class DBconnection extends DBConnector {
                 String receiverID = resultSet.getString("receiverID");
                 String houseID = resultSet.getString("houseID");
                 String date = resultSet.getString("date");
-                requests.add(new Request(houseID,senderID,receiverID,date));
+                String time = resultSet.getString("time");
+                requests.add(new Request(houseID,senderID,receiverID,date,time));
             }
             System.out.println("Return requests successfully.");
         }catch (Exception e){
@@ -67,7 +70,9 @@ public class DBconnection extends DBConnector {
         String senderID = request.getSenderID();
         String receiverID = request.getReceiverID();
         String date = request.getDate();
-        String sql = "delete from requests where senderID="+"'"+senderID+"',"+" and receiverID='"+receiverID+"',"+" and houseID='"+houseID+"',"+" and date='"+date+"'";
+        String time = request.getTime();
+        String sql = "delete from requests where senderID='"+senderID+"'\n" +
+                "and receiverID='"+receiverID+"' and houseID='"+houseID+"' and date='"+date+"' and time='"+time+"';";
         try {
             PreparedStatement preparedStatement = (PreparedStatement)this.connection.prepareStatement(sql);
             preparedStatement.executeUpdate();

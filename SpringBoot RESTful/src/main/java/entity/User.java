@@ -12,10 +12,10 @@ public class User {
     protected String phone;
     protected String type;
 
-    public Request sendRequest(House house, Seller sell){
+    public Request sendRequest(House house, Seller sell,String date,String time){
         String houseID = house.getHouseID();
         String sellerID = sell.getPhone();
-        Request request = new Request(houseID,new Date().toString(),this.phone,sellerID);
+        Request request = new Request(houseID,this.phone,sellerID,date,time,new Date().toString());
         return request;
     }
     public Message sendMessage(String content, User receiver){
