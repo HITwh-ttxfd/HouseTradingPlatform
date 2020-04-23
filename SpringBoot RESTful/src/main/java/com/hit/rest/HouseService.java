@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 @RestController
-public class HouseServer {
+public class HouseService {
     //测试用
     @RequestMapping(value="/test")
     public String test(){
