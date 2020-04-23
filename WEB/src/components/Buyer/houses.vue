@@ -13,6 +13,11 @@
             </el-table-column>
             <el-table-column
                     align="center"
+                    label="小区名称"
+                    prop="community">
+            </el-table-column>
+            <el-table-column
+                    align="center"
                     label="大小"
                     prop="size">
             </el-table-column>
@@ -20,11 +25,6 @@
                     align="center"
                     label="价格"
                     prop="price">
-            </el-table-column>
-            <el-table-column
-                    align="center"
-                    label="是否有电梯"
-                    prop="lift">
             </el-table-column>
             <el-table-column
                     align="center"
@@ -88,10 +88,10 @@
                 dialogVisible: false,
                 houses: [{
                     id: 0,
-                    lift: '是',
-                    location: '山东省威海市文化西路二号',
+                    community: '望江名门',
+                    location: '四川省成都市锦江区龙舟路',
                     price: '1000万元',
-                    size: '100平方米',
+                    size: '200平方米',
                     rate: 3.8
                 }],
                 houseDetail: {

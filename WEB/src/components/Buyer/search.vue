@@ -7,13 +7,13 @@
                         <el-option v-for="(province) in provinces" :key="province.name" :label="province.name" :value="province.name"></el-option>
                     </el-select>
                     <el-select @change="searchLocation(2)"  v-model="form.city" placeholder="城市">
-                        <el-option v-for="(city,index) in cities" :key="city.name" :label="city.name" :value="city.name"></el-option>
+                        <el-option v-for="(city) in cities" :key="city.name" :label="city.name" :value="city.name"></el-option>
                     </el-select>
                     <el-select @change="searchLocation(3)"  v-model="form.district" placeholder="区县">
-                        <el-option v-for="(district,index) in districts" :key="districts.name" :label="district.name" :value="district.name"></el-option>
+                        <el-option v-for="(district) in districts" :key="districts.name" :label="district.name" :value="district.name"></el-option>
                     </el-select>
                     <el-select  v-model="form.street" placeholder="街道">
-                        <el-option v-for="(street,index) in streets" :key="street.name" :label="street.name" :value="street.name"></el-option>
+                        <el-option v-for="(street) in streets" :key="street.name" :label="street.name" :value="street.name"></el-option>
                     </el-select>
                 </div>
             </el-form-item>
@@ -27,7 +27,7 @@
                     <el-input-number controls-position="right" v-model="form.mimSize" :min="10" :max="form.maxSize"></el-input-number>
                     ～
                     <el-input-number controls-position="right" v-model="form.maxSize" :min="form.mimSize"  :max="1000"></el-input-number>
-                    ㎡
+                    <span>㎡</span>
                 </div>
             </el-form-item>
             <el-form-item   :label-width="'80px'" label="房屋总价">
@@ -35,7 +35,18 @@
                     <el-input-number controls-position="right" v-model="form.mimPrice" :min="50000" :max="form.maxPrice"></el-input-number>
                     ～
                     <el-input-number controls-position="right" v-model="form.maxPrice" :min="form.mimPrice"  :max="100000000"></el-input-number>
-                    元
+                    <span>元</span>
+                </div>
+            </el-form-item>
+            <el-form-item   :label-width="'80px'" label="建成时间">
+                <div class="wrapper">
+                    <el-input-number controls-position="right" v-model="form.age" :min="1" :max="50"></el-input-number><span>年内</span>
+                </div>
+            </el-form-item>
+            <el-form-item   :label-width="'80px'" label="最低评价">
+                <div class="wrapper inline">
+                    <el-input-number controls-position="right" v-model="form.rate" :step="0.1" :min="0" :max="5"></el-input-number>
+                    <el-rate disabled v-model="form.rate"></el-rate>
                 </div>
             </el-form-item>
         </el-form>
@@ -60,7 +71,9 @@
                     mimSize:10,
                     maxSize:1000,
                     mimPrice: 50000,
-                    maxPrice: 100000000
+                    maxPrice: 100000000,
+                    age:50,
+                    rate:0.0
                 },
                 provinces:[],
                 cities:'',
@@ -138,5 +151,17 @@
     }
     .wrapper .el-input{
        width: 400px;
+    }
+    .dialog-footer{
+        margin-top: 20px;
+    }
+    .el-rate{
+        margin-left: 10px;
+        display: inline-block;
+        width: 120px;
+        float: none;
+    }
+    span{
+        margin-left: 10px;
     }
 </style>
