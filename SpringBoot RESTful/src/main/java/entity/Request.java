@@ -7,13 +7,14 @@ public class Request {
     private String receiverID;
     private String houseID;
     private String phone;
+    private String location;
     private String date;
     private String time;
     private String sendTime;
 
     public Request(){}
 
-    public Request(String houseID, String senderID, String receiverID, String date, String time,String sendTime,String phone) {
+    public Request(String houseID, String senderID, String receiverID, String date, String time,String sendTime,String phone,String location) {
         this.houseID = houseID;
         this.senderID = senderID;
         this.receiverID = receiverID;
@@ -21,9 +22,10 @@ public class Request {
         this.time = time;
         this.sendTime = sendTime;
         this.phone = phone;
+        this.location=location;
     }
 
-    public Request(String houseID, String senderID, String receiverID, String date, String time,String phone) {
+    public Request(String houseID, String senderID, String receiverID, String date, String time,String phone,String location) {
         this.houseID = houseID;
         this.senderID = senderID;
         this.receiverID = receiverID;
@@ -31,6 +33,11 @@ public class Request {
         this.time = time;
         this.sendTime=new Date().toString();
         this.phone=phone;
+        this.location=location;
+    }
+
+    public String getLocation() {
+        return location;
     }
 
     public String getPhone() {

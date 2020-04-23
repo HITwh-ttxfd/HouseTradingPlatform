@@ -101,7 +101,7 @@ public class SRservice {
     // request相关--测试成功
     @RequestMapping(value = "/sendRequest/{senderID}/{receiverID}/{houseID}/{phone}", method = RequestMethod.GET)
     public void sendRequeset(@PathVariable("senderID")String senderID, @PathVariable("receiverID")String receiverID,
-                             @PathVariable(value = "houseID")String houseID,@PathVariable("phone")String phone,
+                             @PathVariable(value = "houseID")String houseID,@PathVariable("phone")String phone,@RequestParam("location")String location,
                              @RequestParam(value = "date")String date,@RequestParam(value = "time")String time){
         User u1 = db.selectUser(senderID);
         User u2 = db.selectUser(receiverID);
@@ -109,7 +109,7 @@ public class SRservice {
         Seller sell = new Seller(u2.getUsername(),u2.getPassword(),u2.getRealname(),u2.getId(),u2.getPhone());
         // 采取另一个DBconnection类
         House house = hdb.getHouse(houseID);
-        Request request = buy.sendRequest(house,sell,date,time,phone);
+        Request request = buy.sendRequest(house,sell,date,time,phone,location);
         db.addRequests(request);
     }
     @RequestMapping(value = "/receiveRequests/{id}", method = RequestMethod.GET)
@@ -131,9 +131,9 @@ public class SRservice {
     }
     @RequestMapping(value = "/delRequest/{senderID}/{receiverID}/{houseID}/{phone}")
     public void delRequest(@PathVariable("senderID")String senderID,@PathVariable("receiverID")String receiverID,
-                           @PathVariable("houseID")String houseID,@PathVariable("phone")String phone,
+                           @PathVariable("houseID")String houseID,@PathVariable("phone")String phone,@RequestParam("location")String location,
                            @RequestParam(value =  "date")String date, @RequestParam(value = "time")String time) {
-        Request request = new Request(houseID,senderID,receiverID,date,time,phone);
+        Request request = new Request(houseID,senderID,receiverID,date,time,phone,location);
         db.delRequests(request);
     }
 }
