@@ -100,7 +100,7 @@ public class HouseDBconnection {
             ResultSet resultSet = (ResultSet)statement.executeQuery(sql);
             while (resultSet.next()){
                 String village = resultSet.getString("village");
-                Date time = resultSet.getDate("date");
+                Date time = resultSet.getDate("time");
                 String sellerID = resultSet.getString("sellerID");
                 double size = resultSet.getDouble("size");
                 double locationX = resultSet.getDouble("locationX");
@@ -164,7 +164,7 @@ public class HouseDBconnection {
             ResultSet resultSet = (ResultSet)statement.executeQuery(sql);
             while (resultSet.next()){
                 String village = resultSet.getString("village");
-                Date time = resultSet.getDate("date");
+                Date time = resultSet.getDate("time");
                 String houseID = resultSet.getString("houseID");
                 String sellerID = resultSet.getString("sellerID");
                 double size = resultSet.getDouble("size");
