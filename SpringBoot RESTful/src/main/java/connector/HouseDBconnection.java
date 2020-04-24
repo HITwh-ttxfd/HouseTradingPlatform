@@ -309,6 +309,7 @@ public class HouseDBconnection {
 
 
         sql+=" and ListingTime >"+temp;
+        System.out.println(sql);
         try {
             Statement statement = (Statement)this.connection.createStatement();
             ResultSet resultSet = (ResultSet)statement.executeQuery(sql);
