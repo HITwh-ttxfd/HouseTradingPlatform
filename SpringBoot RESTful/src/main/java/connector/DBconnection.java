@@ -59,8 +59,9 @@ public class DBconnection extends DBConnector {
                 String time = resultSet.getString("time");
                 String phone = resultSet.getString("phone");
                 String location = resultSet.getString("location");
+                String sendTime = resultSet.getString("sendTime");
                 String status = resultSet.getString("status");
-                requests.add(new Request(houseID,senderID,receiverID,date,time,phone,location,status));
+                requests.add(new Request(houseID,senderID,receiverID,date,time,sendTime,phone,location,status));
             }
             System.out.println("Return requests successfully.");
         }catch (Exception e){
