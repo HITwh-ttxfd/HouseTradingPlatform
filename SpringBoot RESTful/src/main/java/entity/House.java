@@ -14,13 +14,16 @@ public class House {
     //可筛选信息                                             筛选时
     private double size;                     //建筑面积      默认为0
     private String location;                 //地理位置      默认为all
+    private String village;                  //小区
     private double price;                    //价格         默认max与min为0
     private float score;                     //评分         默认0               满分5分
-    private Date  ListingTime;               //建成时间      默认all 筛time1和time2之间的ListingTime;                    //挂牌时间
-    //    private Date  time;                      //建成时间      默认all 筛time1和time2之间的
+    //    private Date  ListingTime;               //建成时间      默认all 筛time1和time2之间的ListingTime;                    //挂牌时间
+    private Date  time;                      //建成时间      默认all 筛time1和time2之间的
     private int  lift;                       //配置电梯
     private double locationX;
     private double locationY;
+
+
     //一系列详细信息
 //    private String CommunityIntroduction;   //小区介绍
 //    private String houseTypeIntroduction;  //户型介绍
@@ -38,7 +41,7 @@ public class House {
     private String buildingType;            //建筑类型
     private String elevatorProportion;       //梯户比例
     private Date  lastTransaction;           //上次交易
-    //    private Date  lastTransaction;                //上次交易
+    private Date  ListingTime;               //挂牌时间
     private String  housingAge;                    //房屋年限
     private String  mortgageInformation;            //抵押信息
     private String  transactionOwnership;            //交易权属
@@ -51,9 +54,10 @@ public class House {
 
     };
     //最为健全的house，用于向前端发送
-    //27个参数
+    //28个参数
 
-    public House(String houseID, String sellerID,
+    public House(String village,Date  time,
+                 String houseID, String sellerID,
                  double size, double locationX,
                  double locationY, String location,
                  double price, float score,
@@ -67,6 +71,8 @@ public class House {
                  String mortgageInformation, String transactionOwnership,
                  String housingPurpose, String propertyOwnership,
                  String housingParts) {
+        this.village=village;
+        this.time=time;
         this.houseID = houseID;
         this.sellerID = sellerID;
         this.size = size;
@@ -142,7 +148,21 @@ public class House {
 //    }
 
 
+    public String getVillage() {
+        return village;
+    }
 
+    public void setVillage(String village) {
+        this.village = village;
+    }
+
+    public Date getTime() {
+        return time;
+    }
+
+    public void setTime(Date time) {
+        this.time = time;
+    }
     public String getHouseID() {
         return houseID;
     }

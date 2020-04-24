@@ -41,8 +41,9 @@ public class HouseDBconnection {
         }
         //加上一个查询先有houseID最大值的，给houseID赋值
         house.setHouseID(selectMaxHouseID());
-        String sql="insert into house(houseID,sellerID, size, locationX, locationY, location, price,score, lift, lastTransaction, houseType, buildingArea, interiorArea, houseOrientation, decoration, heatingMode, floor, houseTypeStructure, buildingType, elevatorProportion, listingTime, housingAge, mortgageInformation, transactionOwnership, housingPurpose, propertyOwnership, housingParts)" +
-                " values('"+house.getHouseID()+"',"+house.getLocationX()
+        String sql="insert into house(village,time,houseID,sellerID, size, locationX, locationY, location, price,score, lift, lastTransaction, houseType, buildingArea, interiorArea, houseOrientation, decoration, heatingMode, floor, houseTypeStructure, buildingType, elevatorProportion, listingTime, housingAge, mortgageInformation, transactionOwnership, housingPurpose, propertyOwnership, housingParts)" +
+                " values('"+house.getVillage()+"','"+house.getTime()+"','"
+                +house.getHouseID()+"',"+house.getLocationX()
                 +","+house.getLocationY()+",'"+house.getLocation()+"',"
                 +house.getPrice()+","+house.getScore()+","
                 +house.getLift()+",'"+house.getLastTransaction()+"','"
@@ -98,6 +99,8 @@ public class HouseDBconnection {
             Statement statement = (Statement)this.connection.createStatement();
             ResultSet resultSet = (ResultSet)statement.executeQuery(sql);
             while (resultSet.next()){
+                String village = resultSet.getString("village");
+                Date time = resultSet.getDate("date");
                 String sellerID = resultSet.getString("sellerID");
                 double size = resultSet.getDouble("size");
                 double locationX = resultSet.getDouble("locationX");
@@ -124,7 +127,7 @@ public class HouseDBconnection {
                 String housingPurpose = resultSet.getString("housingPurpose");
                 String propertyOwnership = resultSet.getString("propertyOwnership");
                 String housingParts = resultSet.getString("housingParts");
-                House housetemp=new House(
+                House housetemp=new House(village,time,
                         houseID, sellerID,
                         size,locationX,
                         locationY,location,
@@ -160,6 +163,8 @@ public class HouseDBconnection {
             Statement statement = (Statement)this.connection.createStatement();
             ResultSet resultSet = (ResultSet)statement.executeQuery(sql);
             while (resultSet.next()){
+                String village = resultSet.getString("village");
+                Date time = resultSet.getDate("date");
                 String houseID = resultSet.getString("houseID");
                 String sellerID = resultSet.getString("sellerID");
                 double size = resultSet.getDouble("size");
@@ -187,7 +192,7 @@ public class HouseDBconnection {
                 String housingPurpose = resultSet.getString("housingPurpose");
                 String propertyOwnership = resultSet.getString("propertyOwnership");
                 String housingParts = resultSet.getString("housingParts");
-                House house=new House(
+                House house=new House(village,time,
                         houseID, sellerID,
                         size,locationX,
                         locationY,location,
@@ -224,6 +229,7 @@ public class HouseDBconnection {
                 house.setPrice(resultSet.getDouble("price"));
                 house.setSize(resultSet.getDouble("size"));
                 house.setLocation(resultSet.getString("location"));
+                house.setVillage(resultSet.getString("village"));
                 //测试用，正式上线删
                 System.out.println(resultSet.getString("houseID")+
                         resultSet.getString("sellerID")+
@@ -276,11 +282,13 @@ public class HouseDBconnection {
         return temp;
     }
     //搜索房源
-    public ArrayList<House> selectBasicHouse(String position, double mimSize, double maxSize, double minPrice,double maxPrice, float score, int time) throws ParseException {
+    public ArrayList<House> selectBasicHouse(String position,String village, double mimSize, double maxSize, double minPrice,double maxPrice, float score, int time) throws ParseException {
         ArrayList<House> houses = new ArrayList<House>();
         String sql="select * from house where";
         if(position!=null){
             sql+="location LIKE '"+position+"%' and";
+            if(village!=null)
+                sql+="village LIKE '"+position+"%' and";
         }
         sql+="size >"+mimSize;
         sql+="and size <"+maxSize;
@@ -314,6 +322,7 @@ public class HouseDBconnection {
                 house.setPrice(resultSet.getDouble("price"));
                 house.setSize(resultSet.getDouble("size"));
                 house.setLocation(resultSet.getString("location"));
+                house.setVillage(resultSet.getString("village"));
                 //测试用，正式上线删
                 System.out.println(resultSet.getString("houseID")+
                         resultSet.getString("sellerID")+
