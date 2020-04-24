@@ -108,12 +108,12 @@ public class SRservice {
         Buyer buy = new Buyer(u1.getUsername(),u1.getPassword(),u1.getRealname(),u1.getId(),u1.getPhone());
         Seller sell = new Seller(u2.getUsername(),u2.getPassword(),u2.getRealname(),u2.getId(),u2.getPhone());
         House house = hdb.getHouse(houseID);
-        String location = house.getHouseID(); // getLocation
+        String location = house.getLocation(); // getLocation
         // 采取另一个DBconnection类
         Request request = buy.sendRequest(house,sell,date,time,phone,location);
         db.addRequests(request);
     }
-    @RequestMapping(value = "/receiveRequests/{id}", method = RequestMethod.GET)
+        @RequestMapping(value = "/receiveRequests/{id}", method = RequestMethod.GET)
     public ArrayList<Request> receiveRequests(@PathVariable("id")String receiverID){
         User u = db.selectUser(receiverID);
         ArrayList<Request> requests = new ArrayList<Request>();
@@ -135,7 +135,7 @@ public class SRservice {
                            @PathVariable("houseID")String houseID,@PathVariable("phone")String phone,
                            @RequestParam(value =  "date")String date, @RequestParam(value = "time")String time) {
         House house = hdb.getHouse(houseID);
-        String location = null; // getlocation
+        String location = house.getLocation(); // getlocation
         Request request = new Request(houseID,senderID,receiverID,date,time,phone,location);
         db.delRequests(request);
     }
