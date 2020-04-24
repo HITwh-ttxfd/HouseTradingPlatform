@@ -70,8 +70,8 @@ public class JdbcUserDao implements UserDao {
             }
             if(rs.next()) {
                 return new User(rs.getString("username"),rs.getString("password"),
-                        rs.getString("realname"), rs.getString("phone"),
-                        rs.getString("id"), rs.getString("type"));
+                        rs.getString("realname"), rs.getString("id"),
+                        rs.getString("phone"),rs.getString("type"));
             } else {
                 return null;
             }

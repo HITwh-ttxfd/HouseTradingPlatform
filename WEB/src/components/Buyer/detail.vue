@@ -20,19 +20,19 @@
             <div class="info">
                 <div class="infoLine">
                     <p class="content label">房屋户型:</p>
-                    <p class="content">{{houseDetail.roomType}}</p>
+                    <p class="content">{{houseDetail.HouseType}}</p>
                 </div>
                 <div class="infoLine">
                     <p class="content label">建筑面积:</p>
-                    <p class="content">{{houseDetail.outerSize}}</p>
+                    <p class="content">{{houseDetail.buildingArea}}</p>
                 </div>
                 <div class="infoLine">
                     <p class="content label">套内面积:</p>
-                    <p class="content">{{houseDetail.innerSize}}</p>
+                    <p class="content">{{houseDetail.interiorArea}}</p>
                 </div>
                 <div class="infoLine">
                     <p class="content label">房屋朝向:</p>
-                    <p class="content">{{houseDetail.direction}}</p>
+                    <p class="content">{{houseDetail.houseOrientation}}</p>
                 </div>
                 <div class="infoLine">
                     <p class="content label">装修情况:</p>
@@ -40,7 +40,7 @@
                 </div>
                 <div class="infoLine">
                     <p class="content label">供暖方式:</p>
-                    <p class="content">{{houseDetail.warmth}}</p>
+                    <p class="content">{{houseDetail.heatingMode}}</p>
                 </div>
             </div>
             <div class="info">
@@ -50,23 +50,23 @@
                 </div>
                 <div class="infoLine">
                     <p class="content label">户型结构:</p>
-                    <p class="content">{{houseDetail.roomStructure}}</p>
+                    <p class="content">{{houseDetail.houseTypeStructure}}</p>
                 </div>
                 <div class="infoLine">
                     <p class="content label">建筑类型:</p>
-                    <p class="content">{{houseDetail.architectureType}}</p>
+                    <p class="content">{{houseDetail.buildingType}}</p>
                 </div>
                 <div class="infoLine">
                     <p class="content label">建筑结构:</p>
-                    <p class="content">{{houseDetail.architectureStructure}}</p>
+                    <p class="content">{{houseDetail.buildingType}}</p>
                 </div>
                 <div class="infoLine">
                     <p class="content label">梯户比例:</p>
-                    <p class="content">{{houseDetail.neighborType}}</p>
+                    <p class="content">{{houseDetail.elevatorProportion}}</p>
                 </div>
                 <div class="infoLine">
                     <p class="content label">配备电梯:</p>
-                    <p class="content">{{houseDetail.lift}}</p>
+                    <p class="content">{{displayLift}}</p>
                 </div>
             </div>
         </div>
@@ -75,37 +75,37 @@
             <div class="info">
                 <div class="infoLine">
                     <p class="content label">挂牌时间:</p>
-                    <p class="content">{{houseDetail.postTime}}</p>
+                    <p class="content">{{houseDetail.ListingTime}}</p>
                 </div>
                 <div class="infoLine">
                     <p class="content label">上次交易:</p>
-                    <p class="content">{{houseDetail.laseTradeTime}}</p>
+                    <p class="content">{{houseDetail.lastTransaction}}</p>
                 </div>
                 <div class="infoLine">
                     <p class="content label">房屋年限:</p>
-                    <p class="content">{{houseDetail.houseAge}}</p>
+                    <p class="content">{{houseDetail.housingAge}}</p>
                 </div>
                 <div class="infoLine">
                     <p class="content label">抵押信息:</p>
-                    <p class="content">{{houseDetail.mortgage}}</p>
+                    <p class="content">{{houseDetail.mortgageInformation}}</p>
                 </div>
             </div>
             <div class="info">
                 <div class="infoLine">
                     <p class="content label">交易权属:</p>
-                    <p class="content">{{houseDetail.tradeProperty}}</p>
+                    <p class="content">{{houseDetail.transactionOwnership}}</p>
                 </div>
                 <div class="infoLine">
                     <p class="content label">房屋用途:</p>
-                    <p class="content">{{houseDetail.houseUsage}}</p>
+                    <p class="content">{{houseDetail.housingPurpose}}</p>
                 </div>
                 <div class="infoLine">
                     <p class="content label">产权所属:</p>
-                    <p class="content">{{houseDetail.ownership}}</p>
+                    <p class="content">{{houseDetail.propertyOwnership}}</p>
                 </div>
                 <div class="infoLine">
                     <p class="content label">房本备件:</p>
-                    <p class="content">{{houseDetail.credentials}}</p>
+                    <p class="content">{{houseDetail.housingParts}}</p>
                 </div>
             </div>
         </div>
@@ -116,33 +116,20 @@
 <script>
     export default {
         name: "detail",
+        props:{
+            houseDetail:Object
+        },
         data(){
             return{
-                houseDetail: {
-                    roomType: '3室1厅1厨1卫',
-                    outerSize: '72.83㎡',
-                    innerSize: '62.48㎡',
-                    direction: '南 北',
-                    decoration: '精装',
-                    warmth: '集中供暖',
-                    floor: '中楼层 (共4层)',
-                    roomStructure: '平层',
-                    architectureType: '板楼',
-                    architectureStructure: '混合结构',
-                    neighborType: '一梯两户',
-                    lift: '无',
-                    postTime:'2018-11-05',
-                    laseTradeTime:'2013-12-03',
-                    tradeProperty:'商品房',
-                    houseUsage:'普通住宅',
-                    houseAge:'房屋年限',
-                    ownership:'非共有',
-                    mortgage:'无抵押',
-                    credentials:'已上传房本照片',
-                    imgs: [
-                        require("../../assets/timg.jpeg"),
-                        require("../../assets/timg-2.jpeg")
-                    ]
+
+            }
+        },
+        computed:{
+            displayLift(){
+                if (this.houseDetail.lift===0){
+                    return "是";
+                }else {
+                    return "否";
                 }
             }
         }

@@ -16,7 +16,7 @@
         </el-form>
         <div slot="footer" class="dialog-footer">
             <el-button @click="$emit('close')">取 消</el-button>
-            <el-button type="primary" @click="confirm">确 定</el-button>
+            <el-button type="primary" @click="$emit('confirm')">确 定</el-button>
         </div>
     </div>
 </template>
@@ -25,26 +25,15 @@
     export default {
         name: "request",
         props: {
-
+            form:Object
         },
         data(){
             return{
-                form:{
-                    phoneNumber:'',
-                    date:'',
-                    time:''
-                }
+
             }
         },
         methods:{
-            confirm(){
-                this.$emit('close');
-                this.$notify({
-                    title: '申请成功',
-                    message: '等待卖家做出回应',
-                    type: 'success'
-                });
-            }
+
         }
     }
 </script>
