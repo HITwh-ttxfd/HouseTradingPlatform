@@ -23,8 +23,9 @@ public class DBconnection extends DBConnector {
         String date = request.getDate();
         String time = request.getTime();
         String sendTime = request.getSendTime();
-        String sql="insert into requests(senderID,receiverID,houseID,phone,location,date,time,sendTime) " +
-                "values('"+senderID+"','"+receiverID+"','"+houseID+"','"+phone+"','"+location+"','"+date+"','"+time+"','"+sendTime+"');";
+        String status = request.getStatus();
+        String sql="insert into requests(senderID,receiverID,houseID,phone,location,date,time,sendTime,status) " +
+                "values('"+senderID+"','"+receiverID+"','"+houseID+"','"+phone+"','"+location+"','"+date+"','"+time+"','"+sendTime+"','"+status+"');";
         try {
             PreparedStatement preparedStatement = (PreparedStatement)this.connection.prepareStatement(sql);
             preparedStatement.executeUpdate();
@@ -59,8 +60,9 @@ public class DBconnection extends DBConnector {
                 String time = resultSet.getString("time");
                 String phone = resultSet.getString("phone");
                 String location = resultSet.getString("location");
+                String sendTime = resultSet.getString("sendTime");
                 String status = resultSet.getString("status");
-                requests.add(new Request(houseID,senderID,receiverID,date,time,phone,location,status));
+                requests.add(new Request(houseID,senderID,receiverID,date,time,sendTime,phone,location,status));
             }
             System.out.println("Return requests successfully.");
         }catch (Exception e){
