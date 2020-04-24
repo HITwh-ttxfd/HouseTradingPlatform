@@ -3,9 +3,7 @@ package com.hit.rest;
 
 import connector.HouseDBconnection;
 import entity.House;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -86,13 +84,15 @@ public class HouseService {
     }
 
     //筛选
-    @RequestMapping(value="/select/{position}/mimSize/maxSize/mimPrice/maxPrice/score/{time}")
-    public ArrayList<House> selectHouse(@PathVariable("position")String position, @PathVariable("mimSize")double mimSize
-            , @PathVariable("maxSize")double maxSize, @PathVariable("mimPrice")double mimPrice,
-                                        @PathVariable("maxPrice")double maxPrice,
-                                        @PathVariable("score")float score,@PathVariable("time")int time) throws ParseException {
+    @PostMapping(value = "/select")
+    public ArrayList<House> selectHouse(
+            @RequestParam(value = "village")String village,
+            @RequestParam(value ="position")String position, @RequestParam(value ="mimSize")double mimSize,
+            @RequestParam(value ="maxSize")double maxSize, @RequestParam(value ="mimPrice")double mimPrice,
+            @RequestParam(value ="maxPrice")double maxPrice,
+            @RequestParam(value ="score")float score,@RequestParam(value ="time")int time) throws ParseException{
         HouseDBconnection p = new HouseDBconnection();
-        ArrayList<House> houses= p.selectBasicHouse(position,mimSize,maxSize,mimPrice,maxPrice,score,time);
+        ArrayList<House> houses= p.selectBasicHouse(position,village,mimSize,maxSize,mimPrice,maxPrice,score,time);
         return houses;
     }
 }
