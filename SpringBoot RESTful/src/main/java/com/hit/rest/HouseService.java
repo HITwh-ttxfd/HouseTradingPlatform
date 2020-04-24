@@ -86,7 +86,7 @@ public class HouseService {
     //筛选
     @RequestMapping(value = "/select")
     public ArrayList<House> selectHouse(
-            @RequestParam(value = "community")String village,
+            @RequestParam(value = "village")String village,
             @RequestParam(value ="position")String position, @RequestParam(value ="mimSize")double mimSize,
             @RequestParam(value ="maxSize")double maxSize, @RequestParam(value ="mimPrice")double mimPrice,
             @RequestParam(value ="maxPrice")double maxPrice,
