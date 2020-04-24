@@ -287,9 +287,9 @@ public class HouseDBconnection {
         String sql="select * from house where";
         if(position!=""){
             sql+=" location LIKE '"+position+"%' and ";
-            if(village!="")
-                sql+=" village LIKE '"+position+"%' and ";
         }
+        if(village!="")
+            sql+=" village LIKE '"+position+"%' and ";
         sql+=" size >"+mimSize;
         sql+=" and size <"+maxSize;
         sql+=" and price >"+minPrice;
