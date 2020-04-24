@@ -289,7 +289,7 @@ public class HouseDBconnection {
             sql+=" location LIKE '"+position+"%' and ";
         }
         if(village!="")
-            sql+=" village = '"+position+"%' and ";
+            sql+=" village = '"+position+"' and ";
         sql+=" size >"+mimSize;
         sql+=" and size <"+maxSize;
         sql+=" and price >"+minPrice;
