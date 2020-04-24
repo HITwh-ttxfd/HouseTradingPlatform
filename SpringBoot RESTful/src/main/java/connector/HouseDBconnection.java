@@ -289,7 +289,7 @@ public class HouseDBconnection {
             sql+=" location LIKE '"+position+"%' and ";
         }
         if(village!="")
-            sql+=" village = '"+position+"' and ";
+            sql+=" village = '"+village+"' and ";
         sql+=" size >"+mimSize;
         sql+=" and size <"+maxSize;
         sql+=" and price >"+minPrice;
@@ -308,7 +308,8 @@ public class HouseDBconnection {
         temp=str1+'-'+str2;
 
 
-        sql+=" and ListingTime >"+temp;
+        sql+=" and time >"+temp;
+        System.out.println(sql);
         try {
             Statement statement = (Statement)this.connection.createStatement();
             ResultSet resultSet = (ResultSet)statement.executeQuery(sql);
