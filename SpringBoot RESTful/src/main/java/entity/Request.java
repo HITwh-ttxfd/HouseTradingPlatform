@@ -11,8 +11,21 @@ public class Request {
     private String date;
     private String time;
     private String sendTime;
-
+    private String status;
+    // 0-等待审核 1-卖家拒绝 2-卖家同意 3-已完成
     public Request(){}
+
+    public Request(String houseID, String senderID, String receiverID, String date, String time,String sendTime,String phone,String location,String status) {
+        this.houseID = houseID;
+        this.senderID = senderID;
+        this.receiverID = receiverID;
+        this.date = date;
+        this.time = time;
+        this.sendTime = sendTime;
+        this.phone = phone;
+        this.location=location;
+        this.status=status;
+    }
 
     public Request(String houseID, String senderID, String receiverID, String date, String time,String sendTime,String phone,String location) {
         this.houseID = houseID;
@@ -23,6 +36,7 @@ public class Request {
         this.sendTime = sendTime;
         this.phone = phone;
         this.location=location;
+        this.status="0";
     }
 
     public Request(String houseID, String senderID, String receiverID, String date, String time,String phone,String location) {
@@ -34,6 +48,15 @@ public class Request {
         this.sendTime=new Date().toString();
         this.phone=phone;
         this.location=location;
+        this.status="0";
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getStatus() {
+        return status;
     }
 
     public String getLocation() {

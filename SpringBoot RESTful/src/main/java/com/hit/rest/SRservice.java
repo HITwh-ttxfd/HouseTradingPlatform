@@ -100,7 +100,7 @@ public class SRservice {
 
     // request相关--测试成功
     @RequestMapping(value = "/sendRequest/{senderID}/{receiverID}/{houseID}/{phone}", method = RequestMethod.GET)
-    public void sendRequeset(@PathVariable("senderID")String senderID, @PathVariable("receiverID")String receiverID,
+    public String sendRequeset(@PathVariable("senderID")String senderID, @PathVariable("receiverID")String receiverID,
                              @PathVariable("houseID")String houseID,@PathVariable("phone")String phone,
                              @RequestParam(value = "date")String date,@RequestParam(value = "time")String time){
         User u1 = db.selectUser(senderID);
@@ -111,7 +111,15 @@ public class SRservice {
         String location = house.getLocation(); // getLocation
         // 采取另一个DBconnection类
         Request request = buy.sendRequest(house,sell,date,time,phone,location);
-        db.addRequests(request);
+        String check = db.selectRequest(request);
+        if(check.equals("exist")){
+            return check;
+        }else if(check.equals("new")){
+            db.addRequests(request);
+            return "success";
+        }else{
+            return "fali";
+        }
     }
         @RequestMapping(value = "/receiveRequests/{id}", method = RequestMethod.GET)
     public ArrayList<Request> receiveRequests(@PathVariable("id")String receiverID){
@@ -131,12 +139,32 @@ public class SRservice {
         return requests;
     }
     @RequestMapping(value = "/delRequest/{senderID}/{receiverID}/{houseID}/{phone}")
-    public void delRequest(@PathVariable("senderID")String senderID,@PathVariable("receiverID")String receiverID,
+    public String delRequest(@PathVariable("senderID")String senderID,@PathVariable("receiverID")String receiverID,
                            @PathVariable("houseID")String houseID,@PathVariable("phone")String phone,
                            @RequestParam(value =  "date")String date, @RequestParam(value = "time")String time) {
         House house = hdb.getHouse(houseID);
         String location = house.getLocation(); // getlocation
         Request request = new Request(houseID,senderID,receiverID,date,time,phone,location);
-        db.delRequests(request);
+        String result = db.delRequests(request);
+        if(result.equals("success")){
+            return result;
+        }else if(result.equals("fail")){
+            return result;
+        }else{
+            return "error";
+        }
     }
+    @RequestMapping(value = "/changeRequestStatus/{senderID}/{receiverID}/{houseID}")
+    public String changeRequest(@PathVariable("senderID")String senderID,@PathVariable("receiverID")String receiverID,
+                                @PathVariable("houseID")String houseID,@RequestParam(value = "status")String choice){
+        String result = db.changeRequestStatus(senderID,receiverID,houseID,choice);
+        if(result.equals("success")){
+            return result;
+        }else if(result.equals("fail")){
+            return result;
+        }else{
+            return "error";
+        }
+    }
+
 }

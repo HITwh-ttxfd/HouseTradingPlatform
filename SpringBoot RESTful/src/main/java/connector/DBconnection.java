@@ -59,7 +59,8 @@ public class DBconnection extends DBConnector {
                 String time = resultSet.getString("time");
                 String phone = resultSet.getString("phone");
                 String location = resultSet.getString("location");
-                requests.add(new Request(houseID,senderID,receiverID,date,time,phone,location));
+                String status = resultSet.getString("status");
+                requests.add(new Request(houseID,senderID,receiverID,date,time,phone,location,status));
             }
             System.out.println("Return requests successfully.");
         }catch (Exception e){
@@ -68,8 +69,45 @@ public class DBconnection extends DBConnector {
         return requests;
     }
     //更改请求--未定义
+    //查询请求
+    public String selectRequest(Request request){
+        String send = request.getSenderID();
+        String receive = request.getReceiverID();
+        String houseid = request.getHouseID();
+        String sql = "select * from requests where senderID='"+send+"' and receiverID='"+receive+"' and houseID='"+houseid+"'";
+        try {
+            Statement statement = (Statement)this.connection.createStatement();
+            ResultSet resultSet = (ResultSet)statement.executeQuery(sql);
+            while (resultSet.next()){
+                String senderID = resultSet.getString("senderID");
+                String receiverID = resultSet.getString("receiverID");
+                String houseID = resultSet.getString("houseID");
+                if (send==senderID&&receive==receiverID&&houseid==houseID){
+                    return "exist";
+                }
+            }
+            System.out.println("Search requests successfully.");
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return "new";
+    }
+    //更改状态
+    public String changeRequestStatus(String senderID,String receiverID,String houseID, String choice){
+        String sql = "update requests set status='"+choice+"' where senderID='"+senderID+"' and receiverID='"+receiverID+"' and houseID='"+houseID+"'";
+        try {
+            PreparedStatement preparedStatement = (PreparedStatement)this.connection.prepareStatement(sql);
+            preparedStatement.executeUpdate();
+            System.out.println("com.company.Request request status changed successfully.");
+            preparedStatement.close();
+        }catch (Exception e){
+            e.printStackTrace();
+            return "fail";
+        }
+        return "sucess";
+    }
     //删除请求
-    public void delRequests(Request request){
+    public String delRequests(Request request){
         String houseID = request.getHouseID();
         String senderID = request.getSenderID();
         String receiverID = request.getReceiverID();
@@ -82,8 +120,10 @@ public class DBconnection extends DBConnector {
             preparedStatement.executeUpdate();
             System.out.println("Delete successfully.");
             preparedStatement.close();
+            return "success";
         }catch (Exception e){
             e.printStackTrace();
+            return "fail";
         }
     }
 
