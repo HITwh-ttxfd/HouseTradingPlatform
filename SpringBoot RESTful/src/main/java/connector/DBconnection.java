@@ -24,7 +24,7 @@ public class DBconnection extends DBConnector {
         String time = request.getTime();
         String sendTime = request.getSendTime();
         String status = request.getStatus();
-        String sql="insert into requests(senderID,receiverID,houseID,phone,location,date,time,sendTime,staus) " +
+        String sql="insert into requests(senderID,receiverID,houseID,phone,location,date,time,sendTime,status) " +
                 "values('"+senderID+"','"+receiverID+"','"+houseID+"','"+phone+"','"+location+"','"+date+"','"+time+"','"+sendTime+"','"+status+"');";
         try {
             PreparedStatement preparedStatement = (PreparedStatement)this.connection.prepareStatement(sql);
