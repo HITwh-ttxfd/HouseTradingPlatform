@@ -33,6 +33,7 @@ public class HouseDBconnection {
             e.printStackTrace();
         }
     }
+
     //增加房源
     public void addHouse(House house){
         if(house==null){
@@ -64,6 +65,7 @@ public class HouseDBconnection {
             e.printStackTrace();
         }
     }
+
     //查询HouseId最大值
     public String selectMaxHouseID(){
         String sql = "select max(houseID) from house ";
@@ -80,6 +82,7 @@ public class HouseDBconnection {
         }
         return temp;
     }
+
     //   删除房源
     public void deleteHouse(String houseID) {
         String sql = "delete from house where houseID='"+houseID+"'";
@@ -91,6 +94,7 @@ public class HouseDBconnection {
             e.printStackTrace();
         }
     }
+
     // 查找某一房源详细信息    第二次点击
     public House getHouse(String houseID) {
         String sql = "select * from house where houseID='"+houseID+"'";
@@ -155,6 +159,7 @@ public class HouseDBconnection {
         }
         return house;
     }
+
     //返回所有house
     public  ArrayList<House> getHouses() {
         String sql = "select * from house ";
@@ -214,6 +219,7 @@ public class HouseDBconnection {
         }
         return houses;
     }
+
     //返回基本房源   第一次点击
     public ArrayList<House> getBasicHouses() {
         String sql = "select * from house ";
@@ -244,6 +250,7 @@ public class HouseDBconnection {
         }
         return houses;
     }
+
     //修改房源价格（房子也就价格可以修改了）
     public void changeHousePrice(String houseID, double price){
         String sql = "UPDATE house SET price = "+price+" WHERE houseID ='"+houseID+"'";
@@ -255,6 +262,7 @@ public class HouseDBconnection {
             e.printStackTrace();
         }
     }
+
     //修改房源评价分数
     public void changeHouseScore(float score, String houseID){
         String sql = "UPDATE house SET score = "+score+" WHERE houseID ='"+houseID+"'";
@@ -266,6 +274,7 @@ public class HouseDBconnection {
             e.printStackTrace();
         }
     }
+
     //获得房源评价分数
     public float getHouseScore(String houseID){
         String sql = "select score from house where houseID='"+houseID+"'";
@@ -281,6 +290,7 @@ public class HouseDBconnection {
         }
         return temp;
     }
+
     //搜索房源
     public ArrayList<House> selectBasicHouse(String position,String village, double mimSize, double maxSize, double minPrice,double maxPrice, float score, int time) throws ParseException {
         ArrayList<House> houses = new ArrayList<House>();
