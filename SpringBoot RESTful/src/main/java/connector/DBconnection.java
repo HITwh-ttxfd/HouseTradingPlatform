@@ -9,6 +9,56 @@ import java.util.ArrayList;
 @Component
 public class DBconnection extends DBConnector {
 
+    // 上传图片
+    public void uploadImg(String path, String houseID,String fileName,String style){
+        if(path==null || houseID==null){
+            System.out.println("Image is null. Error.");
+            return;
+        }
+        String sql = "insert into house_pic(houseID,fileName,style,path) values('"+houseID+"','"+fileName+"','"
+                +style+"','"+path+"');";
+        try {
+            PreparedStatement preparedStatement = (PreparedStatement)this.connection.prepareStatement(sql);
+            preparedStatement.executeUpdate();
+            System.out.println("Image insert successfully.");
+            preparedStatement.close();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+    // 返回图片列表
+    public ArrayList<housePic> selectImg(String houseID){
+        ArrayList<housePic> bases = new ArrayList<>();
+        String sql = "select * from house_pic where houseID='"+houseID+"';";
+        try {
+            Statement statement = this.connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(sql);
+            while (resultSet.next()){
+                String houseid= resultSet.getString("houseID");
+                String fileName = resultSet.getString("fileName");
+                String style = resultSet.getString("style");
+                String path = resultSet.getString("path");
+                System.out.println(houseID);
+                bases.add(new housePic(houseid,fileName,style,path));
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return bases;
+    }
+    // 删除图片
+    public void delImg(String houseID,String fileName){
+        String sql = "delete from house_pic where houseID='"+houseID+"' and fileName='"+fileName+"';";
+        try {
+            PreparedStatement preparedStatement = (PreparedStatement)this.connection.prepareStatement(sql);
+            preparedStatement.executeUpdate();
+            System.out.println("Image delete successfully.");
+            preparedStatement.close();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
     //上传请求
     public void addRequests(Request request){
         if(request==null){
