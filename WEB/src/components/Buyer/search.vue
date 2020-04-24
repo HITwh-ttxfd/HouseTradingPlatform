@@ -52,7 +52,7 @@
         </el-form>
         <div class="dialog-footer" slot="footer">
             <el-button @click="$emit('close')">取 消</el-button>
-            <el-button @click="confirm" type="primary">确 定</el-button>
+            <el-button @click="$emit('selectionEnabled')" type="primary">确 定</el-button>
         </div>
     </div>
 </template>
@@ -60,21 +60,11 @@
 <script>
     export default {
         name: "search",
+        props:{
+            form:Object
+        },
         data() {
             return {
-                form: {
-                    province: '',
-                    city: '',
-                    district: '',
-                    street:'',
-                    community:'',
-                    mimSize:10,
-                    maxSize:1000,
-                    mimPrice: 50000,
-                    maxPrice: 100000000,
-                    age:50,
-                    rate:0.0
-                },
                 provinces:[],
                 cities:'',
                 districts:'',
@@ -82,12 +72,6 @@
             }
         },
         methods:{
-            confirm(){
-                this.$emit('close');
-            },
-            searchSize(){
-
-            },
             searchLocation(level){
                 if (level<0||level>3)
                     return

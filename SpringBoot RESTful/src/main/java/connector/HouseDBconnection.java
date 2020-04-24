@@ -100,7 +100,7 @@ public class HouseDBconnection {
             ResultSet resultSet = (ResultSet)statement.executeQuery(sql);
             while (resultSet.next()){
                 String village = resultSet.getString("village");
-                Date time = resultSet.getDate("date");
+                Date time = resultSet.getDate("time");
                 String sellerID = resultSet.getString("sellerID");
                 double size = resultSet.getDouble("size");
                 double locationX = resultSet.getDouble("locationX");
@@ -164,7 +164,7 @@ public class HouseDBconnection {
             ResultSet resultSet = (ResultSet)statement.executeQuery(sql);
             while (resultSet.next()){
                 String village = resultSet.getString("village");
-                Date time = resultSet.getDate("date");
+                Date time = resultSet.getDate("time");
                 String houseID = resultSet.getString("houseID");
                 String sellerID = resultSet.getString("sellerID");
                 double size = resultSet.getDouble("size");
@@ -285,16 +285,16 @@ public class HouseDBconnection {
     public ArrayList<House> selectBasicHouse(String position,String village, double mimSize, double maxSize, double minPrice,double maxPrice, float score, int time) throws ParseException {
         ArrayList<House> houses = new ArrayList<House>();
         String sql="select * from house where";
-        if(position!=null){
-            sql+="location LIKE '"+position+"%' and";
-            if(village!=null)
-                sql+="village LIKE '"+position+"%' and";
+        if(position!=""){
+            sql+=" location LIKE '"+position+"%' and ";
         }
-        sql+="size >"+mimSize;
-        sql+="and size <"+maxSize;
-        sql+="and price >"+minPrice;
-        sql+="and price <"+maxPrice;
-        sql+="and score >"+score;
+        if(village!="")
+            sql+=" village = '"+position+"' and ";
+        sql+=" size >"+mimSize;
+        sql+=" and size <"+maxSize;
+        sql+=" and price >"+minPrice;
+        sql+=" and price <"+maxPrice;
+        sql+=" and score >"+score;
 
         //将现在的时间减去给的时间
         SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd");
@@ -306,11 +306,9 @@ public class HouseDBconnection {
         m-=time;
         str1 = String.valueOf(m);
         temp=str1+'-'+str2;
-        Date date1 = formatter.parse(temp);
 
 
-        sql+="and ListingTime >"+date1;
-        System.out.println(sql);
+        sql+=" and ListingTime >"+temp;
         try {
             Statement statement = (Statement)this.connection.createStatement();
             ResultSet resultSet = (ResultSet)statement.executeQuery(sql);
