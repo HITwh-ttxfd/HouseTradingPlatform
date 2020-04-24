@@ -18,7 +18,7 @@ public class LoginControl<Allow> {
             user=dao.find("id",id);
         if (user!=null&& user.getPassword().equals(password)){
             String radio;
-            return new res(user.getUsername(),user.getType(),"success");
+            return new res(user.getPhone(),user.getType(),"success");
         } else {
           return new res(null,null,"error");
         }

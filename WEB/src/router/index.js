@@ -101,7 +101,7 @@ router.beforeEach((to, from, next) => {
             })
         }
     } else {
-        window.localStorage["username"] = '';
+        window.localStorage["primaryKey"] = '';
         window.localStorage["radio"] = '';
         next()
     }
