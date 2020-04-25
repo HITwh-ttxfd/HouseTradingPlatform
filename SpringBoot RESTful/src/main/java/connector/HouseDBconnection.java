@@ -12,18 +12,12 @@ import java.util.ArrayList;
 import java.util.Date;
 
 
-public class HouseDBconnection {
+public class HouseDBconnection extends DBConnector{
     //上传项目专用
-    String driver = "com.mysql.cj.jdbc.Driver";
-    String url = "jdbc:mysql://39.98.48.34:3306/htpbase?serverTimezone=UTC";
-    String user = "root";
-    String password = "2296026";
-    Connection connection = null;
-
 
     //构造函数
     public HouseDBconnection(){
-        try {
+        /*try {
             Class.forName(driver);
             connection=(Connection) DriverManager.getConnection(url,user,password);
             if(!connection.isClosed()){
@@ -31,7 +25,8 @@ public class HouseDBconnection {
             }
         }catch (Exception e){
             e.printStackTrace();
-        }
+        }*/
+        super();
     }
 
     //增加房源
