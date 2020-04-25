@@ -27,7 +27,7 @@ public class DBconnection extends DBConnector {
         }
     }
     // 返回图片列表
-    public ArrayList<housePic>  selectImg(String houseID){
+    public ArrayList<housePic> selectImg(String houseID){
         ArrayList<housePic> bases = new ArrayList<>();
         String sql = "select * from house_pic where houseID='"+houseID+"';";
         try {
@@ -134,13 +134,17 @@ public class DBconnection extends DBConnector {
                 String senderID = resultSet.getString("senderID");
                 String receiverID = resultSet.getString("receiverID");
                 String houseID = resultSet.getString("houseID");
-                if (send==senderID&&receive==receiverID&&houseid==houseID){
+                System.out.println(senderID+" "+send);
+                System.out.println(receiverID+" "+receive);
+                System.out.println(houseID+" "+houseid);
+                if (send.equals(senderID) && receive.equals(receiverID) && houseid.equals(houseID)){
                     return "exist";
                 }
             }
             System.out.println("Search requests successfully.");
         }catch (Exception e){
             e.printStackTrace();
+            return "exist";
         }
         return "new";
     }
