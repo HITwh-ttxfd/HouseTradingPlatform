@@ -9,7 +9,7 @@ import java.sql.DriverManager;
 public class DBConnector {
     //数据库连接基类
     String driver = "com.mysql.cj.jdbc.Driver";
-    String url = "jdbc:mysql://39.98.48.34:3306/htpbase?serverTimezone=UTC&autoReconnect=true";
+    String url = "jdbc:mysql://39.98.48.34:3306/htpbase?serverTimezone=UTC&&autoReconnect=true&failOverReadOnly=false";
     String user = "root";
     String password = "2296026";
     Connection connection = null;
