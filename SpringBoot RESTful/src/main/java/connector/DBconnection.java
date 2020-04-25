@@ -27,7 +27,7 @@ public class DBconnection extends DBConnector {
         }
     }
     // 返回图片列表
-    public ArrayList<housePic> selectImg(String houseID){
+    public ArrayList<housePic>  selectImg(String houseID){
         ArrayList<housePic> bases = new ArrayList<>();
         String sql = "select * from house_pic where houseID='"+houseID+"';";
         try {
