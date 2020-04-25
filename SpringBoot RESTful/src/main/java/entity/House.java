@@ -83,7 +83,7 @@ public class House {
         this.score = score;
         this.lift = lift;
         this.lastTransaction = lastTransaction;
-        HouseType = houseType;
+        this.HouseType = houseType;
         this.buildingArea = buildingArea;
         this.interiorArea = interiorArea;
         this.houseOrientation = houseOrientation;
@@ -93,7 +93,7 @@ public class House {
         this.houseTypeStructure = houseTypeStructure;
         this.buildingType = buildingType;
         this.elevatorProportion = elevatorProportion;
-        ListingTime = listingTime;
+        this.ListingTime = listingTime;
         this.housingAge = housingAge;
         this.mortgageInformation = mortgageInformation;
         this.transactionOwnership = transactionOwnership;
