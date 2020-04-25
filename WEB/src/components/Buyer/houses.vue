@@ -47,6 +47,11 @@
                             size="small"
                             type="primary"><i class="el-icon-setting"> 筛选</i>
                     </el-button>
+                    <el-button
+                            @click="reset()"
+                            size="small"
+                            type="info"><i class="el-icon-refresh-left"> 重置</i>
+                    </el-button>
                 </template>
                 <template slot-scope="scope">
                     <el-button
@@ -100,6 +105,19 @@
                     age:50,
                     rate:0.0
                 },
+                filterBackup:{
+                    province: '',
+                    city: '',
+                    district: '',
+                    street:'',
+                    community:'',
+                    mimSize:10,
+                    maxSize:1000,
+                    mimPrice: 50000,
+                    maxPrice: 100000000,
+                    age:50,
+                    rate:0.0
+                },
                 requestForm:{
                     senderID:'',
                     sellerID:'',
@@ -112,8 +130,13 @@
             }
         },
         methods: {
+            reset(){
+                this.load()
+                Object.assign(this.$data.request, this.$options.data().request);
+            },
             select() {
                 this.filterVisible=true;
+                this.filterBackup = JSON.parse(JSON.stringify(this.filter));
             },
             detail(id) {
                 this.$axios({
@@ -121,6 +144,14 @@
                     method: 'GET'
                 }).then(res=>{
                     this.houseDetail=res.data;
+                    this.$axios({
+                        url: 'http://localhost:8080/imgManage/selectImg/'+id,
+                        method: 'GET',
+                    }).then(res=>{
+                        this.$set(this.houseDetail,'imgs',res.data);
+                    }).catch(e=>{
+                        console.log(e);
+                    })
                     this.detailVisible = true;
                     setTimeout(function () {
                         map = new AMap.Map('AMap', {
@@ -133,8 +164,9 @@
                         })
                         map.add(marker);
                     }, 30);
+                }).catch(e=>{
+                    console.log(e);
                 })
-
             },
             request(sellerID,houseID){
                 this.requestVisible=true;
@@ -144,7 +176,7 @@
             },
             closeRequest(){
                 this.requestVisible=false;
-                Object.assign(this.$data.request, this.$options.data().request);
+
             },
             load() {
                 this.$axios({
