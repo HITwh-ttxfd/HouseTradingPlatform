@@ -5,7 +5,7 @@
                 <el-carousel height="200px">
                     <el-carousel-item :key="img.fileName" v-for="img in houseDetail.imgs">
                         <h3 class="small">
-                            <el-image :src="img.url" fit="contain">
+                            <el-image :src="img.path" fit="contain">
                                 <div class="image-slot" slot="error">
                                     <i class="el-icon-picture-outline"></i>
                                 </div>
