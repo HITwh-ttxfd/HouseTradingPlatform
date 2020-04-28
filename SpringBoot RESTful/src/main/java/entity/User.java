@@ -2,6 +2,8 @@ package entity;
 
 import connector.UserDao;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 public class User {
@@ -20,7 +22,11 @@ public class User {
     }
     public Message sendMessage(String content, User receiver){
         String receiverID = receiver.getPhone();
-        Message message = new Message(content,this.phone,receiverID,new Date().toString());
+        String name = receiver.getUsername();
+        Calendar c = Calendar.getInstance();
+        String d = c.get(Calendar.YEAR)+"-"+c.get(Calendar.MONTH)+"-"+c.get(Calendar.DATE)+" "
+                +c.get(Calendar.HOUR_OF_DAY)+":"+c.get(Calendar.MINUTE)+":"+c.get(Calendar.SECOND);
+        Message message = new Message(name,this.phone,receiverID,content,d);
         return message;
     }
     public Comment sendComment(String content, House house){

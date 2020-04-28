@@ -79,13 +79,14 @@ public class SRservice {
         Message message = buy.sendMessage(content, sell);
         return DBconnection.addMessages(message);
     }
-    @RequestMapping(value = "/receiveMessages/{id}", method = RequestMethod.GET)
-    @ResponseBody
-    public List<Message> receiveMessages(@PathVariable("id")String receiverID){
-        User u = DBconnection.selectUser(receiverID);
+    @RequestMapping(value = "/receiveMessages/{id1}/{id2}", method = RequestMethod.GET)
+    @ResponseBody // 返回符合id的所有消息
+    public List<Message> receiveMessages(@PathVariable("id1")String senderID,@PathVariable("id2")String receiverID){
+        User u1 = DBconnection.selectUser(senderID);
+        User u2 = DBconnection.selectUser(receiverID);
         List<Message> messages;
-        //messages = db.selectMessages(u);
-        if(u.getType().equals("seller")){
+        messages = DBconnection.selectMessages(u1,u2);
+/*        if(u.getType().equals("seller")){
             Seller sell = new Seller(u.getUsername(),u.getPassword(),u.getRealname(),u.getId(),u.getPhone());
             messages = DBconnection.selectMessages(sell);
         }else if(u.getType().equals("buyer")){
@@ -94,8 +95,24 @@ public class SRservice {
         }else{
             System.out.println("No this user.");
             return null;
-        }
+        }*/
         return messages;
+    }
+    @GetMapping(value = "/changeMessageStatus/{senderID}/{receiverID}/{content}/{date}")
+    public String changeMessageStatus(@PathVariable("senderID")String send,@PathVariable("receiverID")String receive,
+                                      @PathVariable("content")String content,@PathVariable("date")String date,
+                                      @RequestParam(name = "status")String status){
+        String name = DBconnection.selectUser(receive).getUsername();
+        Message message = new Message(name,send,receive,content,date,status);
+        return DBconnection.changeMessageStatus(message,status);
+        //return "success";
+    }
+    @GetMapping(value = "/delMessage/{senderID}/{receiverID}/{content}/{date}")
+    public String delMessage(@PathVariable("senderID")String send,@PathVariable("receiverID")String receive,
+                             @PathVariable("content")String content,@PathVariable("date")String date){
+        String name = DBconnection.selectUser(receive).getUsername();
+        Message message = new Message(name,send,receive,content,date);
+        return DBconnection.delMessage(message);
     }
 
     // request相关--测试成功
