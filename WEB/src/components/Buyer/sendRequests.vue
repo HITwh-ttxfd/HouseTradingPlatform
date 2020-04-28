@@ -1,5 +1,7 @@
 <template>
+    <div>
     <el-table
+            v-loading="loading"
             :data="Requests">
         <el-table-column
                 align="center"
@@ -19,7 +21,7 @@
         <el-table-column align="center" label="操作">
             <template slot-scope="scope">
                 <el-button
-                        @click="detail(scope.row)"
+                        @click="detail(scope.row.houseID)"
                         size="mini">详情
                 </el-button>
                 <el-button
@@ -37,28 +39,69 @@
             </template>
         </el-table-column>
     </el-table>
+        <el-dialog :visible.sync="detailVisible" title="详细信息" destroy-on-close @closed="destroyMap">
+            <detail :house-detail="houseDetail"></detail>
+        </el-dialog>
+    </div>
 </template>
 
 <script>
+    import Detail from "./detail";
+    let map;
     export default {
         name: "sendRequests",
+        components: {Detail},
         data() {
             return {
-                Requests: []
+                Requests: [],
+                detailVisible: false,
+                houseDetail:{},
+                loading: true
             }
         },
         methods: {
             delete() {
 
             },
-            detail() {
-
+            destroyMap(){
+                map.destroy();
+            },
+            detail(id) {
+                this.$axios({
+                    url: 'http://localhost:8080/house/'+id,
+                    method: 'GET'
+                }).then(res=>{
+                    this.houseDetail=res.data;
+                    this.$axios({
+                        url: 'http://localhost:8080/imgManage/selectImg/'+id,
+                        method: 'GET',
+                    }).then(res=>{
+                        this.$set(this.houseDetail,'imgs',res.data);
+                    }).catch(e=>{
+                        console.log(e);
+                    })
+                    this.detailVisible = true;
+                    setTimeout(function () {
+                        map = new AMap.Map('AMap', {
+                            resizeEnable: true,
+                            center: [res.data.locationX,res.data.locationY],
+                            zoom: 13
+                        });
+                        let marker = new AMap.Marker({
+                            position: [res.data.locationX,res.data.locationY]
+                        })
+                        map.add(marker);
+                    }, 30);
+                }).catch(e=>{
+                    console.log(e);
+                })
             },
             load(){
                 this.$axios({
                     url: 'http://localhost:8080/SRservice/receiveRequests/'+localStorage['username'],
                     method: 'GET',
                 }).then(res=>{
+                    this.loading=false;
                     this.Requests=res.data;
                 }).catch(e=>{
                     this.$message.error("拉取请求列表失败");

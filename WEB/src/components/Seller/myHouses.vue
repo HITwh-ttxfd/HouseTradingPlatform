@@ -1,5 +1,5 @@
 <template>
-  <el-table stripe :data="conversations" >
+  <el-table stripe :data="houses" >
     <el-table-column
             prop="location"
             label="位置"
@@ -43,7 +43,7 @@
     data(){
       return{
         searchInfo:'',
-        conversations:[{
+        houses:[{
           location:'山东省威海市文化西路2号',
           size:'150平米',
           price:'1500000元'

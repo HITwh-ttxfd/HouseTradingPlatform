@@ -4,7 +4,7 @@ import login from '../components/login'
 import buyer from "../components/Buyer/buyer";
 import buyerHouses from "../components/Buyer/houses";
 import conversations from "../components/shared/conversations";
-import receiveRequests from "../components/Buyer/sendRequests";
+import receiveRequests from "../components/Seller/receiveRequests";
 import sendRequests from "../components/Buyer/sendRequests";
 import myHouses from "../components/Seller/myHouses";
 import seller from "../components/Seller/seller";

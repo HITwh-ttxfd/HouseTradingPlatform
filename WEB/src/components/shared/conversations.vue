@@ -1,82 +1,70 @@
 <template>
-  <el-table stripe :data="conversations" >
-    <el-table-column
-      prop="guestID"
-      label="用户名"
-      align="center">
-    </el-table-column>
-    <el-table-column
-      prop="date"
-      label="日期"
-      align="center">
-    </el-table-column>
-    <el-table-column
-      prop="recentMessage"
-      label="最近消息"
-      align="center">
-    </el-table-column>
-    <el-table-column
-            align="center">
-      <template slot="header" slot-scope="scope">
-        <el-input
-                v-model="searchInfo"
-                size="mini"
-                style="width: 70%"
-                placeholder="输入用户名搜索"/>
-        <el-button
-                size="mini"
-                type="primary"
-                @click="search()">搜索</el-button>
-      </template>
-      <template slot-scope="scope">
-        <el-button
-                size="mini"
-                @click="detail(scope.$index, scope.row)">详情</el-button>
-        <el-button
-                size="mini"
-                type="danger"
-                @click="delete(scope.$index, scope.row)">删除</el-button>
-      </template>
-    </el-table-column>
-  </el-table>
+    <div>
+        <el-table stripe :data="conversations" >
+            <el-table-column
+                    prop="guestID"
+                    label="用户名"
+                    align="center">
+            </el-table-column>
+            <el-table-column
+                    prop="date"
+                    label="日期"
+                    align="center">
+            </el-table-column>
+            <el-table-column
+                    prop="recentMessage"
+                    label="最近消息"
+                    align="center">
+            </el-table-column>
+            <el-table-column align="center" label="操作">
+                <template slot-scope="scope">
+                    <el-button
+                            size="mini"
+                            @click="detail(scope.row)">详情</el-button>
+                </template>
+            </el-table-column>
+        </el-table>
+        <el-dialog :visible.sync="messageVisible" :title="name" destroy-on-close>
+            <chatting :messages="messages"></chatting>
+        </el-dialog>
+    </div>
 </template>
 
 <script>
-  export default {
-    name: "conversation",
-    data(){
-      return{
-        searchInfo:'',
-        conversations:[{
-          guestID:'王大锤',
-          date:'14:00',
-          recentMessage:'Hello World!'
-        }],
-        conversation:{
-          receiverID:'',
-          date:'',
-          recentMessage:''
+    import Chatting from "./chatting";
+    export default {
+        name: "conversation",
+        components: {Chatting},
+        data(){
+            return{
+                messageVisible:false,
+                searchInfo:'',
+                name:'王大锤',
+                conversations:[{
+                    guestID:'王大锤',
+                    date:'14:00',
+                    recentMessage:'Hello World!'
+                }],
+                conversation:{
+                    receiverID:'',
+                    date:'',
+                    recentMessage:''
+                },
+                messages:[]
+            }
+        },
+        methods:{
+            load(){
+
+            },
+            detail(index){
+                this.messageVisible=true;
+            }
+        },
+        mounted() {
+            // load();
         }
-      }
-    },
-    methods:{
-      load(){
-
-      },
-      search(){
-
-      },
-      detail(index,row){
-
-      },
-      delete(index,row){
-
-      }
-    },
-    mounted() {
-      // load();
     }
-  }
 </script>
 
 <style scoped>
