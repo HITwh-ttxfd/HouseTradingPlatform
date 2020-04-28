@@ -5,6 +5,7 @@
             <el-breadcrumb-item>浏览房源</el-breadcrumb-item>
         </el-breadcrumb>
         <el-table
+                v-loading="loading"
                 :data="houses">
             <el-table-column
                     align="center"
@@ -91,6 +92,7 @@
                 filterVisible: false,
                 requestVisible: false,
                 detailVisible: false,
+                loading: true,
                 houses: [],
                 filter: {
                     province: '',
@@ -183,6 +185,7 @@
                     url: 'http://localhost:8080/houseList',
                     method: 'GET'
                 }).then(res=>{
+                    this.loading=false;
                     this.houses=res.data;
                 }).catch(e=>{
                     console.log(e);

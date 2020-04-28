@@ -10,7 +10,7 @@
                 </el-col>
                 <el-col class="line" :span="2">-</el-col>
                 <el-col :span="11">
-                    <el-time-picker :picker-options="timePickerOptions" placeholder="选择时间" v-model="form.time" format="HH:mm" style="width: 100%;"></el-time-picker>
+                    <el-time-select :picker-options="timePickerOptions" placeholder="选择时间" v-model="form.time" style="width: 100%;"></el-time-select>
                 </el-col>
             </el-form-item>
         </el-form>
@@ -35,8 +35,9 @@
                     }
                 },
                 timePickerOptions:{
-                    selectableRange:['09:00 - 17:00'],
-                    format: 'HH:mm'
+                    start: '08:30',
+                    step: '00:15',
+                    end: '18:30'
                 }
             }
         },
