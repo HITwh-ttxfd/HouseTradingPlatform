@@ -43,8 +43,8 @@
                     id:'18030864538',       //对方id
                     username:'王大锤',         //对方用户名
                     time:'2020-4-28 10:00',     //最近一条消息的发送时间
-                    recentMessage:'Hello World!'    //最近一条消息
-                    //能不能在排序的时候顺便算出来未读消息的条数
+                    recentMessage:'Hello World!',    //最近一条消息
+                    unreadCount: 0
                 }],
                 messages: {
                     name:'王大锤',

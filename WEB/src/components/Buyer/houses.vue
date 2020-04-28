@@ -5,6 +5,7 @@
             <el-breadcrumb-item>浏览房源</el-breadcrumb-item>
         </el-breadcrumb>
         <el-table
+                height="650px"
                 v-loading="loading"
                 :data="houses">
             <el-table-column
@@ -56,13 +57,18 @@
                 </template>
                 <template slot-scope="scope">
                     <el-button
+                            type="primary"
                             @click="detail(scope.row.houseID)"
-                            size="small">详情
+                            size="small"><i class="el-icon-more"></i>
+                    </el-button>
+                    <el-button
+                            @click="comment(scope.row.sellerID,scope.row.houseID)"
+                            size="small"><i class="el-icon-chat-dot-square"></i>
                     </el-button>
                     <el-button
                             type="success"
                             @click="request(scope.row.sellerID,scope.row.houseID)"
-                            size="small">看房
+                            size="small"><i class="el-icon-s-order"></i>
                     </el-button>
                 </template>
             </el-table-column>
@@ -76,6 +82,9 @@
         <el-dialog :visible.sync="filterVisible" title="筛选" destroy-on-close>
             <search :form="filter" @selectionEnabled="selectionConfirmed" @close="closeFilter"></search>
         </el-dialog>
+        <el-dialog width="500px" :visible.sync="commentVisible" title="评价" destroy-on-close>
+            <comment :comments="comments"></comment>
+        </el-dialog>
     </div>
 </template>
 
@@ -83,17 +92,56 @@
     import Detail from "./detail";
     import Request from "./request";
     import search from "./search";
+    import Comment from "./comment";
     let map;
     export default {
         name: "buyerHouses",
-        components: {search, Request, Detail},
+        components: {Comment, search, Request, Detail},
         data() {
             return {
+                commentVisible: false,
                 filterVisible: false,
                 requestVisible: false,
                 detailVisible: false,
                 loading: true,
                 houses: [],
+                comments:[{
+                    date: '2020-04-29',
+                    score: 4,
+                    content:'给阿姨倒一杯\n卡布奇诺'
+                },{
+                    date: '2020-04-30',
+                    score: 5,
+                    content:'我卢本伟\n没有开挂'
+                },{
+                    date: '2020-04-30',
+                    score: 5,
+                    content:'我卢本伟\n没有开挂'
+                },{
+                    date: '2020-04-30',
+                    score: 5,
+                    content:'我卢本伟\n没有开挂'
+                },{
+                    date: '2020-04-30',
+                    score: 5,
+                    content:'我卢本伟\n没有开挂'
+                },{
+                    date: '2020-04-30',
+                    score: 5,
+                    content:'我卢本伟\n没有开挂'
+                },{
+                    date: '2020-04-30',
+                    score: 5,
+                    content:'我卢本伟\n没有开挂'
+                },{
+                    date: '2020-04-30',
+                    score: 5,
+                    content:'我卢本伟\n没有开挂'
+                },{
+                    date: '2020-04-30',
+                    score: 5,
+                    content:'我卢本伟\n没有开挂'
+                }],
                 filter: {
                     province: '',
                     city: '',
@@ -132,6 +180,9 @@
             }
         },
         methods: {
+            comment(){
+                this.commentVisible=true;
+            },
             reset(){
                 this.load()
                 Object.assign(this.$data.request, this.$options.data().request);
@@ -268,5 +319,10 @@
 
     .el-table {
         margin-top: 10px;
+    }
+
+    .route-content{
+        max-height: 500px;
+        overflow: scroll;
     }
 </style>
