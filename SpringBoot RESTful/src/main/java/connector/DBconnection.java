@@ -306,6 +306,10 @@ public class DBconnection{
             e.printStackTrace();
             return "error";
         }
+        finally{
+            HouseDBconnection p = new HouseDBconnection();
+            p.changeScore(houseID);
+        }
     }
     //下传评价至房源
     public static ArrayList<Comment> selectComments(House house){
@@ -378,8 +382,8 @@ public class DBconnection{
         }
     }
     //返回评价数
-    public static int countComments(House house){
-        String sql = "select count(*) as num from comments where houseID='"+house.getHouseID()+"';";
+    public static int countComments(String houseID){
+        String sql = "select count(*) as num from comments where houseID='"+houseID+"';";
         int result = 0;
         try {
             Connection connection = jdbcUtils.getConnect();
@@ -398,8 +402,8 @@ public class DBconnection{
         return result;
     }
     //返回评价总分
-    public static float sumComments(House house){
-        String sql = "select sum(score) as sum from comments where houseID='"+house.getHouseID()+"';";
+    public static float sumComments(String houseID){
+        String sql = "select sum(score) as sum from comments where houseID='"+houseID+"';";
         float result = 0;
         try {
             Connection connection = jdbcUtils.getConnect();
