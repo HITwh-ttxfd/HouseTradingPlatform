@@ -17,7 +17,10 @@ public class User {
     public Request sendRequest(House house, Seller sell,String date,String time,String phone,String location){
         String houseID = house.getHouseID();
         String sellerID = sell.getPhone();
-        Request request = new Request(houseID,this.phone,sellerID,date,time,new Date().toString(),phone,location);
+        Calendar c = Calendar.getInstance();
+        String d = c.get(Calendar.YEAR)+"-"+c.get(Calendar.MONTH)+"-"+c.get(Calendar.DATE)+" "
+                +c.get(Calendar.HOUR_OF_DAY)+":"+c.get(Calendar.MINUTE)+":"+c.get(Calendar.SECOND);
+        Request request = new Request(houseID,this.phone,sellerID,date,time,d,phone,location);
         return request;
     }
     public Message sendMessage(String content, User receiver){
@@ -29,9 +32,12 @@ public class User {
         Message message = new Message(name,this.phone,receiverID,content,d);
         return message;
     }
-    public Comment sendComment(String content, House house){
+    public Comment sendComment(String content, House house,String score){
         String houseID = house.getHouseID();
-        Comment comment = new Comment(this.phone, new Date().toString(), houseID, content);
+        Calendar c = Calendar.getInstance();
+        String d = c.get(Calendar.YEAR)+"-"+c.get(Calendar.MONTH)+"-"+c.get(Calendar.DATE)+" "
+                +c.get(Calendar.HOUR_OF_DAY)+":"+c.get(Calendar.MINUTE)+":"+c.get(Calendar.SECOND);
+        Comment comment = new Comment(this.phone, d, houseID, content,score);
         return comment;
     }
 

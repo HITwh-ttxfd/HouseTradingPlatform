@@ -292,7 +292,7 @@ public class DBconnection{
         String houseID = comment.getHouseID();
         String content = comment.getContent();
         String date = comment.getDate();
-        String score = Float.toString(comment.getScore());
+        float score = comment.getScore();
         String sql = "insert into comments(authorID,houseID,content,date,score) values('"+authorID+"','"+houseID+"','"+content+"','"+date+"','"+score+"')";
         try {
             Connection connection = jdbcUtils.getConnect();
@@ -530,6 +530,7 @@ public class DBconnection{
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(sql);
             HashSet<String> index = new HashSet<>();
+            index.add(id);
             while (resultSet.next()){
                 String name = resultSet.getString("name");
                 String senderID = resultSet.getString("senderID");
@@ -551,6 +552,7 @@ public class DBconnection{
         }catch (Exception e){
             e.printStackTrace();
         }
+        Collections.sort(list,new sortById());
         return list;
     }
 

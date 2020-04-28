@@ -41,12 +41,13 @@ public class SRservice {
     @RequestMapping(value = "/sendComment/{id}", method = RequestMethod.GET)
     public String sendComment(@RequestParam(value = "content", required = true)String content,
                               @PathVariable("id")String authorID,
-                              @RequestParam(value = "houseID", required = true)String houseID){
+                              @RequestParam(value = "houseID", required = true)String houseID,
+                              @RequestParam(value = "score")String score){
         // 上传至comment到数据库
         House house = hdb.getHouse(houseID);
         User u = DBconnection.selectUser(authorID);
         Buyer buy = new Buyer(u.getUsername(),u.getPassword(),u.getRealname(),u.getId(),u.getPhone());
-        Comment comment = buy.sendComment(content, house);
+        Comment comment = buy.sendComment(content, house,score);
         String result = DBconnection.addComments(comment);
         //等待调用更新评分
         return result;
@@ -69,6 +70,7 @@ public class SRservice {
         Comment comment = new Comment(authorID,date,houseID,content,score);
         return DBconnection.delComments(comment);
     }
+
 
     // message相关--测试成功
     @RequestMapping(value = "/sendMessage/{senderID}/{receiverID}", method = RequestMethod.GET)
@@ -123,6 +125,7 @@ public class SRservice {
         list = DBconnection.selectConversation(u);
         return list;
     }
+
 
     // request相关--测试成功
     @RequestMapping(value = "/sendRequest/{senderID}/{receiverID}/{houseID}/{phone}", method = RequestMethod.GET)
