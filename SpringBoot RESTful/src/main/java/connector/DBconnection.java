@@ -10,6 +10,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashSet;
 
 
 public class DBconnection{
@@ -291,7 +292,8 @@ public class DBconnection{
         String houseID = comment.getHouseID();
         String content = comment.getContent();
         String date = comment.getDate();
-        String sql = "insert into comments(authorID,houseID,content,date) values('"+authorID+"','"+houseID+"','"+content+"','"+date+"')";
+        String score = Float.toString(comment.getScore());
+        String sql = "insert into comments(authorID,houseID,content,date,score) values('"+authorID+"','"+houseID+"','"+content+"','"+date+"','"+score+"')";
         try {
             Connection connection = jdbcUtils.getConnect();
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
@@ -319,7 +321,8 @@ public class DBconnection{
                 String houseID = resultSet.getString("houseID");
                 String content = resultSet.getString("content");
                 String date = resultSet.getString("date");
-                comments.add(new Comment(authorID,date,houseID,content));
+                String score = resultSet.getString("score");
+                comments.add(new Comment(authorID,date,houseID,content,score));
             }
             statement.close();
             resultSet.close();
@@ -343,7 +346,8 @@ public class DBconnection{
                 String houseID = resultSet.getString("houseID");
                 String content = resultSet.getString("content");
                 String date = resultSet.getString("date");
-                comments.add(new Comment(authorID,date,houseID,content));
+                String score = resultSet.getString("score");
+                comments.add(new Comment(authorID,date,houseID,content,score));
             }
             statement.close();
             resultSet.close();
@@ -372,6 +376,46 @@ public class DBconnection{
             e.printStackTrace();
             return "error";
         }
+    }
+    //返回评价数
+    public static int countComments(House house){
+        String sql = "select count(*) as num from comments where houseID='"+house.getHouseID()+"';";
+        int result = 0;
+        try {
+            Connection connection = jdbcUtils.getConnect();
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(sql);
+            while (resultSet.next()){
+                String num = resultSet.getString("num");
+                result = Integer.parseInt(num);
+            }
+            statement.close();
+            resultSet.close();
+            connection.close();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return result;
+    }
+    //返回评价总分
+    public static float sumComments(House house){
+        String sql = "select sum(score) as sum from comments where houseID='"+house.getHouseID()+"';";
+        float result = 0;
+        try {
+            Connection connection = jdbcUtils.getConnect();
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(sql);
+            while (resultSet.next()){
+                float sum = resultSet.getFloat("sum");
+                result = sum;
+            }
+            statement.close();
+            resultSet.close();
+            connection.close();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return result;
     }
 
     //上传消息
@@ -475,6 +519,39 @@ public class DBconnection{
             e.printStackTrace();
             return "error";
         }
+    }
+    //返回会话
+    public static ArrayList<Conversation> selectConversation(User u){
+        String id = u.getPhone();
+        String sql = "select * from messages where senderID='"+id+"' or receiverID='"+id+"';";
+        ArrayList<Conversation> list = new ArrayList<>();
+        try {
+            Connection connection = jdbcUtils.getConnect();
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(sql);
+            HashSet<String> index = new HashSet<>();
+            while (resultSet.next()){
+                String name = resultSet.getString("name");
+                String senderID = resultSet.getString("senderID");
+                String receiverID = resultSet.getString("receiverID");
+                String content = resultSet.getString("content");
+                String date = resultSet.getString("date");
+                String read = resultSet.getString("status");
+                if(index.add(senderID)){
+                    list.add(new Conversation(name,senderID,content,date,read));
+                }
+                else if(index.add(receiverID)){
+                    list.add(new Conversation(name,receiverID,content,date,read));
+                }
+            }
+            System.out.println("Return conversations successfully.");
+            statement.close();
+            resultSet.close();
+            connection.close();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return list;
     }
 
 }

@@ -48,6 +48,7 @@ public class SRservice {
         Buyer buy = new Buyer(u.getUsername(),u.getPassword(),u.getRealname(),u.getId(),u.getPhone());
         Comment comment = buy.sendComment(content, house);
         String result = DBconnection.addComments(comment);
+        //等待调用更新评分
         return result;
     }
     @RequestMapping(value = "/buyerReceiveComments/{id}", method = RequestMethod.GET)
@@ -63,8 +64,9 @@ public class SRservice {
     }
     @RequestMapping(value = "/delComment/{authorID}/{houseID}")
     public String delComment(@PathVariable("authorID")String authorID,@PathVariable("houseID")String houseID,
-                             @RequestParam(value = "content")String content,@RequestParam(value = "date")String date){
-        Comment comment = new Comment(authorID,date,houseID,content);
+                             @RequestParam(value = "content")String content,@RequestParam(value = "date")String date,
+                             @RequestParam(value = "score")String score){
+        Comment comment = new Comment(authorID,date,houseID,content,score);
         return DBconnection.delComments(comment);
     }
 
@@ -113,6 +115,13 @@ public class SRservice {
         String name = DBconnection.selectUser(receive).getUsername();
         Message message = new Message(name,send,receive,content,date);
         return DBconnection.delMessage(message);
+    }
+    @GetMapping(value = "/selectConversation/{id}")
+    public ArrayList<Conversation> selectConversation(@PathVariable("id")String id){
+        User u = DBconnection.selectUser(id);
+        ArrayList<Conversation> list = new ArrayList<>();
+        list = DBconnection.selectConversation(u);
+        return list;
     }
 
     // request相关--测试成功
