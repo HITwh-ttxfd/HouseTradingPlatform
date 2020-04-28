@@ -2,9 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/SpringBoot RESTful/src/main/main.iml" filepath="$PROJECT_DIR$/SpringBoot RESTful/src/main/main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Apache CXF/Apache CXF.iml" filepath="$PROJECT_DIR$/Apache CXF/Apache CXF.iml" />
       <module fileurl="file://$PROJECT_DIR$/SpringBoot RESTful/rest.iml" filepath="$PROJECT_DIR$/SpringBoot RESTful/rest.iml" />
-      <module fileurl="file://$PROJECT_DIR$/SpringBoot RESTful/src/test/test.iml" filepath="$PROJECT_DIR$/SpringBoot RESTful/src/test/test.iml" />
     </modules>
   </component>
 </project>

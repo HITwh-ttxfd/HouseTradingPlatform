@@ -6,11 +6,11 @@
             </el-form-item>
             <el-form-item label="预约时间" :label-width="'100px'">
                 <el-col :span="11">
-                    <el-date-picker type="date" placeholder="选择日期" v-model="form.date" style="width: 100%;"></el-date-picker>
+                    <el-date-picker :picker-options="datePickerOptions" type="date" placeholder="选择日期" v-model="form.date"  style="width: 100%;"></el-date-picker>
                 </el-col>
                 <el-col class="line" :span="2">-</el-col>
                 <el-col :span="11">
-                    <el-time-picker placeholder="选择时间" v-model="form.time" style="width: 100%;"></el-time-picker>
+                    <el-time-select :picker-options="timePickerOptions" placeholder="选择时间" v-model="form.time" style="width: 100%;"></el-time-select>
                 </el-col>
             </el-form-item>
         </el-form>
@@ -29,7 +29,16 @@
         },
         data(){
             return{
-
+                datePickerOptions:{
+                    disabledDate(time){
+                        return time.getTime() < Date.now() || time.getTime() > Date.now()+(30 * 24 * 3600 * 1000);
+                    }
+                },
+                timePickerOptions:{
+                    start: '08:30',
+                    step: '00:15',
+                    end: '18:30'
+                }
             }
         },
         methods:{

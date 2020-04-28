@@ -4,30 +4,26 @@ import Api.htpImageManage;
 import connector.DBconnection;
 import entity.housePic;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.IOException;
+//import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.Map;
-import java.util.UUID;
 
-//import org.json.JSONException;
 
 @RestController
 @RequestMapping(value = "/imgManage")
 @CrossOrigin
 public class uploadImg {
-    private DBconnection db = new DBconnection();
     private htpImageManage htpImage = new htpImageManage();
     // private String houseID="";
-    private String filePath = "./loadimg";
     public uploadImg(){}
 
     //上传图片
+    @RequestMapping(value = "/uploadImg64", method = RequestMethod.POST)
     @CrossOrigin
-    @PostMapping(value = "/uploadImg64")
-    public String uploadImage(@RequestBody Map<String,Object> map){
+    public String uploadImage(@RequestBody Map<String,Object> map/*, HttpServletResponse response*/){
+        //response.setHeader("Access-Control-Allow-Origin","*");
+        //response.setHeader("Cache-Control","no-cache");
         String text = (String)map.get("file");
         String fileName = (String)map.get("fileName");
         String houseID = (String)map.get("houseID");
@@ -47,16 +43,17 @@ public class uploadImg {
         //String result = HTPrecognition.departBase64(index);
 
         if(result.equals("no house")){
+            // 上传的不是房屋图片
             return "fail";
-        }else if(result.equals("fail")){
-            return "Error";
+        }else if(result.equals("error")){
+            return "error";
         }else {
             // 等待调用cxf进行存储工作
             htpImage.storeImage(base64,fileName,houseID);
             String path = htpImage.selectUrl(fileName,houseID);
             // 上传数据库
-            db.uploadImg(path,houseID,fileName,result);
-            return result;
+            return DBconnection.uploadImg(path,houseID,fileName,result);
+            // return result;
         }
         //System.out.println(base64);
         //System.out.println(rs.toString());
@@ -66,8 +63,8 @@ public class uploadImg {
     @CrossOrigin
     @GetMapping(value = "/selectImg/{houseID}")
     public ArrayList<housePic> selectImage(@PathVariable("houseID")String houseID){
-        System.out.println("Test");
-        ArrayList<housePic> bases = db.selectImg(houseID);
+        System.out.println("Return img url.");
+        ArrayList<housePic> bases = DBconnection.selectImg(houseID);
         return bases;
     }
 
@@ -75,8 +72,11 @@ public class uploadImg {
     @CrossOrigin
     @GetMapping(value = "/delImg/{houseID}/{fileName}")
     public String delImage(@PathVariable("houseID")String houseID, @PathVariable("fileName")String fileName){
-        db.delImg(houseID,fileName);
-        return "success";
+        String index = htpImage.delImg(fileName,houseID);
+        if(index.equals("fail")){
+            return "error";
+        }
+        return DBconnection.delImg(houseID,fileName);
     }
 }
 

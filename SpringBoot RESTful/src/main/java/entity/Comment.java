@@ -5,12 +5,18 @@ public class Comment {
     private String date;
     private String houseID;
     private String content;
+    private float score;
 
-    public Comment(String authorID, String date,String houseID, String content) {
+    public Comment(String authorID, String date,String houseID, String content, String score) {
         this.authorID = authorID;
         this.date = date;
         this.houseID = houseID;
         this.content = content;
+        this.score=Float.parseFloat(score);
+    }
+
+    public float getScore() {
+        return score;
     }
 
     public String getAuthorID() {

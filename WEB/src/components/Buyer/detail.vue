@@ -3,9 +3,9 @@
         <div class="head">
             <div class="block">
                 <el-carousel height="200px">
-                    <el-carousel-item :key="img" v-for="img in houseDetail.imgs">
+                    <el-carousel-item :key="img.fileName" v-for="img in houseDetail.imgs">
                         <h3 class="small">
-                            <el-image :src="img" fit="contain">
+                            <el-image :src="img.path" fit="contain">
                                 <div class="image-slot" slot="error">
                                     <i class="el-icon-picture-outline"></i>
                                 </div>
@@ -20,7 +20,7 @@
             <div class="info">
                 <div class="infoLine">
                     <p class="content label">房屋户型:</p>
-                    <p class="content">{{houseDetail.HouseType}}</p>
+                    <p class="content">{{houseDetail.houseType}}</p>
                 </div>
                 <div class="infoLine">
                     <p class="content label">建筑面积:</p>
@@ -75,7 +75,7 @@
             <div class="info">
                 <div class="infoLine">
                     <p class="content label">挂牌时间:</p>
-                    <p class="content">{{houseDetail.ListingTime}}</p>
+                    <p class="content">{{houseDetail.listingTime}}</p>
                 </div>
                 <div class="infoLine">
                     <p class="content label">上次交易:</p>

@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 
-public class HouseDBconnection {
+public class HouseDBconnection{
     //上传项目专用
     String driver = "com.mysql.cj.jdbc.Driver";
     String url = "jdbc:mysql://39.98.48.34:3306/htpbase?serverTimezone=UTC";

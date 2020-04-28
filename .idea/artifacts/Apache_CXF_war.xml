@@ -1,0 +1,14 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="Apache CXF:war">
+    <output-path>$PROJECT_DIR$/Apache CXF/target</output-path>
+    <properties id="maven-jee-properties">
+      <options>
+        <module>Apache CXF</module>
+        <packaging>war</packaging>
+      </options>
+    </properties>
+    <root id="archive" name="Apache CXF.war">
+      <element id="artifact" artifact-name="Apache CXF:war exploded" />
+    </root>
+  </artifact>
+</component>
