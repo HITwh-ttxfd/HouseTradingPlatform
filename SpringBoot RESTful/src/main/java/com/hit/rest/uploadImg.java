@@ -72,8 +72,7 @@ public class uploadImg {
     @CrossOrigin
     @GetMapping(value = "/delImg/{houseID}/{fileName}")
     public String delImage(@PathVariable("houseID")String houseID, @PathVariable("fileName")String fileName){
-        DBconnection.delImg(houseID,fileName);
-        return "success";
+        return DBconnection.delImg(houseID,fileName);
     }
 }
 
