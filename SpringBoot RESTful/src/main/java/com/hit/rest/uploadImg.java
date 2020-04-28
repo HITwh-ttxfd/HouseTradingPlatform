@@ -45,8 +45,8 @@ public class uploadImg {
         if(result.equals("no house")){
             // 上传的不是房屋图片
             return "fail";
-        }else if(result.equals("fail")){
-            return "Error";
+        }else if(result.equals("error")){
+            return "error";
         }else {
             // 等待调用cxf进行存储工作
             htpImage.storeImage(base64,fileName,houseID);
