@@ -3,67 +3,82 @@ package connector;
 import entity.*;
 import org.springframework.stereotype.Component;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.ArrayList;
 
-@Component
-public class DBconnection extends DBConnector {
+
+public class DBconnection{
 
     // 上传图片
-    public void uploadImg(String path, String houseID,String fileName,String style){
+    public static String uploadImg(String path, String houseID,String fileName,String style){
         if(path==null || houseID==null){
             System.out.println("Image is null. Error.");
-            return;
+            return "null";
         }
         String sql = "insert into house_pic(houseID,fileName,style,path) values('"+houseID+"','"+fileName+"','"
                 +style+"','"+path+"');";
         try {
-            PreparedStatement preparedStatement = (PreparedStatement)this.connection.prepareStatement(sql);
+            Connection connection = jdbcUtils.getConnect();
+            PreparedStatement preparedStatement = (PreparedStatement)connection.prepareStatement(sql);
             preparedStatement.executeUpdate();
             System.out.println("Image insert successfully.");
             preparedStatement.close();
+            connection.close();
+            return "success";
         }catch (Exception e){
             e.printStackTrace();
+            return "error";
         }
     }
     // 返回图片列表
-    public ArrayList<housePic> selectImg(String houseID){
+    public static ArrayList<housePic> selectImg(String houseID){
         ArrayList<housePic> bases = new ArrayList<>();
         String sql = "select * from house_pic where houseID='"+houseID+"';";
         try {
-            Statement statement = this.connection.createStatement();
+            Connection connection = jdbcUtils.getConnect();
+            Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(sql);
             while (resultSet.next()){
                 String houseid= resultSet.getString("houseID");
                 String fileName = resultSet.getString("fileName");
                 String style = resultSet.getString("style");
                 String path = resultSet.getString("path");
-                System.out.println(houseID);
                 bases.add(new housePic(houseid,fileName,style,path));
             }
+            System.out.println("Img return successfully");
+            statement.close();
+            resultSet.close();
+            connection.close();
         }catch (Exception e){
             e.printStackTrace();
         }
         return bases;
     }
     // 删除图片
-    public void delImg(String houseID,String fileName){
+    public static String delImg(String houseID,String fileName){
         String sql = "delete from house_pic where houseID='"+houseID+"' and fileName='"+fileName+"';";
         try {
-            PreparedStatement preparedStatement = (PreparedStatement)this.connection.prepareStatement(sql);
+            Connection connection = jdbcUtils.getConnect();
+            PreparedStatement preparedStatement = (PreparedStatement)connection.prepareStatement(sql);
             preparedStatement.executeUpdate();
             System.out.println("Image delete successfully.");
             preparedStatement.close();
+            connection.close();
+            return "success";
         }catch (Exception e){
             e.printStackTrace();
+            return "error";
         }
     }
 
     //上传请求
-    public void addRequests(Request request){
+    public static String addRequests(Request request){
         if(request==null){
             System.out.println("com.company.Request null, can't insert.");
-            return;
+            return "null";
         }
         String senderID = request.getSenderID();
         String receiverID = request.getReceiverID();
@@ -77,16 +92,20 @@ public class DBconnection extends DBConnector {
         String sql="insert into requests(senderID,receiverID,houseID,phone,location,date,time,sendTime,status) " +
                 "values('"+senderID+"','"+receiverID+"','"+houseID+"','"+phone+"','"+location+"','"+date+"','"+time+"','"+sendTime+"','"+status+"');";
         try {
-            PreparedStatement preparedStatement = (PreparedStatement)this.connection.prepareStatement(sql);
+            Connection connection = jdbcUtils.getConnect();
+            PreparedStatement preparedStatement = (PreparedStatement)connection.prepareStatement(sql);
             preparedStatement.executeUpdate();
-            System.out.println("com.company.Request insert successfully.");
+            System.out.println("Request insert successfully.");
             preparedStatement.close();
+            connection.close();
+            return "success";
         }catch (Exception e){
             e.printStackTrace();
+            return "error";
         }
     }
     //下传请求 返回列表
-    public ArrayList<Request> selectRequests(User user){
+    public static ArrayList<Request> selectRequests(User user){
         String recID = user.getPhone();
         String type = user.getType();
         String sql = "";
@@ -100,7 +119,9 @@ public class DBconnection extends DBConnector {
         }
         ArrayList<Request> requests = new ArrayList<Request>();
         try {
-            Statement statement = (Statement)this.connection.createStatement();
+            Connection connection = jdbcUtils.getConnect();
+            System.out.println(connection);
+            Statement statement = (Statement)connection.createStatement();
             ResultSet resultSet = (ResultSet)statement.executeQuery(sql);
             while (resultSet.next()){
                 String senderID = resultSet.getString("senderID");
@@ -114,6 +135,9 @@ public class DBconnection extends DBConnector {
                 String status = resultSet.getString("status");
                 requests.add(new Request(houseID,senderID,receiverID,date,time,sendTime,phone,location,status));
             }
+            statement.close();
+            resultSet.close();
+            connection.close();
             System.out.println("Return requests successfully.");
         }catch (Exception e){
             e.printStackTrace();
@@ -122,13 +146,14 @@ public class DBconnection extends DBConnector {
     }
     //更改请求--未定义
     //查询请求
-    public String selectRequest(Request request){
+    public static String selectRequest(Request request){
         String send = request.getSenderID();
         String receive = request.getReceiverID();
         String houseid = request.getHouseID();
         String sql = "select * from requests where senderID='"+send+"' and receiverID='"+receive+"' and houseID='"+houseid+"'";
         try {
-            Statement statement = (Statement)this.connection.createStatement();
+            Connection connection = jdbcUtils.getConnect();
+            Statement statement = (Statement)connection.createStatement();
             ResultSet resultSet = (ResultSet)statement.executeQuery(sql);
             while (resultSet.next()){
                 String senderID = resultSet.getString("senderID");
@@ -141,6 +166,9 @@ public class DBconnection extends DBConnector {
                     return "exist";
                 }
             }
+            statement.close();
+            resultSet.close();
+            connection.close();
             System.out.println("Search requests successfully.");
         }catch (Exception e){
             e.printStackTrace();
@@ -149,21 +177,23 @@ public class DBconnection extends DBConnector {
         return "new";
     }
     //更改状态
-    public String changeRequestStatus(String senderID,String receiverID,String houseID, String choice){
+    public static String changeRequestStatus(String senderID,String receiverID,String houseID, String choice){
         String sql = "update requests set status='"+choice+"' where senderID='"+senderID+"' and receiverID='"+receiverID+"' and houseID='"+houseID+"'";
         try {
-            PreparedStatement preparedStatement = (PreparedStatement)this.connection.prepareStatement(sql);
+            Connection connection = jdbcUtils.getConnect();
+            PreparedStatement preparedStatement = (PreparedStatement)connection.prepareStatement(sql);
             preparedStatement.executeUpdate();
-            System.out.println("com.company.Request request status changed successfully.");
+            System.out.println("Request status changed successfully.");
             preparedStatement.close();
+            connection.close();
         }catch (Exception e){
             e.printStackTrace();
             return "fail";
         }
-        return "sucess";
+        return "success";
     }
     //删除请求
-    public String delRequests(Request request){
+    public static String delRequests(Request request){
         String houseID = request.getHouseID();
         String senderID = request.getSenderID();
         String receiverID = request.getReceiverID();
@@ -172,10 +202,12 @@ public class DBconnection extends DBConnector {
         String sql = "delete from requests where senderID='"+senderID+"'\n" +
                 "and receiverID='"+receiverID+"' and houseID='"+houseID+"' and date='"+date+"' and time='"+time+"';";
         try {
-            PreparedStatement preparedStatement = (PreparedStatement)this.connection.prepareStatement(sql);
+            Connection connection = jdbcUtils.getConnect();
+            PreparedStatement preparedStatement = (PreparedStatement)connection.prepareStatement(sql);
             preparedStatement.executeUpdate();
-            System.out.println("Delete successfully.");
+            System.out.println("Delete request successfully.");
             preparedStatement.close();
+            connection.close();
             return "success";
         }catch (Exception e){
             e.printStackTrace();
@@ -183,31 +215,9 @@ public class DBconnection extends DBConnector {
         }
     }
 
-    //上传用户--新增用户
-    public void addUser(User user){
-        if(user==null){
-            System.out.println("User data null.");
-            return;
-        }
-        String username = user.getUsername();
-        String password = user.getPassword();
-        String realname = user.getRealname();
-        String id = user.getId();
-        String phone = user.getPhone();
-        String type = user.getType();
-        String sql = "insert into users(username,password,realname,id,phone,type) values('"+username+"','"
-                +password+"','"+realname+"','"+id+"','"+phone+"','"+type+"')";
-        try {
-            PreparedStatement preparedStatement = this.connection.prepareStatement(sql);
-            preparedStatement.executeUpdate();
-            System.out.println("User data insert successfully.");
-            preparedStatement.close();
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-    }
+
     //查询用户--登录校验--根据phone和password返回user对象
-    public User selectUser(String ph, String pass){
+    public static User selectUser(String ph, String pass){
         if(ph==null){
             System.out.println("error, ID is null.");
             return null;
@@ -215,7 +225,8 @@ public class DBconnection extends DBConnector {
         String sql = "select * from users where phone='"+ph+"' and password='"+pass+"'";
         User user = new User();
         try {
-            Statement statement = this.connection.createStatement();
+            Connection connection = jdbcUtils.getConnect();
+            Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(sql);
             String username="", id="", realname="",password="",type="",phone="";
             while (resultSet.next()){
@@ -226,7 +237,10 @@ public class DBconnection extends DBConnector {
                 phone = resultSet.getString("phone");
                 type = resultSet.getString("type");
             }
-            //System.out.println(username+" read.");
+            System.out.println(phone+" read.");
+            statement.close();
+            resultSet.close();
+            connection.close();
             user = new User(username,password,realname,id,phone,type);
         }catch (Exception e){
             e.printStackTrace();
@@ -234,7 +248,7 @@ public class DBconnection extends DBConnector {
         return user;
     }
     //查询用户--类中生成临时对象使用
-    public User selectUser(String ID){
+    public static User selectUser(String ID){
         if(ID==null){
             System.out.println("error, ID is null.");
             return null;
@@ -242,7 +256,9 @@ public class DBconnection extends DBConnector {
         String sql = "select * from users where phone='"+ID+"'";
         User user = new User();
         try {
-            Statement statement = this.connection.createStatement();
+            Connection connection = jdbcUtils.getConnect();
+            //System.out.println(connection);
+            Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(sql);
             String username="", id="", realname="",password="",type="",phone="";
             while (resultSet.next()){
@@ -253,8 +269,11 @@ public class DBconnection extends DBConnector {
                 phone = resultSet.getString("phone");
                 type = resultSet.getString("type");
             }
-            System.out.println("MySQL read "+phone);
+            System.out.println("MySQL read user "+phone);
             user = new User(username,password,realname,id,phone,type);
+            statement.close();
+            resultSet.close();
+            connection.close();
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -262,9 +281,9 @@ public class DBconnection extends DBConnector {
     }
 
     //上传评价
-    public void addComments(Comment comment){
+    public static String addComments(Comment comment){
         if(comment==null){
-            return;
+            return "null";
         }
         String authorID = comment.getAuthorID();
         String houseID = comment.getHouseID();
@@ -272,21 +291,26 @@ public class DBconnection extends DBConnector {
         String date = comment.getDate();
         String sql = "insert into comments(authorID,houseID,content,date) values('"+authorID+"','"+houseID+"','"+content+"','"+date+"')";
         try {
-            PreparedStatement preparedStatement = this.connection.prepareStatement(sql);
+            Connection connection = jdbcUtils.getConnect();
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.executeUpdate();
             System.out.println("Comments add successfully.");
             preparedStatement.close();
+            connection.close();
+            return "success";
         }catch (Exception e){
             e.printStackTrace();
+            return "error";
         }
     }
     //下传评价至房源
-    public ArrayList<Comment> selectComments(House house){
+    public static ArrayList<Comment> selectComments(House house){
         String id = house.getHouseID();
         String sql = "select * from comments where houseID='"+id+"'";
         ArrayList<Comment> comments = new ArrayList<Comment>();
         try {
-            Statement statement = this.connection.createStatement();
+            Connection connection = jdbcUtils.getConnect();
+            Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(sql);
             while (resultSet.next()){
                 String authorID = resultSet.getString("authorID");
@@ -295,18 +319,22 @@ public class DBconnection extends DBConnector {
                 String date = resultSet.getString("date");
                 comments.add(new Comment(authorID,date,houseID,content));
             }
+            statement.close();
+            resultSet.close();
+            connection.close();
         }catch (Exception e){
             e.printStackTrace();
         }
         return comments;
     }
     //下传评价至用户
-    public ArrayList<Comment> selectComments(Buyer buyer){
+    public static ArrayList<Comment> selectComments(Buyer buyer){
         String id = buyer.getPhone();
         String sql = "select * from comments where authorID='"+id+"'";
         ArrayList<Comment> comments = new ArrayList<Comment>();
         try {
-            Statement statement = this.connection.createStatement();
+            Connection connection = jdbcUtils.getConnect();
+            Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(sql);
             while (resultSet.next()){
                 String authorID = resultSet.getString("authorID");
@@ -315,32 +343,39 @@ public class DBconnection extends DBConnector {
                 String date = resultSet.getString("date");
                 comments.add(new Comment(authorID,date,houseID,content));
             }
+            statement.close();
+            resultSet.close();
+            connection.close();
         }catch (Exception e){
             e.printStackTrace();
         }
         return comments;
     }
     //删除评价
-    public void delComments(Comment comment){
+    public static String delComments(Comment comment){
         String authorID = comment.getAuthorID();
         String houseID = comment.getHouseID();
         String content = comment.getContent();
         String date = comment.getDate();
         String sql = "delete from comments where authorID='"+authorID+"' and houseID='"+houseID+"' and content='"+content+"' and date='"+date+"'";
         try {
-            PreparedStatement preparedStatement = this.connection.prepareStatement(sql);
+            Connection connection = jdbcUtils.getConnect();
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.executeUpdate();
             System.out.println("Delete comment successfully.");
             preparedStatement.close();
+            connection.close();
+            return "success";
         }catch (Exception e){
             e.printStackTrace();
+            return "error";
         }
     }
 
     //上传消息
-    public void addMessages(Message message){
+    public static String addMessages(Message message){
         if(message==null){
-            return;
+            return "null";
         }
         String content = message.getContent();
         String senderID = message.getSenderID();
@@ -348,16 +383,20 @@ public class DBconnection extends DBConnector {
         String date = message.getDate();
         String sql = "insert into messages(content,senderID,receiverID,date) values('"+content+"','"+senderID+"','"+receiverID+"','"+date+"')";
         try {
-            PreparedStatement preparedStatement = this.connection.prepareStatement(sql);
+            Connection connection = jdbcUtils.getConnect();
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.executeUpdate();
-            System.out.println("com.company.Message upload successfully.");
+            System.out.println("Message upload successfully.");
             preparedStatement.close();
+            connection.close();
+            return "success";
         }catch (Exception e){
             e.printStackTrace();
+            return "error";
         }
     }
     //下传消息
-    public ArrayList<Message> selectMessages(User user){
+    public static ArrayList<Message> selectMessages(User user){
         if(user==null){
             System.out.println("error, no user.");
             return null;
@@ -366,7 +405,8 @@ public class DBconnection extends DBConnector {
         String sql = "select * from messages where senderID='"+id+"' or receiverID='"+id+"'";
         ArrayList<Message> messages = new ArrayList();
         try {
-            Statement statement = this.connection.createStatement();
+            Connection connection = jdbcUtils.getConnect();
+            Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(sql);
             while (resultSet.next()){
                 String content = resultSet.getString("content");
@@ -374,20 +414,16 @@ public class DBconnection extends DBConnector {
                 String receiverID = resultSet.getString("receiverID");
                 String date = resultSet.getString("date");
                 messages.add(new Message(content,senderID,receiverID,date));
-                System.out.println(messages.get(0).getReceiverID());
             }
+            System.out.println("Return messages successfully.");
+            statement.close();
+            resultSet.close();
+            connection.close();
         }catch (Exception e){
             e.printStackTrace();
         }
-        if (messages.isEmpty()){
-            System.out.println("Empty.");
-        }
         return messages;
     }
-    
-    //加载驱动程序
-    public DBconnection(){
-        super();
-    }
+
 
 }
