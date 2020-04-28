@@ -9,7 +9,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
-@ImportResource(locations = "classpath:/springDispatcherServlet-servlet.xml")
+
 @SpringBootApplication
 public class RestApplication {
     private static final Logger logger = LoggerFactory.getLogger(RestApplication.class);

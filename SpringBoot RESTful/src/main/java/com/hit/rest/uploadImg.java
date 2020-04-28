@@ -3,10 +3,9 @@ package com.hit.rest;
 import Api.htpImageManage;
 import connector.DBconnection;
 import entity.housePic;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletResponse;
+//import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.Map;
 
