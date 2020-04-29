@@ -34,11 +34,12 @@
                     prop="rank">
                 <template slot-scope="scope">
                     <el-rate
+                            v-if="scope.row.count>0"
                             disabled
-                            show-score
                             text-color="#ff9900"
                             v-model="scope.row.score">
-                    </el-rate>
+                        </el-rate>
+                    <p v-else>暂无评分</p>
                 </template>
             </el-table-column>
             <el-table-column
@@ -62,6 +63,7 @@
                             size="small"><i class="el-icon-more"></i>
                     </el-button>
                     <el-button
+                            v-if="scope.row.count>0"
                             @click="comment(scope.row.sellerID,scope.row.houseID)"
                             size="small"><i class="el-icon-chat-dot-square"></i>
                     </el-button>
@@ -196,6 +198,7 @@
                     url: 'http://localhost:8080/house/'+id,
                     method: 'GET'
                 }).then(res=>{
+                    this.detailVisible = true;
                     this.houseDetail=res.data;
                     this.$axios({
                         url: 'http://localhost:8080/imgManage/selectImg/'+id,
@@ -205,7 +208,6 @@
                     }).catch(e=>{
                         console.log(e);
                     })
-                    this.detailVisible = true;
                     setTimeout(function () {
                         map = new AMap.Map('AMap', {
                             resizeEnable: true,
@@ -246,7 +248,9 @@
                 this.requestVisible=false;
                 let request=this.requestForm;
                 this.$axios({
-                    url: 'http://localhost:8080/SRservice/sendRequest/'+request.senderID+'/'+request.sellerID +'/'+request.houseId+'/'+request.phoneNumber,
+                    url: 'http://localhost:8080/SRservice/sendRequest/'+
+                        request.senderID+'/'+request.sellerID +'/'+request.houseId+
+                        '/'+request.phoneNumber,
                     method: 'GET',
                     params:{
                         date: request.date,
@@ -321,8 +325,7 @@
         margin-top: 10px;
     }
 
-    .route-content{
-        max-height: 500px;
-        overflow: scroll;
+    p{
+        color: rgba(175, 175, 175, 0.83);
     }
 </style>

@@ -1,7 +1,7 @@
 <template>
     <div class="route-content">
         <div class="head">
-            <div class="block">
+            <div class="block" v-if="houseDetail.imgs!== undefined && houseDetail.imgs.length>0">
                 <el-carousel height="200px">
                     <el-carousel-item :key="img.fileName" v-for="img in houseDetail.imgs">
                         <h3 class="small">
@@ -56,10 +56,10 @@
                     <p class="content label">建筑类型:</p>
                     <p class="content">{{houseDetail.buildingType}}</p>
                 </div>
-                <div class="infoLine">
-                    <p class="content label">建筑结构:</p>
-                    <p class="content">{{houseDetail.buildingType}}</p>
-                </div>
+<!--                <div class="infoLine">-->
+<!--                    <p class="content label">建筑结构:</p>-->
+<!--                    <p class="content">{{houseDetail.buildingType}}</p>-->
+<!--                </div>-->
                 <div class="infoLine">
                     <p class="content label">梯户比例:</p>
                     <p class="content">{{houseDetail.elevatorProportion}}</p>
@@ -186,6 +186,7 @@
         margin-left: 10%;
         width: 30%;
         display: inline-block;
+        vertical-align: top;
     }
 
     .infoBlock .title {
