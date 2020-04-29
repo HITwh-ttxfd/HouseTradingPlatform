@@ -40,7 +40,7 @@
       <detail :house-detail="houseDetail"></detail>
     </el-dialog>
     <el-dialog width="500px" :visible.sync="configVisible" title="添加房源" destroy-on-close>
-      <new-house></new-house>
+      <new-house @close="configVisible=false"></new-house>
     </el-dialog>
   </div>
 </template>

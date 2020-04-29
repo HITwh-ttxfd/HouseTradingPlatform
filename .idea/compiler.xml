@@ -7,6 +7,7 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="SOA" />
         <module name="rest" />
         <module name="Apache CXF" />
       </profile>
@@ -14,6 +15,7 @@
     <bytecodeTargetLevel>
       <module name="Apache CXF" target="1.7" />
       <module name="rest" target="1.8" />
+      <module name="SOA" target="1.5" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">

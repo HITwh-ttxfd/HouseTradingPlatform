@@ -132,6 +132,10 @@
                 <el-input style="width: 300px" v-model="newHouse.location.detail"></el-input>
             </div>
         </div>
+        <div class="dialog-footer" slot="footer">
+            <el-button @click="$emit('close')">取 消</el-button>
+            <el-button @click="upload" type="primary">确 定</el-button>
+        </div>
     </div>
 </template>
 
@@ -189,6 +193,9 @@
             }
         },
         methods:{
+            upload(){
+                this.$emit('close');
+            },
             searchLocation(level){
                 if (level<0||level>3)
                     return
@@ -465,6 +472,10 @@
     .el-select{
         display: inline-block;
         width: 100px;
+    }
+
+    .dialog-footer{
+        float: right;
     }
 
 </style>

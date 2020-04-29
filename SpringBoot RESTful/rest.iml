@@ -260,7 +260,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/../../JDBCThread/.idea/commons-collections4-4.4.jar!/" />
+          <root url="jar://$USER_HOME$/JDBCThread/.idea/commons-collections4-4.4.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -269,7 +269,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/../../JDBCThread/.idea/commons-dbcp2-2.7.0.jar!/" />
+          <root url="jar://$USER_HOME$/JDBCThread/.idea/commons-dbcp2-2.7.0.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -278,7 +278,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/../../JDBCThread/.idea/commons-pool2-2.8.0.jar!/" />
+          <root url="jar://$USER_HOME$/JDBCThread/.idea/commons-pool2-2.8.0.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -287,11 +287,14 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/../../JDBCThread/lib/commons-logging-1.1.0.jboss.jar!/" />
+          <root url="jar://$USER_HOME$/JDBCThread/lib/commons-logging-1.1.0.jboss.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
       </library>
     </orderEntry>
+    <orderEntry type="library" name="commons-collections4-4.4 (2)" level="project" />
+    <orderEntry type="library" name="commons-dbcp2-2.7.0 (2)" level="project" />
+    <orderEntry type="library" name="commons-pool2-2.8.0 (2)" level="project" />
   </component>
 </module>
