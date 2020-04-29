@@ -223,6 +223,38 @@ public class HouseDBconnection{
         return houses;
     }
 
+    //返回卖家房源
+    public ArrayList<House> getSellerHouse(String sellerID) {
+        String sql = "select * from house where sellerID='"+sellerID+"'";
+        ArrayList<House> houses = new ArrayList<House>();
+        try {
+            Statement statement = (Statement)this.connection.createStatement();
+            ResultSet resultSet = (ResultSet)statement.executeQuery(sql);
+            while (resultSet.next()){
+                House house=new House();
+                house.setHouseID(resultSet.getString("houseID"));
+                house.setSellerID(resultSet.getString("sellerID"));
+                house.setScore(resultSet.getFloat("score"));
+                house.setPrice(resultSet.getDouble("price"));
+                house.setSize(resultSet.getDouble("size"));
+                house.setLocation(resultSet.getString("location"));
+                house.setVillage(resultSet.getString("village"));
+                house.setCount(resultSet.getInt("count"));
+                //测试用，正式上线删
+                System.out.println(resultSet.getString("houseID")+
+                        resultSet.getString("sellerID")+
+                        resultSet.getDouble("price")+
+                        resultSet.getDouble("size")
+                        + resultSet.getFloat("score")
+                        +resultSet.getString("location"));
+                houses.add(house);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return houses;
+    }
+
     //返回基本房源   第一次点击
     public ArrayList<House> getBasicHouses() {
         String sql = "select * from house ";

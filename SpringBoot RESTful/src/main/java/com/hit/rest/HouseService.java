@@ -69,6 +69,13 @@ public class HouseService {
         return p.getBasicHouses();
     }
 
+    //返回卖家房源
+    @RequestMapping(value="/sellerHouse/{sellerID}")
+    public ArrayList<House> getSellerHouse(@PathVariable("sellerID")String id){
+        HouseDBconnection p = new HouseDBconnection();
+        return p.getSellerHouse(id);
+    }
+
     //返回某一房源详细信息     第二次点击
     @RequestMapping(value="/house/{houseID}")
     public House getPastHouses(@PathVariable("houseID")String id){
