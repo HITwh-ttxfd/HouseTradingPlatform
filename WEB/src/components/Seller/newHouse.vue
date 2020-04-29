@@ -220,22 +220,22 @@
                             this.cities=eval(regions);
                             this.districts=[{name:'全部'}];
                             this.streets=[{name:'全部'}];
-                            this.form.city='';
-                            this.form.district='';
-                            this.form.street='';
+                            this.newHouse.location.city='';
+                            this.newHouse.location.district='';
+                            this.newHouse.location.street='';
                             break;
                         case 2:
                             this.districts=eval(regions);
                             this.streets=[{name:'全部'}];
-                            this.form.district='';
-                            this.form.street='';
+                            this.newHouse.location.district='';
+                            this.newHouse.location.street='';
                             break;
                         case 3:
                             this.streets=eval(regions);
                             this.streets.concat({
                                 name: '全部'
                             });
-                            this.form.street='';
+                            this.newHouse.location.street='';
                     }
                 }).catch(e=>{
                     console.log(e);
