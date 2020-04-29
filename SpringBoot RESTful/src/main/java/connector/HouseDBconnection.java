@@ -42,8 +42,9 @@ public class HouseDBconnection{
         }
         //加上一个查询先有houseID最大值的，给houseID赋值
         house.setHouseID(selectMaxHouseID());
-        String sql="insert into house(village,time,houseID,sellerID, size, locationX, locationY, location, price,score, lift, lastTransaction, houseType, buildingArea, interiorArea, houseOrientation, decoration, heatingMode, floor, houseTypeStructure, buildingType, elevatorProportion, listingTime, housingAge, mortgageInformation, transactionOwnership, housingPurpose, propertyOwnership, housingParts)" +
-                " values('"+house.getVillage()+"','"+house.getTime()+"','"
+        String sql="insert into house(count,village,time,houseID,sellerID, size, locationX, locationY, location, price,score, lift, lastTransaction, houseType, buildingArea, interiorArea, houseOrientation, decoration, heatingMode, floor, houseTypeStructure, buildingType, elevatorProportion, listingTime, housingAge, mortgageInformation, transactionOwnership, housingPurpose, propertyOwnership, housingParts)" +
+                " values("+house.getCount()+",'"
+                +house.getVillage()+"','"+house.getTime()+"','"
                 +house.getHouseID()+"',"+house.getLocationX()
                 +","+house.getLocationY()+",'"+house.getLocation()+"',"
                 +house.getPrice()+","+house.getScore()+","
@@ -103,6 +104,7 @@ public class HouseDBconnection{
             Statement statement = (Statement)this.connection.createStatement();
             ResultSet resultSet = (ResultSet)statement.executeQuery(sql);
             while (resultSet.next()){
+                int count=resultSet.getInt("count");
                 String village = resultSet.getString("village");
                 Date time = resultSet.getDate("time");
                 String sellerID = resultSet.getString("sellerID");
@@ -131,7 +133,7 @@ public class HouseDBconnection{
                 String housingPurpose = resultSet.getString("housingPurpose");
                 String propertyOwnership = resultSet.getString("propertyOwnership");
                 String housingParts = resultSet.getString("housingParts");
-                House housetemp=new House(village,time,
+                House housetemp=new House(count,village,time,
                         houseID, sellerID,
                         size,locationX,
                         locationY,location,
@@ -168,6 +170,7 @@ public class HouseDBconnection{
             Statement statement = (Statement)this.connection.createStatement();
             ResultSet resultSet = (ResultSet)statement.executeQuery(sql);
             while (resultSet.next()){
+                int count=resultSet.getInt("count");
                 String village = resultSet.getString("village");
                 Date time = resultSet.getDate("time");
                 String houseID = resultSet.getString("houseID");
@@ -197,7 +200,7 @@ public class HouseDBconnection{
                 String housingPurpose = resultSet.getString("housingPurpose");
                 String propertyOwnership = resultSet.getString("propertyOwnership");
                 String housingParts = resultSet.getString("housingParts");
-                House house=new House(village,time,
+                House house=new House(count,village,time,
                         houseID, sellerID,
                         size,locationX,
                         locationY,location,
@@ -236,6 +239,7 @@ public class HouseDBconnection{
                 house.setSize(resultSet.getDouble("size"));
                 house.setLocation(resultSet.getString("location"));
                 house.setVillage(resultSet.getString("village"));
+                house.setCount(resultSet.getInt("count"));
                 //测试用，正式上线删
                 System.out.println(resultSet.getString("houseID")+
                         resultSet.getString("sellerID")+
@@ -263,9 +267,9 @@ public class HouseDBconnection{
         }
     }
 
-    //修改房源评价分数
-    public void changeHouseScore(float score, String houseID){
-        String sql = "UPDATE house SET score = "+score+" WHERE houseID ='"+houseID+"'";
+    //修改房源评价分数和评价数量
+    public void changeHouseScore(float score, String houseID,int count){
+        String sql = "UPDATE house SET score = "+score+"and count="+count+" WHERE houseID ='"+houseID+"'";
         try {
             PreparedStatement preparedStatement = (PreparedStatement)this.connection.prepareStatement(sql);
             preparedStatement.executeUpdate();
@@ -289,6 +293,15 @@ public class HouseDBconnection{
             e.printStackTrace();
         }
         return temp;
+    }
+
+    //修改房源评价分数  用于发生评价并且更新评价后
+    public void changeScore(String houseID)
+    {
+        int count=DBconnection.countComments(houseID);
+        float score=DBconnection.sumComments(houseID);
+        float finalScore=score/(float)count;
+        changeHouseScore(finalScore,houseID,count);
     }
 
     //搜索房源

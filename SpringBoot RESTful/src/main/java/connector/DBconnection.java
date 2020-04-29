@@ -8,6 +8,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashSet;
 
 
 public class DBconnection{
@@ -289,7 +292,8 @@ public class DBconnection{
         String houseID = comment.getHouseID();
         String content = comment.getContent();
         String date = comment.getDate();
-        String sql = "insert into comments(authorID,houseID,content,date) values('"+authorID+"','"+houseID+"','"+content+"','"+date+"')";
+        float score = comment.getScore();
+        String sql = "insert into comments(authorID,houseID,content,date,score) values('"+authorID+"','"+houseID+"','"+content+"','"+date+"','"+score+"')";
         try {
             Connection connection = jdbcUtils.getConnect();
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
@@ -301,6 +305,10 @@ public class DBconnection{
         }catch (Exception e){
             e.printStackTrace();
             return "error";
+        }
+        finally{
+            HouseDBconnection p = new HouseDBconnection();
+            p.changeScore(houseID);
         }
     }
     //下传评价至房源
@@ -317,7 +325,8 @@ public class DBconnection{
                 String houseID = resultSet.getString("houseID");
                 String content = resultSet.getString("content");
                 String date = resultSet.getString("date");
-                comments.add(new Comment(authorID,date,houseID,content));
+                String score = resultSet.getString("score");
+                comments.add(new Comment(authorID,date,houseID,content,score));
             }
             statement.close();
             resultSet.close();
@@ -341,7 +350,8 @@ public class DBconnection{
                 String houseID = resultSet.getString("houseID");
                 String content = resultSet.getString("content");
                 String date = resultSet.getString("date");
-                comments.add(new Comment(authorID,date,houseID,content));
+                String score = resultSet.getString("score");
+                comments.add(new Comment(authorID,date,houseID,content,score));
             }
             statement.close();
             resultSet.close();
@@ -371,17 +381,60 @@ public class DBconnection{
             return "error";
         }
     }
+    //返回评价数
+    public static int countComments(String houseID){
+        String sql = "select count(*) as num from comments where houseID='"+houseID+"';";
+        int result = 0;
+        try {
+            Connection connection = jdbcUtils.getConnect();
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(sql);
+            while (resultSet.next()){
+                String num = resultSet.getString("num");
+                result = Integer.parseInt(num);
+            }
+            statement.close();
+            resultSet.close();
+            connection.close();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return result;
+    }
+    //返回评价总分
+    public static float sumComments(String houseID){
+        String sql = "select sum(score) as sum from comments where houseID='"+houseID+"';";
+        float result = 0;
+        try {
+            Connection connection = jdbcUtils.getConnect();
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(sql);
+            while (resultSet.next()){
+                float sum = resultSet.getFloat("sum");
+                result = sum;
+            }
+            statement.close();
+            resultSet.close();
+            connection.close();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return result;
+    }
 
     //上传消息
     public static String addMessages(Message message){
         if(message==null){
             return "null";
         }
+        String name = message.getName();
         String content = message.getContent();
         String senderID = message.getSenderID();
         String receiverID = message.getReceiverID();
         String date = message.getDate();
-        String sql = "insert into messages(content,senderID,receiverID,date) values('"+content+"','"+senderID+"','"+receiverID+"','"+date+"')";
+        String read = message.getRead();
+        String sql = "insert into messages(name,senderID,receiverID,content,date,status) values('"+name+"','"+senderID+"','"+receiverID+"','"
+                +content+"','"+date+"','"+read+"')";
         try {
             Connection connection = jdbcUtils.getConnect();
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
@@ -396,24 +449,28 @@ public class DBconnection{
         }
     }
     //下传消息
-    public static ArrayList<Message> selectMessages(User user){
-        if(user==null){
+    public static ArrayList<Message> selectMessages(User u1, User u2){
+        if(u1==null || u2==null){
             System.out.println("error, no user.");
             return null;
         }
-        String id = user.getPhone();
-        String sql = "select * from messages where senderID='"+id+"' or receiverID='"+id+"'";
+        String id1 = u1.getPhone();
+        String id2 = u2.getPhone();
+        String sql = "select * from htpbase.messages\n" +
+                "where (senderID='"+id1+"' and receiverID='"+id2+"') or (senderID='"+id2+"' and receiverID='"+id1+"');";
         ArrayList<Message> messages = new ArrayList();
         try {
             Connection connection = jdbcUtils.getConnect();
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(sql);
             while (resultSet.next()){
-                String content = resultSet.getString("content");
+                String name = resultSet.getString("name");
                 String senderID = resultSet.getString("senderID");
                 String receiverID = resultSet.getString("receiverID");
+                String content = resultSet.getString("content");
                 String date = resultSet.getString("date");
-                messages.add(new Message(content,senderID,receiverID,date));
+                String read = resultSet.getString("status");
+                messages.add(new Message(name,senderID,receiverID,content,date,read));
             }
             System.out.println("Return messages successfully.");
             statement.close();
@@ -422,8 +479,96 @@ public class DBconnection{
         }catch (Exception e){
             e.printStackTrace();
         }
+        Collections.sort(messages,new sortById());
         return messages;
     }
+    //修改状态
+    public static String changeMessageStatus(Message message,String status){
+        String senderID = message.getSenderID();
+        String receiverID = message.getReceiverID();
+        String content = message.getContent();
+        String date = message.getDate();
+        String sql = "update messages set status='"+status+"' where senderID='"+senderID+"' and receiverID='"+
+                receiverID+"' and content='"+content+"' and date='"+date+"';";
+        try {
+            Connection connection = jdbcUtils.getConnect();
+            PreparedStatement preparedStatement = (PreparedStatement)connection.prepareStatement(sql);
+            preparedStatement.executeUpdate();
+            System.out.println("Message status changed successfully.");
+            preparedStatement.close();
+            connection.close();
+        }catch (Exception e){
+            e.printStackTrace();
+            return "error";
+        }
+        return "success";
+    }
+    //删除消息
+    public static String delMessage(Message message){
+        String send = message.getSenderID();
+        String receive = message.getReceiverID();
+        String content = message.getContent();
+        String date = message.getDate();
+        String sql = "delete from messages where senderID='"+send+"' and receiverID='"+receive+"' and content='"
+                +content+"' and date='"+date+"';";
+        try {
+            Connection connection = jdbcUtils.getConnect();
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.executeUpdate();
+            System.out.println("Delete message successfully.");
+            preparedStatement.close();
+            connection.close();
+            return "success";
+        }catch (Exception e){
+            e.printStackTrace();
+            return "error";
+        }
+    }
+    //返回会话
+    public static ArrayList<Conversation> selectConversation(User u){
+        String id = u.getPhone();
+        String sql = "select * from messages where senderID='"+id+"' or receiverID='"+id+"';";
+        ArrayList<Conversation> list = new ArrayList<>();
+        try {
+            Connection connection = jdbcUtils.getConnect();
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(sql);
+            HashSet<String> index = new HashSet<>();
+            index.add(id);
+            while (resultSet.next()){
+                String name = resultSet.getString("name");
+                String senderID = resultSet.getString("senderID");
+                String receiverID = resultSet.getString("receiverID");
+                String content = resultSet.getString("content");
+                String date = resultSet.getString("date");
+                String read = resultSet.getString("status");
+                if(index.add(senderID)){
+                    list.add(new Conversation(name,senderID,content,date,read));
+                }
+                else if(index.add(receiverID)){
+                    list.add(new Conversation(name,receiverID,content,date,read));
+                }
+            }
+            System.out.println("Return conversations successfully.");
+            statement.close();
+            resultSet.close();
+            connection.close();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        Collections.sort(list,new sortById());
+        return list;
+    }
 
+}
+class sortById implements Comparator {
+
+    public int compare(Object o1, Object o2) {
+        //倒序，日期最靠前的在最前
+        if(((Message)o1).getDate().compareTo(((Message)o2).getDate())==1){
+            return -1;
+        }
+        return 1;
+    }
 
 }

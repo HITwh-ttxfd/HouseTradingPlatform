@@ -30,6 +30,7 @@ public class House {
 //    private String decorationDescription;  //装修描述
 //    private String  taxAnalysis;          //税费解析
 //    private String coreSellingPoints;     //核心卖点
+    private int count;              //房屋户型
     private String HouseType;              //房屋户型
     private double buildingArea;           //建筑面积                     这里可能存在疑问
     private double interiorArea;           //套内面积
@@ -54,9 +55,10 @@ public class House {
 
     };
     //最为健全的house，用于向前端发送
-    //28个参数
+    //29个参数
 
-    public House(String village,Date  time,
+    public House(int count,
+            String village,Date  time,
                  String houseID, String sellerID,
                  double size, double locationX,
                  double locationY, String location,
@@ -71,6 +73,7 @@ public class House {
                  String mortgageInformation, String transactionOwnership,
                  String housingPurpose, String propertyOwnership,
                  String housingParts) {
+        this.count=count;
         this.village=village;
         this.time=time;
         this.houseID = houseID;
@@ -148,6 +151,13 @@ public class House {
 //    }
 
 
+    public int getCount() {
+        return count;
+    }
+
+    public void setCount(int count) {
+        this.count = count;
+    }
     public String getVillage() {
         return village;
     }

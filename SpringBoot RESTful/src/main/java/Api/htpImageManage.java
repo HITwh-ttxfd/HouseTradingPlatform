@@ -58,6 +58,19 @@ public class htpImageManage {
             return "error";
         }
     }
+    // delImg
+    public String delImg(String fileName, String houseID){
+        client = jas.createClient(url);
+        Object[] objects;
+        try {
+            objects = client.invoke("delImg",fileName,houseID);
+            closeClient();
+            return objects[0].toString();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return "error";
+    }
     public htpImageManage(){
         jas = JaxWsDynamicClientFactory.newInstance();
         url = "http://39.98.48.34:2233/AliyunImageStore_war/service/imgRecognition?wsdl";
