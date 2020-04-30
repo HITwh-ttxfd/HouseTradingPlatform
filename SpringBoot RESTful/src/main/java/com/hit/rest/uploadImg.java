@@ -39,6 +39,11 @@ public class uploadImg {
         //System.out.println(base64);
         String index = htpImage.imgClassify(base64);
         String result = htpImage.departRes(index);
+        if(result.equals("Chinese")){
+            result="中式风格";
+        }else if(result.equals("Europe")){
+            result="欧式风格";
+        }
         //String index = HTPrecognition.easydlImageClassify(base64);
         //String result = HTPrecognition.departBase64(index);
 
