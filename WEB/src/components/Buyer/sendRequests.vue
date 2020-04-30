@@ -1,6 +1,7 @@
 <template>
     <div>
     <el-table
+            height="650px"
             v-loading="loading"
             :data="Requests">
         <el-table-column
@@ -26,7 +27,7 @@
                 </el-button>
                 <el-button
                         v-if="scope.row.status==='0'|| scope.row.status==='2'"
-                        @click="this.delete(scope.row)"
+                        @click="this.cancel(scope.row)"
                         size="mini"
                         type="danger">撤销
                 </el-button>
@@ -60,6 +61,9 @@
             }
         },
         methods: {
+            cancel(){
+
+            },
             delete() {
 
             },
@@ -115,7 +119,8 @@
                     case '0': return '等待审核';
                     case '1': return '卖家拒绝';
                     case '2': return '卖家同意';
-                    case '3': return '已完成';
+                    case '3': return '未评价';
+                    case '4': return '已评价'
                 }
             }
         },

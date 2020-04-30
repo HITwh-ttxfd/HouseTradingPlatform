@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-table stripe :data="houses" >
+    <el-table height="650px" stripe :data="houses" >
       <el-table-column
               prop="location"
               label="位置"
