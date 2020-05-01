@@ -547,7 +547,7 @@ public class DBconnection{
                     list.add(new Conversation(senderID,name,date,content,read));
                 }
                 else if(index.add(receiverID)){
-                    list.add(new Conversation(name,receiverID,content,date,read));
+                    list.add(new Conversation(senderID,name,date,content,read));
                 }
             }
             System.out.println("Return conversations successfully.");
