@@ -3,7 +3,7 @@
     <el-table
             height="650px"
             v-loading="loading"
-            :data="Requests">
+            :data="undefeatedRequests">
       <el-table-column
               align="center"
               label="房源"
@@ -26,17 +26,24 @@
                   size="mini">详情
           </el-button>
           <el-button
-                  v-if="scope.row.status==='0'|| scope.row.status==='2'"
-                  @click="this.refuse(scope.row)"
+                  v-if="scope.row.status==='0'"
+                  @click="permit(scope.row)"
+                  size="mini"
+                  type="success">同意
+          </el-button>
+          <el-button
+                  v-if="scope.row.status==='0'"
+                  @click="refuse(scope.row)"
                   size="mini"
                   type="danger">拒绝
           </el-button>
-          <el-button
-                  v-else
-                  @click="this.delete(scope.row)"
-                  size="mini"
-                  type="info">删除
-          </el-button>
+<!--          <el-button-->
+<!--                  v-if="scope.row.status==='3'||scope.row.status==='4'||-->
+<!--                  scope.row.status==='5'||scope.row.status==='6'"-->
+<!--                  @click="defeat(scope.row)"-->
+<!--                  size="mini"-->
+<!--                  type="info">删除-->
+<!--          </el-button>-->
         </template>
       </el-table-column>
     </el-table>
@@ -61,11 +68,29 @@
       }
     },
     methods: {
-      refuse(){
-
+      permit(row){
+        this.loading=true;
+        if(this.changeStatus(row.senderID,localStorage.username,row.houseID,'2'))
+          this.$message.success("处理成功");
+        this.load();
       },
-      delete() {
-
+      refuse(row){
+        this.loading=true;
+        if(this.changeStatus(row.senderID,localStorage.username,row.houseID,'1'))
+          this.$message.success("处理成功");
+        this.load();
+      },
+      defeat(row) {
+        this.loading=true;
+        if (row.status!=='6') {
+          if (this.changeStatus(row.senderID, localStorage.username, row.houseID, '7'))
+            this.$message.success("处理成功");
+        }
+        else {
+          if (this.changeStatus(row.senderID, localStorage.username, row.houseID, '8'))
+            this.$message.success("处理成功");
+        }
+        this.load();
       },
       destroyMap(){
         map.destroy();
@@ -120,8 +145,30 @@
           case '1': return '卖家拒绝';
           case '2': return '卖家同意';
           case '3': return '未评价';
-          case '4': return '已评价'
+          case '6':
+          case '4': return '已评价';
+          case '5': return '已撤回';
+
         }
+      },
+      changeStatus(buyerID,sellerID,houseID,status){
+        this.$axios({
+          method: 'GET',
+          url: 'http://localhost:8080/SRservice/changeRequestStatus/'+buyerID+'/'+sellerID+'/'+houseID,
+          params:{
+            status: status
+          }
+        }).then(res=>{
+          return true;
+        }).catch(e=>{
+          console.log(e);
+          return false;
+        });
+      }
+    },
+    computed:{
+      undefeatedRequests: function(){
+        return this.Requests.filter(v => v.status !== '7' && v.status !== '8')
       }
     },
     mounted() {

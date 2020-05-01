@@ -37,12 +37,12 @@
                             size="mini"
                             type="primary">评价
                     </el-button>
-                    <el-button
-                            v-else
-                            @click="defeat(scope.row)"
-                            size="mini"
-                            type="info">删除
-                    </el-button>
+<!--                    <el-button-->
+<!--                            v-else-->
+<!--                            @click="defeat(scope.row)"-->
+<!--                            size="mini"-->
+<!--                            type="info">删除-->
+<!--                    </el-button>-->
                 </template>
             </el-table-column>
         </el-table>
@@ -84,9 +84,16 @@
             },
             defeat(row) {
                 this.loading=true;
-                if(this.changeStatus(localStorage.username,row.receiverID,row.houseID,'6'))
-                    this.$message.success("处理成功");
-                this.load();
+                if (row.status!=='7') {
+                    if (this.changeStatus(localStorage.username, row.receiverID, row.houseID, '6'))
+                        this.$message.success("处理成功");
+                    this.load();
+                }
+                else{
+                    if (this.changeStatus(localStorage.username, row.receiverID, row.houseID, '8'))
+                        this.$message.success("处理成功");
+                    this.load();
+                }
             },
             destroyMap(){
                 map.destroy();
@@ -171,7 +178,7 @@
         },
         computed:{
             undefeatedRequests: function(){
-                return this.Requests.filter(v => v.status !== '6')
+                return this.Requests.filter(v => v.status !== '6' && v.status !== '8')
             }
         }
     }

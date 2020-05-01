@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-table height="650px" stripe :data="houses" >
+    <el-table height="650px" stripe :data="houses" v-loading="loading">
       <el-table-column
               prop="location"
               label="位置"
@@ -32,7 +32,7 @@
           <el-button
                   size="mini"
                   type="danger"
-                  @click="delete(scope.$index, scope.row)">删除</el-button>
+                  @click="defeat(scope.row.houseID)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -54,6 +54,7 @@
     components: {NewHouse, Detail},
     data(){
       return{
+        loading: true,
         detailVisible:false,
         configVisible: false,
         searchInfo:'',
@@ -73,11 +74,11 @@
     methods:{
       load() {
         this.$axios({
-          url: 'http://localhost:8080/houseList',
+          url: 'http://localhost:8080/sellerHouse/'+localStorage.username,
           method: 'GET'
         }).then(res=>{
-          this.loading=false;
           this.houses=res.data;
+          this.loading = false;
         }).catch(e=>{
           console.log(e);
         })
@@ -115,8 +116,19 @@
           console.log(e);
         })
       },
-      delete(index,row){
-
+      defeat(id){
+        this.loading = true;
+        this.$axios({
+          method: 'GET',
+          url: 'http://localhost:8080/deletePastHouse/'+id
+        }).then(res=>{
+          this.$message.success("删除成功");
+          this.load();
+        }).catch(e=>{
+          this.$message.error("删除失败");
+          this.load();
+          console.log(e);
+        })
       },
       destroyMap(){
         map.destroy();
