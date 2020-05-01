@@ -59,9 +59,11 @@ public class HouseDBconnection{
                 +house.getHousingPurpose()+"','"+house.getPropertyOwnership()+"','"
                 +house.getHousingParts()+"')";
         try {
-            PreparedStatement preparedStatement = (PreparedStatement)this.connection.prepareStatement(sql);
+            Connection con = jdbcUtils.getConnect();
+            PreparedStatement preparedStatement = (PreparedStatement)con.prepareStatement(sql);
             preparedStatement.executeUpdate();
             preparedStatement.close();
+            con.close();
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -102,7 +104,7 @@ public class HouseDBconnection{
         House house=new House();
         try {
             Statement statement = (Statement)this.connection.createStatement();
-            ResultSet resultSet = (ResultSet)statement.executeQuery(sql);
+            ResultSet resultSet = (ResultSet)statement. executeQuery(sql);
             while (resultSet.next()){
                 int count=resultSet.getInt("count");
                 String village = resultSet.getString("village");

@@ -328,6 +328,7 @@ public class DBconnection{
                 String score = resultSet.getString("score");
                 comments.add(new Comment(authorID,date,houseID,content,score));
             }
+            System.out.println("Return comments to house successfully.");
             statement.close();
             resultSet.close();
             connection.close();
