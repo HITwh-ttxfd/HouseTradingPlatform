@@ -1,6 +1,6 @@
 <template>
     <div>
-        <el-table stripe :data="conversations" >
+        <el-table height="650px" stripe :data="conversations" >
             <el-table-column
                     prop="username"
                     label="用户名"

@@ -303,7 +303,7 @@ public class HouseDBconnection{
 
     //修改房源评价分数和评价数量
     public void changeHouseScore(float score, String houseID,int count){
-        String sql = "UPDATE house SET score = "+score+"and count="+count+" WHERE houseID ='"+houseID+"'";
+        String sql = "UPDATE house SET score = "+score+" and count="+count+" WHERE houseID ='"+houseID+"'";
         try {
             PreparedStatement preparedStatement = (PreparedStatement)this.connection.prepareStatement(sql);
             preparedStatement.executeUpdate();
@@ -336,6 +336,8 @@ public class HouseDBconnection{
         float score=DBconnection.sumComments(houseID);
         float finalScore=score/(float)count;
         changeHouseScore(finalScore,houseID,count);
+        System.out.println("count"+count);
+        System.out.println("score"+score);
     }
 
     //搜索房源
