@@ -63,8 +63,8 @@
                             size="small"><i class="el-icon-more"></i>
                     </el-button>
                     <el-button
-                            v-if="scope.row.count>0"
-                            @click="comment(scope.row.sellerID,scope.row.houseID)"
+                            v-if="'scope.row.count>0'"
+                            @click="comment(scope.row.houseID)"
                             size="small"><i class="el-icon-chat-dot-square"></i>
                     </el-button>
                     <el-button
@@ -182,8 +182,17 @@
             }
         },
         methods: {
-            comment(){
-                this.commentVisible=true;
+            comment(id){
+                this.$axios({
+                    method: 'GET',
+                    url: 'http://localhost:8080/SRservice/houseReceiveComments/'+id,
+                }).then(res=>{
+                    this.comments=res.data;
+                    this.commentVisible=true;
+                    console.log(res.data)
+                }).catch(e=>{
+                    console.log(e);
+                })
             },
             reset(){
                 this.load()

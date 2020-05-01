@@ -182,9 +182,6 @@
                     housingAge:"19",
                     housingParts:"已上传房本配件",
                     housingPurpose:"普通住宅",
-                    imgs: {
-                        style: '中式'
-                    },
                     interiorArea:75,
                     lastTransaction:"2020-02-05",
                     lift:1,
@@ -205,6 +202,13 @@
         },
         methods:{
             upload(){
+                this.$axios({
+                    method: 'POST',
+                    url: 'http://localhost:8080/addhouse',
+                    data:{
+                        house: this.newHouse
+                    }
+                })
                 this.$emit('close');
             },
             searchLocation(level){

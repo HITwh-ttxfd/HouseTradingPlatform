@@ -1,71 +1,92 @@
 <template>
     <div>
-    <el-table
-            height="650px"
-            v-loading="loading"
-            :data="Requests">
-        <el-table-column
-                align="center"
-                label="房源"
-                prop="location">
-        </el-table-column>
-        <el-table-column align="center" label="预约日期">
-            <template slot-scope="scope">
-                {{displayDate(scope.row.date)}}
-            </template>
-        </el-table-column>
-        <el-table-column align="center" label="状态">
-            <template slot-scope="scope">
-                {{displayStatus(scope.row.status)}}
-            </template>
-        </el-table-column>
-        <el-table-column align="center" label="操作">
-            <template slot-scope="scope">
-                <el-button
-                        @click="detail(scope.row.houseID)"
-                        size="mini">详情
-                </el-button>
-                <el-button
-                        v-if="scope.row.status==='0'|| scope.row.status==='2'"
-                        @click="this.cancel(scope.row)"
-                        size="mini"
-                        type="danger">撤销
-                </el-button>
-                <el-button
-                        v-else
-                        @click="this.delete(scope.row)"
-                        size="mini"
-                        type="info">删除
-                </el-button>
-            </template>
-        </el-table-column>
-    </el-table>
+        <el-table
+                height="650px"
+                v-loading="loading"
+                :data="undefeatedRequests">
+            <el-table-column
+                    align="center"
+                    property="location"
+                    label="地址">
+            </el-table-column>
+            <el-table-column align="center" label="预约日期">
+                <template slot-scope="scope">
+                    {{displayDate(scope.row.date)}}
+                </template>
+            </el-table-column>
+            <el-table-column align="center" label="状态">
+                <template slot-scope="scope">
+                    {{displayStatus(scope.row.status)}}
+                </template>
+            </el-table-column>
+            <el-table-column align="center" label="操作">
+                <template slot-scope="scope">
+                    <el-button
+                            @click="detail(scope.row.houseID)"
+                            size="mini">详情
+                    </el-button>
+                    <el-button
+                            v-if="scope.row.status==='0'|| scope.row.status==='2'"
+                            @click="cancel(scope.row)"
+                            size="mini"
+                            type="danger">撤销
+                    </el-button>
+                    <el-button
+                            v-else-if="scope.row.status==='3'"
+                            @click="comment(scope.row.houseID,scope.row.receiverID)"
+                            size="mini"
+                            type="primary">评价
+                    </el-button>
+                    <el-button
+                            v-else
+                            @click="defeat(scope.row)"
+                            size="mini"
+                            type="info">删除
+                    </el-button>
+                </template>
+            </el-table-column>
+        </el-table>
         <el-dialog :visible.sync="detailVisible" title="详细信息" destroy-on-close @closed="destroyMap">
             <detail :house-detail="houseDetail"></detail>
+        </el-dialog>
+        <el-dialog width="500px" :visible.sync="commentVisible" title="评价" destroy-on-close>
+            <new-comment @load="load" @close="commentVisible=false" :seller_id="sellerID" :author_id="authorID" :house_id="commentHouseID"></new-comment>
         </el-dialog>
     </div>
 </template>
 
 <script>
     import Detail from "./detail";
+    import NewComment from "./newComment";
+    import seller from "../Seller/seller";
     let map;
     export default {
         name: "sendRequests",
-        components: {Detail},
+        components: {NewComment, Detail},
         data() {
             return {
                 Requests: [],
                 detailVisible: false,
+                commentHouseID: '',
+                authorID:'',
+                sellerID:'',
+                commentVisible: false,
                 houseDetail:{},
                 loading: true
             }
         },
         methods: {
-            cancel(){
-
+            cancel(row){
+                this.loading=true;
+                if(this.changeStatus(localStorage.username,row.receiverID,row.houseID,'5'))
+                    this.$message.success("处理成功");
+                this.load();
             },
-            delete() {
-
+            defeat(row) {
+                this.loading=true;
+                if(this.changeStatus(localStorage.username,row.receiverID,row.houseID,'6'))
+                    this.$message.success("处理成功");
+                this.load();
             },
             destroyMap(){
                 map.destroy();
@@ -120,12 +141,38 @@
                     case '1': return '卖家拒绝';
                     case '2': return '卖家同意';
                     case '3': return '未评价';
-                    case '4': return '已评价'
+                    case '4': return '已评价';
+                    case '5': return '已撤回';
                 }
+            },
+            comment(houseID,sellerID){
+                this.commentHouseID=houseID;
+                this.authorID=localStorage.username;
+                this.sellerID=sellerID;
+                this.commentVisible=true;
+            },
+            changeStatus(buyerID,sellerID,houseID,status){
+                this.$axios({
+                    method: 'GET',
+                    url: 'http://localhost:8080/SRservice/changeRequestStatus/'+buyerID+'/'+sellerID+'/'+houseID,
+                    params:{
+                        status: status
+                    }
+                }).then(res=>{
+                    return true;
+                }).catch(e=>{
+                    console.log(e);
+                    return false;
+                });
             }
         },
         mounted() {
             this.load();
+        },
+        computed:{
+            undefeatedRequests: function(){
+                return this.Requests.filter(v => v.status !== '6')
+            }
         }
     }
 </script>
