@@ -544,7 +544,7 @@ public class DBconnection{
                 String date = resultSet.getString("date");
                 String read = resultSet.getString("status");
                 if(index.add(senderID)){
-                    list.add(new Conversation(name,senderID,content,date,read));
+                    list.add(new Conversation(senderID,name,date,content,read));
                 }
                 else if(index.add(receiverID)){
                     list.add(new Conversation(name,receiverID,content,date,read));
