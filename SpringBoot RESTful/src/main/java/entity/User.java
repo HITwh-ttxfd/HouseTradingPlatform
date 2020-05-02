@@ -5,6 +5,7 @@ import connector.UserDao;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.TimeZone;
 
 public class User {
     protected String username;
@@ -18,7 +19,7 @@ public class User {
         String houseID = house.getHouseID();
         String sellerID = sell.getPhone();
         Calendar c = Calendar.getInstance();
-        String d = c.get(Calendar.YEAR)+"-"+c.get(Calendar.MONTH)+"-"+c.get(Calendar.DATE)+" "
+        String d = c.get(Calendar.YEAR)+"-"+(c.get(Calendar.MONTH)+1)+"-"+c.get(Calendar.DATE)+" "
                 +c.get(Calendar.HOUR_OF_DAY)+":"+c.get(Calendar.MINUTE)+":"+c.get(Calendar.SECOND);
         Request request = new Request(houseID,this.phone,sellerID,date,time,d,phone,location);
         return request;
@@ -27,7 +28,7 @@ public class User {
         String receiverID = receiver.getPhone();
         String name = receiver.getUsername();
         Calendar c = Calendar.getInstance();
-        String d = c.get(Calendar.YEAR)+"-"+c.get(Calendar.MONTH)+"-"+c.get(Calendar.DATE)+" "
+        String d = c.get(Calendar.YEAR)+"-"+(c.get(Calendar.MONTH)+1)+"-"+c.get(Calendar.DATE)+" "
                 +c.get(Calendar.HOUR_OF_DAY)+":"+c.get(Calendar.MINUTE)+":"+c.get(Calendar.SECOND);
         Message message = new Message(name,this.phone,receiverID,content,d);
         return message;
@@ -35,7 +36,7 @@ public class User {
     public Comment sendComment(String content, House house,String score){
         String houseID = house.getHouseID();
         Calendar c = Calendar.getInstance();
-        String d = c.get(Calendar.YEAR)+"-"+c.get(Calendar.MONTH)+"-"+c.get(Calendar.DATE)+" "
+        String d = c.get(Calendar.YEAR)+"-"+(c.get(Calendar.MONTH)+1)+"-"+c.get(Calendar.DATE)+" "
                 +c.get(Calendar.HOUR_OF_DAY)+":"+c.get(Calendar.MINUTE)+":"+c.get(Calendar.SECOND);
         Comment comment = new Comment(this.phone, d, houseID, content,score);
         return comment;
