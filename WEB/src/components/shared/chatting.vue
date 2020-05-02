@@ -2,8 +2,8 @@
   <div>
     <el-main id="messageList">
       <div v-for="message in messages.messageList"
-           :class="{wrapper: true,me: isMine(message.sender),other: !isMine(message.sender)}">
-        <p class="time">{{message.time}}</p>
+           :class="{wrapper: true,me: isMine(message.senderID),other: !isMine(message.senderID)}">
+        <p class="time">{{message.date}}</p>
         <div class="content">
           <pre>{{message.content}}</pre>
         </div>
@@ -30,7 +30,9 @@
     },
     methods:{
       load(){
-        this.$refs.messageList.scrollTop=this.$refs.messageList.scrollHeight;
+        setTimeout(()=>{
+          document.getElementById('messageList').scrollTop=document.getElementById('messageList').scrollHeight;
+        },30);
       },
       isMine(sender){
         return sender === localStorage['username'];
@@ -41,34 +43,56 @@
            this.entered=false;
          else{
            $event.target.innerText= $event.target.innerText.slice(0,-2);
-           this.messages.messageList.push({
-             sender: localStorage['username'],
-             receiver: this.messages.id,
-             time: '2020-4-28 11:00',
-             content: $event.target.innerText,
-             read: false
-           });
+           // this.messages.messageList.push({
+           //   senderID: localStorage['username'],
+           //   receiverID: this.messages.id,
+           //   date: '2020-4-28 11:00',
+           //   content: $event.target.innerText,
+           //   status: false
+           // });
+           this.$axios({
+             method: 'GET',
+             url: 'http://localhost:8080/SRservice/sendMessage/'+localStorage.username+'/'+this.messages.id,
+             params:{
+               content: $event.target.innerText
+             }
+           }).then(res=>{
+              if (res.data==='error')
+                this.$message.error("发送失败");
+           }).catch(e=>{
+             this.$message.error("发送失败");
+             console.log(e);
+           })
            $event.target.innerText='';
            $event.preventDefault();
-           this.$nextTick(()=>{
-             document.getElementById('messageList').scrollTop=document.getElementById('messageList').scrollHeight;
-           })
+           // this.$nextTick(()=>{
+           //   document.getElementById('messageList').scrollTop=document.getElementById('messageList').scrollHeight;
+           // })
+           this.reload();
          }
        },60)
       },
       enter(){
         this.innerText += '\n';
         this.entered=true;
+      },
+      reload(){
+        this.$axios({
+          method: 'GET',
+          url: 'http://localhost:8080/SRservice/receiveMessages/'+localStorage.username+'/'+this.messages.id
+        }).then(res=>{
+          this.messages.messageList=res.data.reverse();
+          this.load();
+        }).catch(e=>{
+          console.log(e);
+        })
       }
     },
     computed:{
 
     },
     mounted() {
-      // load();
-      setTimeout(()=>{
-        document.getElementById('messageList').scrollTop=document.getElementById('messageList').scrollHeight;
-      },30);
+      this.load();
     }
   }
 </script>
@@ -139,4 +163,5 @@
     *word-wrap: break-word;
     *white-space : normal ;
   }
+
 </style>
