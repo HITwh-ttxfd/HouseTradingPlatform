@@ -7,10 +7,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashSet;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 
 public class DBconnection{
@@ -566,10 +565,23 @@ class sortById implements Comparator {
 
     public int compare(Object o1, Object o2) {
         //倒序，日期最靠前的在最前
-        if(((Message)o1).getDate().compareTo(((Message)o2).getDate())==1){
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-M-d HH:mm:ss");
+        Message m1 = (Message)o1;
+        Message m2 = (Message)o2;
+        Date d1,d2;
+        try {
+            d1 = format.parse(m1.getDate());
+            d2 = format.parse(m2.getDate());
+        } catch (ParseException e) {
+            // 解析出错，则不进行排序
+            System.out.println("ComparatorDate--compare--SimpleDateFormat.parse--error");
+            return 0;
+        }
+        if (d1.before(d2)) {
+            return 1;
+        } else {
             return -1;
         }
-        return 1;
     }
 
 }
