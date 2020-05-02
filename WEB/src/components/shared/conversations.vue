@@ -1,13 +1,13 @@
 <template>
     <div>
-        <el-table height="650px" stripe :data="conversations" >
+        <el-table height="650px" stripe :data="conversations" v-loading="loading">
             <el-table-column
                     prop="username"
                     label="用户名"
                     align="center">
             </el-table-column>
             <el-table-column
-                    prop="time"
+                    prop="date"
                     label="时间"
                     align="center">
             </el-table-column>
@@ -37,6 +37,7 @@
         components: {Chatting},
         data(){
             return{
+                loading: true,
                 messageVisible:false,
                 searchInfo:'',
                 conversations:[{        //消息列表
@@ -67,14 +68,31 @@
         },
         methods:{
             load(){
-
+                this.$axios({
+                    method: 'GET',
+                    url: 'http://localhost:8080/SRservice/selectConversation/'+localStorage.username
+                }).then(res=>{
+                    this.conversations=res.data;
+                    this.loading=false;
+                })
             },
-            detail(index){
+            detail(row){
                 this.messageVisible=true;
+                this.$axios({
+                    method: 'GET',
+                    url: 'http://localhost:8080/SRservice/receiveMessages/'+localStorage.username+'/'+row.id
+                }).then(res=>{
+                    this.messages.name=row.username;
+                    this.messages.id=row.id;
+                    this.messages.messageList=res.data.reverse();
+                    this.messageVisible=true;
+                }).catch(e=>{
+                    console.log(e);
+                })
             }
         },
         mounted() {
-            // load();
+            this.load();
         }
     }
 </script>
