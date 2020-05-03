@@ -554,6 +554,7 @@ public class DBconnection{
                     list.add(new Conversation(receiverID,name,date,content,read));
                 }*/
             }
+            Collections.sort(messages, new sortMessage());
             for(int i=0;i<messages.size();i++){
                 String senderID = messages.get(i).getSenderID();
                 String receiverID = messages.get(i).getReceiverID();
