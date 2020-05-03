@@ -26,7 +26,7 @@ public class DBconnection{
             Connection connection = jdbcUtils.getConnect();
             PreparedStatement preparedStatement = (PreparedStatement)connection.prepareStatement(sql);
             preparedStatement.executeUpdate();
-            System.out.println("Image insert successfully.");
+            //System.out.println("Image insert successfully.");
             preparedStatement.close();
             connection.close();
             return "success";
@@ -50,7 +50,7 @@ public class DBconnection{
                 String path = resultSet.getString("path");
                 bases.add(new housePic(houseid,fileName,style,path));
             }
-            System.out.println("Img return successfully");
+            //System.out.println("Img return successfully");
             statement.close();
             resultSet.close();
             connection.close();
@@ -66,7 +66,7 @@ public class DBconnection{
             Connection connection = jdbcUtils.getConnect();
             PreparedStatement preparedStatement = (PreparedStatement)connection.prepareStatement(sql);
             preparedStatement.executeUpdate();
-            System.out.println("Image delete successfully.");
+            //System.out.println("Image delete successfully.");
             preparedStatement.close();
             connection.close();
             return "success";
@@ -97,7 +97,7 @@ public class DBconnection{
             Connection connection = jdbcUtils.getConnect();
             PreparedStatement preparedStatement = (PreparedStatement)connection.prepareStatement(sql);
             preparedStatement.executeUpdate();
-            System.out.println("Request insert successfully.");
+            //System.out.println("Request insert successfully.");
             preparedStatement.close();
             connection.close();
             return "success";
@@ -122,7 +122,7 @@ public class DBconnection{
         ArrayList<Request> requests = new ArrayList<Request>();
         try {
             Connection connection = jdbcUtils.getConnect();
-            System.out.println(connection);
+            //System.out.println(connection);
             Statement statement = (Statement)connection.createStatement();
             ResultSet resultSet = (ResultSet)statement.executeQuery(sql);
             while (resultSet.next()){
@@ -140,10 +140,11 @@ public class DBconnection{
             statement.close();
             resultSet.close();
             connection.close();
-            System.out.println("Return requests successfully.");
+            //System.out.println("Return requests successfully.");
         }catch (Exception e){
             e.printStackTrace();
         }
+        Collections.sort(requests,new sortById());
         return requests;
     }
     //更改请求--未定义
@@ -161,9 +162,9 @@ public class DBconnection{
                 String senderID = resultSet.getString("senderID");
                 String receiverID = resultSet.getString("receiverID");
                 String houseID = resultSet.getString("houseID");
-                System.out.println(senderID+" "+send);
-                System.out.println(receiverID+" "+receive);
-                System.out.println(houseID+" "+houseid);
+                //System.out.println(senderID+" "+send);
+                //System.out.println(receiverID+" "+receive);
+                //System.out.println(houseID+" "+houseid);
                 if (send.equals(senderID) && receive.equals(receiverID) && houseid.equals(houseID)){
                     return "exist";
                 }
@@ -171,7 +172,7 @@ public class DBconnection{
             statement.close();
             resultSet.close();
             connection.close();
-            System.out.println("Search requests successfully.");
+            //System.out.println("Search requests successfully.");
         }catch (Exception e){
             e.printStackTrace();
             return "exist";
@@ -185,7 +186,7 @@ public class DBconnection{
             Connection connection = jdbcUtils.getConnect();
             PreparedStatement preparedStatement = (PreparedStatement)connection.prepareStatement(sql);
             preparedStatement.executeUpdate();
-            System.out.println("Request status changed successfully.");
+            //System.out.println("Request status changed successfully.");
             preparedStatement.close();
             connection.close();
         }catch (Exception e){
@@ -207,7 +208,7 @@ public class DBconnection{
             Connection connection = jdbcUtils.getConnect();
             PreparedStatement preparedStatement = (PreparedStatement)connection.prepareStatement(sql);
             preparedStatement.executeUpdate();
-            System.out.println("Delete request successfully.");
+            //System.out.println("Delete request successfully.");
             preparedStatement.close();
             connection.close();
             return "success";
@@ -239,7 +240,7 @@ public class DBconnection{
                 phone = resultSet.getString("phone");
                 type = resultSet.getString("type");
             }
-            System.out.println(phone+" read.");
+            //System.out.println(phone+" read.");
             statement.close();
             resultSet.close();
             connection.close();
@@ -271,7 +272,7 @@ public class DBconnection{
                 phone = resultSet.getString("phone");
                 type = resultSet.getString("type");
             }
-            System.out.println("MySQL read user "+phone);
+            //System.out.println("MySQL read user "+phone);
             user = new User(username,password,realname,id,phone,type);
             statement.close();
             resultSet.close();
@@ -297,7 +298,7 @@ public class DBconnection{
             Connection connection = jdbcUtils.getConnect();
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.executeUpdate();
-            System.out.println("Comments add successfully.");
+            //System.out.println("Comments add successfully.");
             preparedStatement.close();
             connection.close();
             return "success";
@@ -327,13 +328,14 @@ public class DBconnection{
                 String score = resultSet.getString("score");
                 comments.add(new Comment(authorID,date,houseID,content,score));
             }
-            System.out.println("Return comments to house successfully.");
+            //System.out.println("Return comments to house successfully.");
             statement.close();
             resultSet.close();
             connection.close();
         }catch (Exception e){
             e.printStackTrace();
         }
+        Collections.sort(comments,new sortById());
         return comments;
     }
     //下传评价至用户
@@ -359,6 +361,7 @@ public class DBconnection{
         }catch (Exception e){
             e.printStackTrace();
         }
+        Collections.sort(comments,new sortById());
         return comments;
     }
     //删除评价
@@ -372,7 +375,7 @@ public class DBconnection{
             Connection connection = jdbcUtils.getConnect();
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.executeUpdate();
-            System.out.println("Delete comment successfully.");
+            //System.out.println("Delete comment successfully.");
             preparedStatement.close();
             connection.close();
             return "success";
@@ -439,7 +442,7 @@ public class DBconnection{
             Connection connection = jdbcUtils.getConnect();
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.executeUpdate();
-            System.out.println("Message upload successfully.");
+            //System.out.println("Message upload successfully.");
             preparedStatement.close();
             connection.close();
             return "success";
@@ -472,7 +475,7 @@ public class DBconnection{
                 String read = resultSet.getString("status");
                 messages.add(new Message(name,senderID,receiverID,content,date,read));
             }
-            System.out.println("Return messages successfully.");
+            //System.out.println("Return messages successfully.");
             statement.close();
             resultSet.close();
             connection.close();
@@ -494,7 +497,7 @@ public class DBconnection{
             Connection connection = jdbcUtils.getConnect();
             PreparedStatement preparedStatement = (PreparedStatement)connection.prepareStatement(sql);
             preparedStatement.executeUpdate();
-            System.out.println("Message status changed successfully.");
+            //System.out.println("Message status changed successfully.");
             preparedStatement.close();
             connection.close();
         }catch (Exception e){
@@ -515,7 +518,7 @@ public class DBconnection{
             Connection connection = jdbcUtils.getConnect();
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.executeUpdate();
-            System.out.println("Delete message successfully.");
+            //System.out.println("Delete message successfully.");
             preparedStatement.close();
             connection.close();
             return "success";
@@ -534,6 +537,7 @@ public class DBconnection{
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(sql);
             HashSet<String> index = new HashSet<>();
+            ArrayList<Message> messages = new ArrayList<>();
             index.add(id);
             while (resultSet.next()){
                 String name = resultSet.getString("name");
@@ -542,10 +546,29 @@ public class DBconnection{
                 String content = resultSet.getString("content");
                 String date = resultSet.getString("date");
                 String read = resultSet.getString("status");
-                if(index.add(senderID)){
+                messages.add(new Message(name,senderID,receiverID,content,date,read));
+                /*if(index.add(senderID)){
                     list.add(new Conversation(senderID,name,date,content,read));
                 }
                 else if(index.add(receiverID)){
+                    list.add(new Conversation(receiverID,name,date,content,read));
+                }*/
+            }
+            for(int i=0;i<messages.size();i++){
+                String senderID = messages.get(i).getSenderID();
+                String receiverID = messages.get(i).getReceiverID();
+                if(index.add(senderID)){
+                    String name = messages.get(i).getName();
+                    String date = messages.get(i).getDate();
+                    String read = messages.get(i).getRead();
+                    String content = messages.get(i).getContent();
+                    list.add(new Conversation(senderID,name,date,content,read));
+                }
+                else if(index.add(receiverID)){
+                    String name = messages.get(i).getName();
+                    String date = messages.get(i).getDate();
+                    String read = messages.get(i).getRead();
+                    String content = messages.get(i).getContent();
                     list.add(new Conversation(receiverID,name,date,content,read));
                 }
             }

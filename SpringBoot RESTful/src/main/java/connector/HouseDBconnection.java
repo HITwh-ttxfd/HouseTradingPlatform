@@ -103,7 +103,8 @@ public class HouseDBconnection{
         String sql = "select * from house where houseID='"+houseID+"'";
         House house=new House();
         try {
-            Statement statement = (Statement)this.connection.createStatement();
+            Connection con = jdbcUtils.getConnect();
+            Statement statement = (Statement)con.createStatement();
             ResultSet resultSet = (ResultSet)statement. executeQuery(sql);
             while (resultSet.next()){
                 int count=resultSet.getInt("count");
@@ -152,12 +153,15 @@ public class HouseDBconnection{
                         housingParts);
                 house=housetemp;
                 //测试用，正式上线删
-                System.out.println(resultSet.getString("houseID")+
+                /*System.out.println(resultSet.getString("houseID")+
                         resultSet.getString("sellerID")+
                         resultSet.getDouble("price")+
                         resultSet.getDouble("size")
-                        +resultSet.getString("location"));
+                        +resultSet.getString("location"));*/
             }
+            statement.close();
+            resultSet.close();
+            con.close();
         }catch (Exception e){
             e.printStackTrace();
         }
