@@ -115,7 +115,7 @@
         </div>
         <div class="infoBlock">
             <p class="title">位置属性</p>
-            <div class="infoLine" style="width: 400px">
+            <div class="infoLine" style="width: 400px;margin-left: 5%;">
                 <p class="content label">行政区划:</p>
                     <el-select @change="searchLocation(1)"  v-model="newHouse.location.province" placeholder="省份">
                         <el-option v-for="(province) in provinces" :key="province.name" :label="province.name" :value="province.name"></el-option>
@@ -123,13 +123,21 @@
                     <el-select @change="searchLocation(2)"  v-model="newHouse.location.city" placeholder="城市">
                         <el-option v-for="(city) in cities" :key="city.name" :label="city.name" :value="city.name"></el-option>
                     </el-select>
-                    <el-select @change="searchLocation(3)"  v-model="newHouse.location.district" placeholder="区县">
+                    <el-select  v-model="newHouse.location.district" placeholder="区县">
                         <el-option v-for="(district) in districts" :key="districts.name" :label="district.name" :value="district.name"></el-option>
                     </el-select>
             </div>
-            <div class="infoLine" style="width: 400px">
+            <div class="infoLine" style="width: 410px;margin-left: 5%;">
+                <p class="content label">街道地址:</p>
+                <el-input placeholder="例：文化西路二号" style="width: 300px" v-model="newHouse.location.street"></el-input>
+            </div>
+            <div class="infoLine" style="width: 410px;margin-left: 5%;">
+                <p class="content label">小区全称:</p>
+                <el-input placeholder="例：XX小区" style="width: 300px" v-model="newHouse.location.community"></el-input>
+            </div>
+            <div class="infoLine" style="width: 410px;margin-left: 5%;">
                 <p class="content label">详细地址:</p>
-                <el-input style="width: 300px" v-model="newHouse.location.detail"></el-input>
+                <p class="content">{{location}}</p>
             </div>
         </div>
         <div class="dialog-footer" slot="footer">
@@ -155,9 +163,10 @@
                 newHouse: {
                     location:{
                         province:'',
+                        city:'',
                         street:'',
-                        districts:'',
-                        detail:''
+                        district:'',
+                        community:''
                     },
                     buildingArea:80,
                     buildingType:"板楼",
@@ -173,7 +182,6 @@
                     housingAge:"19",
                     housingParts:"已上传房本配件",
                     housingPurpose:"普通住宅",
-                    // imgs:Array[2],
                     interiorArea:75,
                     lastTransaction:"2020-02-05",
                     lift:1,
@@ -194,10 +202,17 @@
         },
         methods:{
             upload(){
+                this.$axios({
+                    method: 'POST',
+                    url: 'http://localhost:8080/addhouse',
+                    data:{
+                        house: this.newHouse
+                    }
+                })
                 this.$emit('close');
             },
             searchLocation(level){
-                if (level<0||level>3)
+                if (level<0||level>2)
                     return
                 let location=['中国',this.newHouse.location.province,this.newHouse.location.city,this.newHouse.location.district];
                 this.$axios({
@@ -212,30 +227,22 @@
                     switch (level) {
                         case 0:
                             this.provinces=eval(regions);
-                            this.cities=[{name:'全部'}];
-                            this.districts=[{name:'全部'}];
-                            this.streets=[{name:'全部'}];
+                            this.cities=[];
+                            this.districts=[];
+                            this.streets=[];
                             break;
                         case 1:
                             this.cities=eval(regions);
-                            this.districts=[{name:'全部'}];
-                            this.streets=[{name:'全部'}];
+                            this.districts=[];
+                            this.streets=[];
                             this.newHouse.location.city='';
                             this.newHouse.location.district='';
-                            this.newHouse.location.street='';
                             break;
                         case 2:
                             this.districts=eval(regions);
-                            this.streets=[{name:'全部'}];
+                            this.streets=[];
                             this.newHouse.location.district='';
-                            this.newHouse.location.street='';
                             break;
-                        case 3:
-                            this.streets=eval(regions);
-                            this.streets.concat({
-                                name: '全部'
-                            });
-                            this.newHouse.location.street='';
                     }
                 }).catch(e=>{
                     console.log(e);
@@ -332,6 +339,14 @@
                 axios.get('http://localhost:8080/imgManage/selectImg/' + houseID + '/')
             }
         },
+        computed:{
+            location: function(){
+                let location=this.newHouse.location;
+                if (location===undefined)
+                    return null;
+                return location.province+location.city+location.district+location.street+location.community;
+            },
+        },
         mounted() {
             this.searchLocation(0);
         }
@@ -366,6 +381,13 @@
         vertical-align: middle;
         text-align: center;
         display: block;
+        height: 180px;
+    }
+
+    .head .block{
+        overflow-x: scroll;
+        overflow-y: hidden;
+        white-space: nowrap;
     }
 
     .el-carousel__item{
@@ -413,7 +435,7 @@
 
     .infoLine .content {
         font-size: 13px;
-        vertical-align: middle;
+        vertical-align: center;
         display: inline-block;
         margin-left: 7px;
         margin-bottom: 15px;

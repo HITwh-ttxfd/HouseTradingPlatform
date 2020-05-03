@@ -56,13 +56,13 @@
                     <p class="content label">建筑类型:</p>
                     <p class="content">{{houseDetail.buildingType}}</p>
                 </div>
-<!--                <div class="infoLine">-->
-<!--                    <p class="content label">建筑结构:</p>-->
-<!--                    <p class="content">{{houseDetail.buildingType}}</p>-->
-<!--                </div>-->
                 <div class="infoLine">
                     <p class="content label">梯户比例:</p>
                     <p class="content">{{houseDetail.elevatorProportion}}</p>
+                </div>
+                <div class="infoLine" v-if="houseDetail.imgs!== undefined && houseDetail.imgs.length>0">
+                    <p class="content label">装修风格:</p>
+                    <p class="content">{{houseDetail.imgs[0].style}}</p>
                 </div>
                 <div class="infoLine">
                     <p class="content label">配备电梯:</p>

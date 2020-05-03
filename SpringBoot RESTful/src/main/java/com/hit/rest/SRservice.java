@@ -61,6 +61,7 @@ public class SRservice {
     @RequestMapping(value = "/houseReceiveComments/{id}", method = RequestMethod.GET)
     public ArrayList<Comment> houseReceiveComments(@PathVariable("id")String houseID){
         House house = hdb.getHouse(houseID);
+        System.out.println(house.getHouseID());
         return DBconnection.selectComments(house);
     }
     @RequestMapping(value = "/delComment/{authorID}/{houseID}")
