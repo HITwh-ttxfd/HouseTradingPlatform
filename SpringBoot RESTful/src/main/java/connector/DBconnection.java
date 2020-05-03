@@ -144,7 +144,7 @@ public class DBconnection{
         }catch (Exception e){
             e.printStackTrace();
         }
-        Collections.sort(requests,new sortById());
+        Collections.sort(requests,new sortReq());
         return requests;
     }
     //更改请求--未定义
@@ -335,7 +335,7 @@ public class DBconnection{
         }catch (Exception e){
             e.printStackTrace();
         }
-        Collections.sort(comments,new sortById());
+        Collections.sort(comments,new sortCom());
         return comments;
     }
     //下传评价至用户
@@ -361,7 +361,7 @@ public class DBconnection{
         }catch (Exception e){
             e.printStackTrace();
         }
-        Collections.sort(comments,new sortById());
+        Collections.sort(comments,new sortCom());
         return comments;
     }
     //删除评价
@@ -482,7 +482,7 @@ public class DBconnection{
         }catch (Exception e){
             e.printStackTrace();
         }
-        Collections.sort(messages,new sortById());
+        Collections.sort(messages,new sortMessage());
         return messages;
     }
     //修改状态
@@ -579,12 +579,12 @@ public class DBconnection{
         }catch (Exception e){
             e.printStackTrace();
         }
-        Collections.sort(list,new sortById());
+        Collections.sort(list,new sortConser());
         return list;
     }
 
 }
-class sortById implements Comparator {
+class sortMessage implements Comparator {
 
     public int compare(Object o1, Object o2) {
         //倒序，日期最靠前的在最前
@@ -607,4 +607,73 @@ class sortById implements Comparator {
         }
     }
 
+}
+class sortConser implements Comparator {
+
+    public int compare(Object o1, Object o2) {
+        //倒序，日期最靠前的在最前
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-M-d HH:mm:ss");
+        Conversation m1 = (Conversation)o1;
+        Conversation m2 = (Conversation)o2;
+        Date d1,d2;
+        try {
+            d1 = format.parse(m1.getDate());
+            d2 = format.parse(m2.getDate());
+        } catch (ParseException e) {
+            // 解析出错，则不进行排序
+            System.out.println("ComparatorDate--compare--SimpleDateFormat.parse--error");
+            return 0;
+        }
+        if (d1.before(d2)) {
+            return 1;
+        } else {
+            return -1;
+        }
+    }
+}
+class sortCom implements Comparator {
+
+    public int compare(Object o1, Object o2) {
+        //倒序，日期最靠前的在最前
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-M-d HH:mm:ss");
+        Comment m1 = (Comment)o1;
+        Comment m2 = (Comment)o2;
+        Date d1,d2;
+        try {
+            d1 = format.parse(m1.getDate());
+            d2 = format.parse(m2.getDate());
+        } catch (ParseException e) {
+            // 解析出错，则不进行排序
+            System.out.println("ComparatorDate--compare--SimpleDateFormat.parse--error");
+            return 0;
+        }
+        if (d1.before(d2)) {
+            return 1;
+        } else {
+            return -1;
+        }
+    }
+}
+class sortReq implements Comparator {
+
+    public int compare(Object o1, Object o2) {
+        //倒序，日期最靠前的在最前
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-M-d");
+        Request m1 = (Request)o1;
+        Request m2 = (Request)o2;
+        Date d1,d2;
+        try {
+            d1 = format.parse(m1.getDate());
+            d2 = format.parse(m2.getDate());
+        } catch (ParseException e) {
+            // 解析出错，则不进行排序
+            System.out.println("ComparatorDate--compare--SimpleDateFormat.parse--error");
+            return 0;
+        }
+        if (d1.before(d2)) {
+            return 1;
+        } else {
+            return -1;
+        }
+    }
 }
