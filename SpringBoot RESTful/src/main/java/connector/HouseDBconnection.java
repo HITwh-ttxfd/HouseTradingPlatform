@@ -326,11 +326,11 @@ public class HouseDBconnection{
         }
         if(village!="")
             sql+=" village = '"+village+"' and ";
-        sql+=" size >"+mimSize;
-        sql+=" and size <"+maxSize;
-        sql+=" and price >"+minPrice;
-        sql+=" and price <"+maxPrice;
-        sql+=" and score >"+score;
+        sql+=" size >="+mimSize;
+        sql+=" and size <="+maxSize;
+        sql+=" and price >="+minPrice;
+        sql+=" and price <="+maxPrice;
+        sql+=" and score >="+score;
 
         //将现在的时间减去给的时间
         SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd");
@@ -344,7 +344,7 @@ public class HouseDBconnection{
         temp=str1+'-'+str2;
 
 
-        sql+=" and time >'"+temp+"'";
+        sql+=" and time >='"+temp+"'";
         try {
             Statement statement = (Statement)this.connection.createStatement();
             ResultSet resultSet = (ResultSet)statement.executeQuery(sql);
