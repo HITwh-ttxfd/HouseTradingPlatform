@@ -14,6 +14,16 @@
                     {{displayDate(scope.row.date)}}
                 </template>
             </el-table-column>
+            <el-table-column
+                    align="center"
+                    property="time"
+                    label="预约时间">
+            </el-table-column>
+            <el-table-column
+                    align="center"
+                    property="phone"
+                    label="买家联系电话">
+            </el-table-column>
             <el-table-column align="center" label="状态">
                 <template slot-scope="scope">
                     {{displayStatus(scope.row.status)}}

@@ -208,8 +208,13 @@
                     data:{
                         house: this.newHouse
                     }
+                }).then(res=>{
+                    this.$message.success('上传成功');
+                    this.$emit('close');
+                }).catch(e=>{
+                    this.$message.error('上传失败');
                 })
-                this.$emit('close');
+
             },
             searchLocation(level){
                 if (level<0||level>2)

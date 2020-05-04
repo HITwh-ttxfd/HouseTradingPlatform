@@ -43,7 +43,8 @@
                 </template>
             </el-table-column>
             <el-table-column
-                    align="center">
+                    align="center"
+            width="260px">
                 <template slot="header" slot-scope="scope">
                     <el-button
                             @click="select()"
@@ -72,6 +73,11 @@
                             @click="request(scope.row.sellerID,scope.row.houseID)"
                             size="small"><i class="el-icon-s-order"></i>
                     </el-button>
+                    <el-button
+                            type="primary"
+                            @click="chat(scope.row)"
+                            size="small"><i class="el-icon-message"></i>
+                    </el-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -87,6 +93,9 @@
         <el-dialog width="500px" :visible.sync="commentVisible" title="评价" destroy-on-close>
             <comment :comments="comments"></comment>
         </el-dialog>
+        <el-dialog width="500px" :visible.sync="chattingVisible" :title="conversation.username" @close="clear">
+            <chatting v-if="loaded" :username="conversation.username" :id="conversation.id"></chatting>
+        </el-dialog>
     </div>
 </template>
 
@@ -95,55 +104,26 @@
     import Request from "./request";
     import search from "./search";
     import Comment from "./comment";
+    import Chatting from "../shared/chatting";
     let map;
     export default {
         name: "buyerHouses",
-        components: {Comment, search, Request, Detail},
+        components: {Chatting, Comment, search, Request, Detail},
         data() {
             return {
+                loaded: false,
                 commentVisible: false,
                 filterVisible: false,
                 requestVisible: false,
                 detailVisible: false,
+                chattingVisible: false,
                 loading: true,
                 houses: [],
-                comments:[{
-                    date: '2020-04-29',
-                    score: 4,
-                    content:'给阿姨倒一杯\n卡布奇诺'
-                },{
-                    date: '2020-04-30',
-                    score: 5,
-                    content:'我卢本伟\n没有开挂'
-                },{
-                    date: '2020-04-30',
-                    score: 5,
-                    content:'我卢本伟\n没有开挂'
-                },{
-                    date: '2020-04-30',
-                    score: 5,
-                    content:'我卢本伟\n没有开挂'
-                },{
-                    date: '2020-04-30',
-                    score: 5,
-                    content:'我卢本伟\n没有开挂'
-                },{
-                    date: '2020-04-30',
-                    score: 5,
-                    content:'我卢本伟\n没有开挂'
-                },{
-                    date: '2020-04-30',
-                    score: 5,
-                    content:'我卢本伟\n没有开挂'
-                },{
-                    date: '2020-04-30',
-                    score: 5,
-                    content:'我卢本伟\n没有开挂'
-                },{
-                    date: '2020-04-30',
-                    score: 5,
-                    content:'我卢本伟\n没有开挂'
-                }],
+                comments:[],
+                conversation:{
+                    username:'',
+                    id:''
+                },
                 filter: {
                     province: '',
                     city: '',
@@ -311,6 +291,23 @@
             },
             destroyMap(){
                 map.destroy();
+            },
+            chat(row){
+                new Promise((resolve, reject)=>{
+                    while (this.conversation.username!==row.sellerID||this.conversation.id!==row.sellerID) {
+                        this.conversation.username = row.sellerID;
+                        this.conversation.id = row.sellerID;
+                    }
+                    resolve('success');
+                }).then(res=>{
+                    this.chattingVisible=true;
+                    this.loaded=true;
+                })
+            },
+            clear(){
+                this.conversation.username='';
+                this.conversation.id='';
+                this.loaded=false;
             }
         },
         mounted() {

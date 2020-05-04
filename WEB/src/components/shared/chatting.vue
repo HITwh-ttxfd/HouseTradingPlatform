@@ -1,13 +1,15 @@
 <template>
   <div>
     <el-main id="messageList">
-      <div v-for="message in messages.messageList"
-           :class="{wrapper: true,me: isMine(message.senderID),other: !isMine(message.senderID)}">
-        <p class="time">{{message.date}}</p>
-        <div class="content">
-          <pre>{{message.content}}</pre>
+<!--      <div v-if="loaded">-->
+        <div v-for="message in messages.messageList"
+             :class="{wrapper: true,me: isMine(message.senderID),other: !isMine(message.senderID)}">
+          <p class="time">{{message.date}}</p>
+          <div class="content">
+            <pre>{{message.content}}</pre>
+          </div>
         </div>
-      </div>
+<!--      </div>-->
     </el-main>
     <el-footer>
       <p class="input" contenteditable="true" placeholder="按Enter发送，Shift+Enter换行"
@@ -21,19 +23,20 @@
   export default {
     name: "chatting",
     props:{
-      messages:Object
+      id: String,
+      username: String
     },
     data(){
       return{
-        entered: false
+        entered: false,
+        messages: {
+          name:'',
+          id: '',
+          messageList:[]
+        },
       }
     },
     methods:{
-      load(){
-        setTimeout(()=>{
-          document.getElementById('messageList').scrollTop=document.getElementById('messageList').scrollHeight;
-        },30);
-      },
       isMine(sender){
         return sender === localStorage['username'];
       },
@@ -52,7 +55,7 @@
            // });
            this.$axios({
              method: 'GET',
-             url: 'http://localhost:8080/SRservice/sendMessage/'+localStorage.username+'/'+this.messages.id,
+             url: 'http://localhost:8080/SRservice/sendMessage/'+localStorage.username+'/'+this.id,
              params:{
                content: $event.target.innerText
              }
@@ -65,10 +68,9 @@
            })
            $event.target.innerText='';
            $event.preventDefault();
-           // this.$nextTick(()=>{
-           //   document.getElementById('messageList').scrollTop=document.getElementById('messageList').scrollHeight;
-           // })
-           this.reload();
+           this.$nextTick(()=>{
+             document.getElementById('messageList').scrollTop=document.getElementById('messageList').scrollHeight;
+           })
          }
        },60)
       },
@@ -79,20 +81,37 @@
       reload(){
         this.$axios({
           method: 'GET',
-          url: 'http://localhost:8080/SRservice/receiveMessages/'+localStorage.username+'/'+this.messages.id
+          url: 'http://localhost:8080/SRservice/receiveMessages/'+localStorage.username+'/'+this.id
         }).then(res=>{
           this.messages.messageList=res.data.reverse();
-          this.load();
+          setTimeout(()=>{
+            this.reload();
+          },500);
         }).catch(e=>{
           console.log(e);
         })
-      }
+      },
+      load(){
+          this.$axios({
+            method: 'GET',
+            url: 'http://localhost:8080/SRservice/receiveMessages/'+localStorage.username+'/'+this.id
+          }).then(res=>{
+            this.messages.name=this.username;
+            this.messages.id=this.id;
+            this.messages.messageList=res.data.reverse();
+          }).catch(e=>{
+            console.log(e);
+          })
+      },
     },
     computed:{
 
     },
-    mounted() {
+    beforeMount() {
       this.load();
+    },
+    mounted() {
+      this.reload();
     }
   }
 </script>
