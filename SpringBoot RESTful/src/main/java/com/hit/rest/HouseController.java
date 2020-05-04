@@ -24,6 +24,7 @@ public class HouseController {
 //这里调用api解析地址产生地理编码
         ReadUrlUtil.getLocationDetail(house);
 
+
         //设置房屋年份
         SimpleDateFormat formatter= new SimpleDateFormat("yyyy");
         Date date = new Date(System.currentTimeMillis());

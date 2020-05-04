@@ -8,7 +8,7 @@ public class House {
     //房屋户型、建筑面积、套内面积、房屋朝向、装修情况、供暖方式、所在楼层、户型结构、建筑类型、梯户比例、配置电梯
     //挂牌时间、上次交易、房屋年限、抵押信息、交易权属、房屋用途、产权所属、房本配件
     //房子ID，卖家ID、评分、地理位置、价格
-    private String houseID;     //主键
+    private String houseID;     //主键1
     private String sellerID;
 
     //可筛选信息                                             筛选时
@@ -30,25 +30,25 @@ public class House {
 //    private String decorationDescription;  //装修描述
 //    private String  taxAnalysis;          //税费解析
 //    private String coreSellingPoints;     //核心卖点
-    private int count;              //房屋户型
-    private String HouseType;              //房屋户型
-    private double buildingArea;           //建筑面积                     这里可能存在疑问
-    private double interiorArea;           //套内面积
-    private String houseOrientation;         //房屋朝向
-    private String decoration;               //装修情况
-    private String heatingMode;              //供暖方式
-    private String floor;                   //所在楼层
-    private String houseTypeStructure;      //户型结构
-    private String buildingType;            //建筑类型
-    private String elevatorProportion;       //梯户比例
-    private Date  lastTransaction;           //上次交易
-    private Date  ListingTime;               //挂牌时间
-    private String  housingAge;                    //房屋年限
-    private String  mortgageInformation;            //抵押信息
-    private String  transactionOwnership;            //交易权属
-    private String  housingPurpose;                  //房屋用途
-    private String  propertyOwnership;               //产权所属
-    private String  housingParts;                    //房本配件
+    private int count;              //数量1
+    private String HouseType;              //房屋户型1
+    private double buildingArea;           //证上面积     1                这里可能存在疑问
+    private double interiorArea;           //套内面积1
+    private String houseOrientation;         //房屋朝向1
+    private String decoration;               //装修情况1
+    private String heatingMode;              //供暖方式1
+    private String floor;                   //所在楼层1
+    private String houseTypeStructure;      //户型结构1
+    private String buildingType;            //建筑类型1
+    private String elevatorProportion;       //梯户比例1
+    private Date  lastTransaction;           //上次交易1
+    private Date  listingTime;               //挂牌时间1
+    private String  housingAge;                    //房屋年限1
+    private String  mortgageInformation;            //抵押信息1
+    private String  transactionOwnership;            //交易权属1
+    private String  housingPurpose;                  //房屋用途1
+    private String  propertyOwnership;               //产权所属1
+    private String  housingParts;                    //房本配件1
 
 
     public House(){
@@ -96,7 +96,7 @@ public class House {
         this.houseTypeStructure = houseTypeStructure;
         this.buildingType = buildingType;
         this.elevatorProportion = elevatorProportion;
-        this.ListingTime = listingTime;
+        this.listingTime = listingTime;
         this.housingAge = housingAge;
         this.mortgageInformation = mortgageInformation;
         this.transactionOwnership = transactionOwnership;
@@ -327,11 +327,11 @@ public class House {
     }
 
     public Date getListingTime() {
-        return ListingTime;
+        return listingTime;
     }
 
     public void setListingTime(Date listingTime) {
-        ListingTime = listingTime;
+        this.listingTime = listingTime;
     }
 
     public Date getLastTransaction() {

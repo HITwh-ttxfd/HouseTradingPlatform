@@ -59,11 +59,9 @@ public class HouseDBconnection{
                 +house.getHousingPurpose()+"','"+house.getPropertyOwnership()+"','"
                 +house.getHousingParts()+"')";
         try {
-            Connection con = jdbcUtils.getConnect();
-            PreparedStatement preparedStatement = (PreparedStatement)con.prepareStatement(sql);
+            PreparedStatement preparedStatement = (PreparedStatement)this.connection.prepareStatement(sql);
             preparedStatement.executeUpdate();
             preparedStatement.close();
-            con.close();
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -103,9 +101,8 @@ public class HouseDBconnection{
         String sql = "select * from house where houseID='"+houseID+"'";
         House house=new House();
         try {
-            Connection con = jdbcUtils.getConnect();
-            Statement statement = (Statement)con.createStatement();
-            ResultSet resultSet = (ResultSet)statement. executeQuery(sql);
+            Statement statement = (Statement)this.connection.createStatement();
+            ResultSet resultSet = (ResultSet)statement.executeQuery(sql);
             while (resultSet.next()){
                 int count=resultSet.getInt("count");
                 String village = resultSet.getString("village");
@@ -153,15 +150,12 @@ public class HouseDBconnection{
                         housingParts);
                 house=housetemp;
                 //测试用，正式上线删
-                /*System.out.println(resultSet.getString("houseID")+
+                System.out.println(resultSet.getString("houseID")+
                         resultSet.getString("sellerID")+
                         resultSet.getDouble("price")+
                         resultSet.getDouble("size")
-                        +resultSet.getString("location"));*/
+                        +resultSet.getString("location"));
             }
-            statement.close();
-            resultSet.close();
-            con.close();
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -307,7 +301,7 @@ public class HouseDBconnection{
 
     //修改房源评价分数和评价数量
     public void changeHouseScore(float score, String houseID,int count){
-        String sql = "UPDATE house SET score = "+score+" and count="+count+" WHERE houseID ='"+houseID+"'";
+        String sql = "UPDATE house SET score = "+score+", count="+count+" WHERE houseID ='"+houseID+"'";
         try {
             PreparedStatement preparedStatement = (PreparedStatement)this.connection.prepareStatement(sql);
             preparedStatement.executeUpdate();
@@ -339,9 +333,9 @@ public class HouseDBconnection{
         int count=DBconnection.countComments(houseID);
         float score=DBconnection.sumComments(houseID);
         float finalScore=score/(float)count;
-        changeHouseScore(finalScore,houseID,count);
         System.out.println("count"+count);
         System.out.println("score"+score);
+        changeHouseScore(finalScore,houseID,count);
     }
 
     //搜索房源
