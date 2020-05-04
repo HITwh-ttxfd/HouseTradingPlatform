@@ -117,23 +117,23 @@
             <p class="title">位置属性</p>
             <div class="infoLine" style="width: 400px;margin-left: 5%;">
                 <p class="content label">行政区划:</p>
-                    <el-select @change="searchLocation(1)"  v-model="newHouse.location.province" placeholder="省份">
+                    <el-select @change="searchLocation(1)"  v-model="province" placeholder="省份">
                         <el-option v-for="(province) in provinces" :key="province.name" :label="province.name" :value="province.name"></el-option>
                     </el-select>
-                    <el-select @change="searchLocation(2)"  v-model="newHouse.location.city" placeholder="城市">
+                    <el-select @change="searchLocation(2)"  v-model="city" placeholder="城市">
                         <el-option v-for="(city) in cities" :key="city.name" :label="city.name" :value="city.name"></el-option>
                     </el-select>
-                    <el-select  v-model="newHouse.location.district" placeholder="区县">
+                    <el-select  v-model="district" placeholder="区县">
                         <el-option v-for="(district) in districts" :key="districts.name" :label="district.name" :value="district.name"></el-option>
                     </el-select>
             </div>
             <div class="infoLine" style="width: 410px;margin-left: 5%;">
                 <p class="content label">街道地址:</p>
-                <el-input placeholder="例：文化西路二号" style="width: 300px" v-model="newHouse.location.street"></el-input>
+                <el-input placeholder="例：文化西路二号" style="width: 300px" v-model="street"></el-input>
             </div>
             <div class="infoLine" style="width: 410px;margin-left: 5%;">
                 <p class="content label">小区全称:</p>
-                <el-input placeholder="例：XX小区" style="width: 300px" v-model="newHouse.location.community"></el-input>
+                <el-input placeholder="例：XX小区" style="width: 300px" v-model="newHouse.village"></el-input>
             </div>
             <div class="infoLine" style="width: 410px;margin-left: 5%;">
                 <p class="content label">详细地址:</p>
@@ -160,14 +160,13 @@
                 str: '',
                 dialogImageUrl: '',
                 dialogVisible: false,
+                province:'',
+                city:'',
+                district:'',
+                street:'',
                 newHouse: {
-                    location:{
-                        province:'',
-                        city:'',
-                        street:'',
-                        district:'',
-                        community:''
-                    },
+                    location: '',
+                    village:'',
                     buildingArea:80,
                     buildingType:"板楼",
                     count:0,
@@ -186,8 +185,6 @@
                     lastTransaction:"2020-02-05",
                     lift:1,
                     listingTime:"2005-07-14",
-                    locationX:122.085247,
-                    locationY:37.528791,
                     mortgageInformation:"无抵押",
                     price:350000,
                     propertyOwnership:"非公有",
@@ -196,12 +193,12 @@
                     size:80,
                     time:"2001-02-07",
                     transactionOwnership:"商品房",
-                    village:"哈尔滨工业大学"
                 }
             }
         },
         methods:{
             upload(){
+                this.newHouse.location=this.province+this.city+this.district+this.street;
                 this.$axios({
                     method: 'POST',
                     url: 'http://localhost:8080/addhouse',
@@ -219,7 +216,7 @@
             searchLocation(level){
                 if (level<0||level>2)
                     return
-                let location=['中国',this.newHouse.location.province,this.newHouse.location.city,this.newHouse.location.district];
+                let location=['中国',this.province,this.city,this.district];
                 this.$axios({
                     url: 'https://restapi.amap.com/v3/config/district',
                     method: 'GET',
@@ -240,13 +237,13 @@
                             this.cities=eval(regions);
                             this.districts=[];
                             this.streets=[];
-                            this.newHouse.location.city='';
-                            this.newHouse.location.district='';
+                            this.city='';
+                            this.district='';
                             break;
                         case 2:
                             this.districts=eval(regions);
                             this.streets=[];
-                            this.newHouse.location.district='';
+                            this.district='';
                             break;
                     }
                 }).catch(e=>{
@@ -346,11 +343,13 @@
         },
         computed:{
             location: function(){
-                let location=this.newHouse.location;
-                if (location===undefined)
-                    return null;
-                return location.province+location.city+location.district+location.street+location.community;
+                return this.province+this.city+this.district+this.street+this.newHouse.village;
             },
+        },
+        watch:{
+            location: function () {
+                this.newHouse.location=this.province+this.city+this.district+this.street;
+            }
         },
         mounted() {
             this.searchLocation(0);

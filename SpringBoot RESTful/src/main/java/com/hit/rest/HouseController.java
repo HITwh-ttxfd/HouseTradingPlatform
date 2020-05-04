@@ -21,8 +21,8 @@ public class HouseController {
     @RequestMapping(value = "/addhouse",method= RequestMethod.POST)
     public void login(@RequestBody House house) throws IOException {//@RequestBody: 接收前端发送的json数据，其中JSONObject是封装好的实体
         house.setScore(0);
-//这里调用api解析地址产生地理编码
-        ReadUrlUtil.getLocationDetail(house);
+////这里调用api解析地址产生地理编码
+//        ReadUrlUtil.getLocationDetail(house);
 
 
         //设置房屋年份
