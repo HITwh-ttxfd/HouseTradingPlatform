@@ -149,12 +149,6 @@ public class HouseDBconnection{
                         housingPurpose,propertyOwnership,
                         housingParts);
                 house=housetemp;
-                //测试用，正式上线删
-                System.out.println(resultSet.getString("houseID")+
-                        resultSet.getString("sellerID")+
-                        resultSet.getDouble("price")+
-                        resultSet.getDouble("size")
-                        +resultSet.getString("location"));
             }
         }catch (Exception e){
             e.printStackTrace();
@@ -240,13 +234,6 @@ public class HouseDBconnection{
                 house.setLocation(resultSet.getString("location"));
                 house.setVillage(resultSet.getString("village"));
                 house.setCount(resultSet.getInt("count"));
-                //测试用，正式上线删
-                System.out.println(resultSet.getString("houseID")+
-                        resultSet.getString("sellerID")+
-                        resultSet.getDouble("price")+
-                        resultSet.getDouble("size")
-                        + resultSet.getFloat("score")
-                        +resultSet.getString("location"));
                 houses.add(house);
             }
         }catch (Exception e){
@@ -273,12 +260,6 @@ public class HouseDBconnection{
                 house.setVillage(resultSet.getString("village"));
                 house.setCount(resultSet.getInt("count"));
                 //测试用，正式上线删
-                System.out.println(resultSet.getString("houseID")+
-                        resultSet.getString("sellerID")+
-                        resultSet.getDouble("price")+
-                        resultSet.getDouble("size")
-                        + resultSet.getFloat("score")
-                        +resultSet.getString("location"));
                 houses.add(house);
             }
         }catch (Exception e){
@@ -333,8 +314,6 @@ public class HouseDBconnection{
         int count=DBconnection.countComments(houseID);
         float score=DBconnection.sumComments(houseID);
         float finalScore=score/(float)count;
-        System.out.println("count"+count);
-        System.out.println("score"+score);
         changeHouseScore(finalScore,houseID,count);
     }
 
@@ -366,7 +345,6 @@ public class HouseDBconnection{
 
 
         sql+=" and time >'"+temp+"'";
-        System.out.println(sql);
         try {
             Statement statement = (Statement)this.connection.createStatement();
             ResultSet resultSet = (ResultSet)statement.executeQuery(sql);
@@ -379,13 +357,6 @@ public class HouseDBconnection{
                 house.setSize(resultSet.getDouble("size"));
                 house.setLocation(resultSet.getString("location"));
                 house.setVillage(resultSet.getString("village"));
-                //测试用，正式上线删
-                System.out.println(resultSet.getString("houseID")+
-                        resultSet.getString("sellerID")+
-                        resultSet.getDouble("price")+
-                        resultSet.getDouble("size")
-                        + resultSet.getFloat("score")
-                        +resultSet.getString("location"));
                 houses.add(house);
             }
         }catch (Exception e){

@@ -296,5 +296,14 @@
     <orderEntry type="library" name="commons-collections4-4.4 (2)" level="project" />
     <orderEntry type="library" name="commons-dbcp2-2.7.0 (2)" level="project" />
     <orderEntry type="library" name="commons-pool2-2.8.0 (2)" level="project" />
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$USER_HOME$/Desktop/commons-dbcp2-2.7.0.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
   </component>
 </module>
