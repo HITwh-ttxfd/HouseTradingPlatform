@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 //import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.Random;
 
 
 @RestController
@@ -21,9 +22,12 @@ public class uploadImg {
     //上传图片
     @RequestMapping(value = "/uploadImg64", method = RequestMethod.POST)
     @CrossOrigin
-    public String uploadImage(@RequestBody Map<String,Object> map/*, HttpServletResponse response*/){
+    public String uploadImage(@RequestBody Map<String,Object> map/*, HttpServletResponse response*/) throws InterruptedException {
         //response.setHeader("Access-Control-Allow-Origin","*");
         //response.setHeader("Cache-Control","no-cache");
+        long randomNum = System.currentTimeMillis();
+        int sleepTime = Math.abs((int)randomNum%(1000));
+        Thread.sleep(sleepTime);
         String text = (String)map.get("file");
         String fileName = (String)map.get("fileName");
         String houseID = (String)map.get("houseID");

@@ -8,11 +8,11 @@ public class htpImageManage {
     private org.apache.cxf.endpoint.Client client;
     // return API result
     public String imgClassify(String base){
-        client = jas.createClient(url);
+        //client = jas.createClient(url);
         Object[] objects;
         try {
             objects = client.invoke("imgClassify",base);
-            closeClient();
+            //closeClient();
             return objects[0].toString();
         }catch (Exception e){
             e.printStackTrace();
@@ -21,11 +21,11 @@ public class htpImageManage {
     }
     // return style
     public String departRes(String json){
-        client = jas.createClient(url);
+        //client = jas.createClient(url);
         Object[] objects;
         try {
             objects = client.invoke("departRes",json);
-            closeClient();
+            //closeClient();
             return objects[0].toString();
         }catch (Exception e){
             e.printStackTrace();
@@ -34,11 +34,11 @@ public class htpImageManage {
     }
     // store image
     public String storeImage(String base, String fileName, String houseID){
-        client = jas.createClient(url);
+        //client = jas.createClient(url);
         Object[] objects;
         try {
             objects = client.invoke("storeImg",base,fileName,houseID);
-            closeClient();
+            //closeClient();
             return objects[0].toString();
         }catch (Exception e){
             e.printStackTrace();
@@ -47,11 +47,11 @@ public class htpImageManage {
     }
     // return url
     public String selectUrl(String fileName, String houseID){
-        client = jas.createClient(url);
+        //client = jas.createClient(url);
         Object[] objects;
         try {
             objects = client.invoke("selectImg",fileName,houseID);
-            closeClient();
+            //closeClient();
             return objects[0].toString();
         }catch (Exception e){
             e.printStackTrace();
@@ -60,11 +60,11 @@ public class htpImageManage {
     }
     // delImg
     public String delImg(String fileName, String houseID){
-        client = jas.createClient(url);
+        //client = jas.createClient(url);
         Object[] objects;
         try {
             objects = client.invoke("delImg",fileName,houseID);
-            closeClient();
+            //closeClient();
             return objects[0].toString();
         }catch (Exception e){
             e.printStackTrace();
@@ -74,6 +74,7 @@ public class htpImageManage {
     public htpImageManage(){
         jas = JaxWsDynamicClientFactory.newInstance();
         url = "http://39.98.48.34:2233/AliyunImageStore_war/service/imgRecognition?wsdl";
+        client = jas.createClient(url);
     }
 
     public void closeClient(){
