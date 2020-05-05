@@ -154,7 +154,9 @@ public class DBconnection{
         String send = request.getSenderID();
         String receive = request.getReceiverID();
         String houseid = request.getHouseID();
-        String sql = "select * from requests where senderID='"+send+"' and receiverID='"+receive+"' and houseID='"+houseid+"'";
+        String status = request.getStatus();
+        String sql = "select * from requests where senderID='"+send+"' and receiverID='"+receive+"' and houseID='"
+                +houseid+"';";
         try {
             Connection connection = jdbcUtils.getConnect();
             Statement statement = (Statement)connection.createStatement();
@@ -163,10 +165,13 @@ public class DBconnection{
                 String senderID = resultSet.getString("senderID");
                 String receiverID = resultSet.getString("receiverID");
                 String houseID = resultSet.getString("houseID");
+                String sta = resultSet.getString("status");
                 //System.out.println(senderID+" "+send);
                 //System.out.println(receiverID+" "+receive);
                 //System.out.println(houseID+" "+houseid);
-                if (send.equals(senderID) && receive.equals(receiverID) && houseid.equals(houseID)){
+                if (send.equals(senderID) && receive.equals(receiverID) && houseid.equals(houseID) && sta.equals(status)){
+                    return "exist";
+                }if (send.equals(senderID) && receive.equals(receiverID) && houseid.equals(houseID) && sta.equals("2")){
                     return "exist";
                 }
             }
