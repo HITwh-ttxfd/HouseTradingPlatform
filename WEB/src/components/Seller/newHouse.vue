@@ -209,11 +209,11 @@
                     }
                 }).then(res=>{
                     this.$message.success('上传成功');
-                    this.$emit('close');
+                    this.$emit('done');
                 }).catch(e=>{
                     this.$message.error('上传失败');
+                    console.log(e);
                 })
-
             },
             searchLocation(level){
                 if (level<0||level>2)

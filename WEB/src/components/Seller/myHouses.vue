@@ -40,7 +40,7 @@
       <detail :house-detail="houseDetail"></detail>
     </el-dialog>
     <el-dialog width="500px" :visible.sync="configVisible" title="添加房源" destroy-on-close>
-      <new-house @close="configVisible=false"></new-house>
+      <new-house @close="configVisible=false" @done="done"></new-house>
     </el-dialog>
   </div>
 </template>
@@ -129,6 +129,10 @@
           this.load();
           console.log(e);
         })
+      },
+      done(){
+        this.configVisible=false;
+        this.load();
       },
       destroyMap(){
         map.destroy();
