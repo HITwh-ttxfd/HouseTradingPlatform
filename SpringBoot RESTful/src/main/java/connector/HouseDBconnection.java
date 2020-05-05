@@ -40,24 +40,28 @@ public class HouseDBconnection{
             System.out.println("House is null, can't insert.");
             return;
         }
+        //设置时间日期格式
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         //加上一个查询先有houseID最大值的，给houseID赋值
         house.setHouseID(selectMaxHouseID());
         String sql="insert into house(count,village,time,houseID,sellerID, size, locationX, locationY, location, price,score, lift, lastTransaction, houseType, buildingArea, interiorArea, houseOrientation, decoration, heatingMode, floor, houseTypeStructure, buildingType, elevatorProportion, listingTime, housingAge, mortgageInformation, transactionOwnership, housingPurpose, propertyOwnership, housingParts)" +
                 " values("+house.getCount()+",'"
-                +house.getVillage()+"','"+house.getTime()+"','"
-                +house.getHouseID()+"',"+house.getLocationX()
+                +house.getVillage()+"','"+sdf.format(house.getTime())+"','"
+                +house.getHouseID()+"','"+house.getSellerID()+"',"
+                +house.getSize()+","+house.getLocationX()
                 +","+house.getLocationY()+",'"+house.getLocation()+"',"
                 +house.getPrice()+","+house.getScore()+","
-                +house.getLift()+",'"+house.getLastTransaction()+"','"
-                +house.getHouseType()+"',"+house.getBuildingArea()+",'"
-                +house.getInteriorArea()+"','"+house.getHouseOrientation()+"','"
+                +house.getLift()+",'"+sdf.format(house.getLastTransaction())+"','"
+                +house.getHouseType()+"',"+house.getBuildingArea()+","
+                +house.getInteriorArea()+",'"+house.getHouseOrientation()+"','"
                 +house.getDecoration()+"','"+house.getHeatingMode()+"','"
                 +house.getFloor()+"','"+house.getHouseTypeStructure()+"','"
-                +house.getBuildingType()+"','"+house.getElevatorProportion()+"',"
-                +house.getListingTime()+",'"+house.getHousingAge()+"','"
+                +house.getBuildingType()+"','"+house.getElevatorProportion()+"','"
+                +sdf.format(house.getListingTime())+"',"+house.getHousingAge()+",'"
                 +house.getMortgageInformation()+"','"+house.getTransactionOwnership()+"','"
                 +house.getHousingPurpose()+"','"+house.getPropertyOwnership()+"','"
                 +house.getHousingParts()+"')";
+        System.out.println(sql);
         try {
             PreparedStatement preparedStatement = (PreparedStatement)this.connection.prepareStatement(sql);
             preparedStatement.executeUpdate();

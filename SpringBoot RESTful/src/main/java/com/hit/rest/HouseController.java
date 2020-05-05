@@ -5,9 +5,11 @@ package com.hit.rest;
 import Api.ReadUrlUtil;
 import connector.HouseDBconnection;
 import entity.House;
+import net.sf.json.JSONObject;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -19,10 +21,28 @@ public class HouseController {
     //注意：   这里传过来的house没有score，houseid，locationx，locationy
     @CrossOrigin
     @RequestMapping(value = "/addhouse",method= RequestMethod.POST)
-    public void login(@RequestBody House house) throws IOException {//@RequestBody: 接收前端发送的json数据，其中JSONObject是封装好的实体
+    public void login(@RequestBody JSONObject json) throws IOException, ParseException {
+//    public void login(@RequestBody House house) throws IOException {//@RequestBody: 接收前端发送的json数据，其中JSONObject是封装好的实体
+        System.out.println(json.toString());
+        JSONObject jsonobject=  json.getJSONObject("house");
+        House house= (House)JSONObject.toBean(jsonobject,House.class);
+
+
+
         house.setScore(0);
-////这里调用api解析地址产生地理编码
-//        ReadUrlUtil.getLocationDetail(house);
+        //这里调用api解析地址产生地理编码
+        ReadUrlUtil.getLocationDetail(house);
+
+        //设置时间转化     time
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Date dateTemp = sdf.parse(jsonobject.getString("time"));
+        house.setTime(dateTemp);
+        //         lastTransaction
+        dateTemp = sdf.parse(jsonobject.getString("lastTransaction"));
+        house.setLastTransaction(dateTemp);
+        //             listingTime
+        dateTemp = sdf.parse(jsonobject.getString("listingTime"));
+        house.setListingTime(dateTemp);
 
 
         //设置房屋年份

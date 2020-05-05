@@ -166,6 +166,8 @@
                 street:'',
                 newHouse: {
                     location: '',
+                    locationX:0,
+                    locationY:0,
                     village:'',
                     buildingArea:80,
                     buildingType:"板楼",

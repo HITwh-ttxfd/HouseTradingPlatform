@@ -35,7 +35,7 @@ public class ReadUrlUtil {
 
     //测试用
 //    public static void main(String[] args) throws IOException, JSONException {
-////  这里调用百度的ip定位api服务 详见 http://api.map.baidu.com/lbsapi/cloud/ip-location-api.htm
+//  这里调用百度的ip定位api服务 详见 http://api.map.baidu.com/lbsapi/cloud/ip-location-api.htm
 //        String ip = "113.57.244.100";
 //        String str="河北省邢台市桥西区中兴路街道邢钢南区";
 //        String url = "https://restapi.amap.com/v3/geocode/geo?address="+str+"&output=json&key=954da475f3d5a6d4aca79d8819f10289";
@@ -49,6 +49,10 @@ public class ReadUrlUtil {
 //        double locationx=Double.valueOf(str1.toString());
 //        double locationy=Double.valueOf(str2.toString());
 //        System.out.println("str1"+locationx+"str2"+locationy);
+//        House house=new House();
+//        house.setLocation("河北省邢台市桥西区钢铁路邢钢南区");
+//        getLocationDetail(house);
+//        System.out.println("locationx"+house.getLocationX());
 //    }
 
     //将string型的location转化为double类型的x,y并赋值给house。
