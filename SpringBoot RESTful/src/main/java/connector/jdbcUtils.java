@@ -1,6 +1,7 @@
 package connector;
 
 import org.apache.commons.dbcp2.BasicDataSourceFactory;
+import org.apache.commons.pool2.impl.BaseObjectPoolConfig;
 
 import javax.sql.DataSource;
 import java.io.InputStream;
@@ -32,7 +33,7 @@ public final class jdbcUtils {
             InputStream is = jdbcUtils.class.getClassLoader().getResourceAsStream("dbcp.properties");
             prop.load(is);
             // 利用工厂模式创建数据库
-            dataSource = BasicDataSourceFactory.createDataSource(prop);
+            dataSource =BasicDataSourceFactory.createDataSource(prop);
         } catch (Exception e) {
             throw new ExceptionInInitializerError(e);
         }

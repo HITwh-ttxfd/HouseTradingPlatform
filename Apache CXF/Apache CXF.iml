@@ -195,7 +195,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$USER_HOME$/Desktop/commons-collections4-4.4.jar!/" />
+          <root url="jar://$USER_HOME$/Desktop/面向服务的软件系统/二手房/commons-collections4-4.4.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -204,7 +204,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$USER_HOME$/Desktop/commons-dbcp2-2.7.0.jar!/" />
+          <root url="jar://$USER_HOME$/Desktop/面向服务的软件系统/二手房/commons-logging-1.1.0.jboss.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -213,7 +213,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$USER_HOME$/Desktop/commons-pool2-2.8.0.jar!/" />
+          <root url="jar://$USER_HOME$/Desktop/面向服务的软件系统/二手房/commons-pool2-2.8.0.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -222,16 +222,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$USER_HOME$/Desktop/commons-logging-1.1.0.jboss.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library">
-      <library>
-        <CLASSES>
-          <root url="jar://$USER_HOME$/eclipse/java-2019-06/eclipse/lombok.jar!/" />
+          <root url="jar://$USER_HOME$/Desktop/面向服务的软件系统/二手房/commons-dbcp2-2.7.0.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />

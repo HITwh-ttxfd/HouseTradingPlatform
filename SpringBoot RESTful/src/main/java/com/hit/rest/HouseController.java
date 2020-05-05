@@ -21,8 +21,7 @@ public class HouseController {
     //注意：   这里传过来的house没有score，houseid，locationx，locationy
     @CrossOrigin
     @RequestMapping(value = "/addhouse",method= RequestMethod.POST)
-    public void login(@RequestBody JSONObject json) throws IOException, ParseException {
-//    public void login(@RequestBody House house) throws IOException {//@RequestBody: 接收前端发送的json数据，其中JSONObject是封装好的实体
+    public void login(@RequestBody JSONObject json) throws IOException, ParseException {//@RequestBody: 接收前端发送的json数据，其中JSONObject是封装好的实体
         System.out.println(json.toString());
         JSONObject jsonobject=  json.getJSONObject("house");
         House house= (House)JSONObject.toBean(jsonobject,House.class);
