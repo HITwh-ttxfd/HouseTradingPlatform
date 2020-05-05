@@ -135,6 +135,7 @@ public class SRservice {
                                @RequestParam(value = "date")String date,@RequestParam(value = "time")String time){
         User u1 = DBconnection.selectUser(senderID);
         User u2 = DBconnection.selectUser(receiverID);
+        //System.out.println(senderID+" "+receiverID+" "+houseID+" "+date+" "+time);
         Buyer buy = new Buyer(u1.getUsername(),u1.getPassword(),u1.getRealname(),u1.getId(),u1.getPhone());
         Seller sell = new Seller(u2.getUsername(),u2.getPassword(),u2.getRealname(),u2.getId(),u2.getPhone());
         House house = hdb.getHouse(houseID);
@@ -142,6 +143,7 @@ public class SRservice {
         // 采取另一个DBconnection类
         Request request = buy.sendRequest(house,sell,date,time,phone,location);
         String check = DBconnection.selectRequest(request);
+        System.out.println(check);
         if(check.equals("exist")){
             return check;
         }else if(check.equals("new")){

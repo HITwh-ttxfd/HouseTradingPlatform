@@ -91,6 +91,7 @@ public class DBconnection{
         String time = request.getTime();
         String sendTime = request.getSendTime();
         String status = request.getStatus();
+        //System.out.println(date+" "+time);
         String sql="insert into requests(senderID,receiverID,houseID,phone,location,date,time,sendTime,status) " +
                 "values('"+senderID+"','"+receiverID+"','"+houseID+"','"+phone+"','"+location+"','"+date+"','"+time+"','"+sendTime+"','"+status+"');";
         try {

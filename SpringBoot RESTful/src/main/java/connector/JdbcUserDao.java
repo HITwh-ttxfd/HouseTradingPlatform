@@ -47,7 +47,7 @@ public class JdbcUserDao implements UserDao {
 
     @Override
     public User find(String type,String key) {
-        String driverClassName = "com.mysql.jdbc.Driver";
+        String driverClassName = "com.mysql.cj.jdbc.Driver";
         String url = "jdbc:mysql://39.98.48.34:3306/htpbase?serverTimezone=UTC";	//设置连接路径
         String mysqlusername = "root";	//数据库用户名
         String password = "2296026";
