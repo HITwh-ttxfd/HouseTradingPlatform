@@ -208,15 +208,13 @@
                 while (count < size) {
                     console.log(count + '|' + size)
                     let file = this.fileList[count]
-                    fName[count] = file.name
                     this.getBase64(file.raw).then(res => {
                         // 第一层then 这里在前面的变量已经不能用了
-                        console.log(file.raw)
                         axios.get('http://localhost:8080/getHouseID').then(function (response) {
                             // 第二层 更不能用了
+                            console.log(file.raw)
                             let hid = response.data.toString();
-                            console.log(fName[count])
-                            let data = {'file': res, 'fileName': fName[count], 'houseID': hid}
+                            let data = {'file': res, 'fileName': file.name, 'houseID': hid}
                             // console.log(data)
                             axios.post('http://localhost:8080/imgManage/uploadImg64', data, { headers: { 'Content-Type': 'application/json' } }).then(function (res) {
                                 //console.log(file.name, res.data)
@@ -231,7 +229,6 @@
                                 console.log(err)
                             })
                         })
-                        console.log(hi)
                     })
 
                     count = count + 1
