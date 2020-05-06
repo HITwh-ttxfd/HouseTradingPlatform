@@ -218,9 +218,6 @@
                             console.log(fName[count])
                             let data = {'file': res, 'fileName': fName[count], 'houseID': hid}
                             // console.log(data)
-                            // 此处等待传入houseID
-                            // 测试数据
-                            // 下面传输图片
                             axios.post('http://localhost:8080/imgManage/uploadImg64', data, { headers: { 'Content-Type': 'application/json' } }).then(function (res) {
                                 //console.log(file.name, res.data)
                                 if (res.data === 'fail') {
