@@ -63,9 +63,9 @@ public class HouseService {
     public void deletePastHouse(@PathVariable("houseID")String id) {
         HouseDBconnection p = new HouseDBconnection();
         ArrayList<housePic> ary = DBconnection.selectImg(id);
-        Iterator<housePic> iterator = ary.iterator();
-        while (iterator.hasNext()) {
-            DBconnection.delImg(iterator.next().getHouseID(),iterator.next().getFileName());
+        for (int i = 0; i < ary.size(); i++) {
+            System.out.println(ary.get(i).getHouseID());
+            DBconnection.delImg(ary.get(i).getHouseID(),ary.get(i).getFileName());
         }
         p.deleteHouse(id);
     }
