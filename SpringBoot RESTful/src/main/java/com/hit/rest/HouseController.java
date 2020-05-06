@@ -16,7 +16,7 @@ import java.util.Date;
 @RestController//            @RestController的作用等同于@Controller + @ResponseBody
 @CrossOrigin //              解决跨域问题
 public class HouseController {
-
+    private HouseDBconnection p = new HouseDBconnection();
     //新增房源
     //注意：   这里传过来的house没有score，houseid，locationx，locationy
     @CrossOrigin
@@ -54,10 +54,17 @@ public class HouseController {
         int age=now-past;
         house.setHousingAge(String.valueOf(age));
 
-        HouseDBconnection p = new HouseDBconnection();
         p.addHouse(house);
     }
 
+    @CrossOrigin
+    @GetMapping("/getHouseID")
+    public String getNewID(){
+        // 在添加房源前用于添加图片
+        String id = p.selectMaxHouseID();
+        System.out.println(id);
+        return id;
+    }
 
     //测试用方法
     @CrossOrigin

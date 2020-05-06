@@ -57,7 +57,7 @@ public class uploadImg {
         }else if(result.equals("error")){
             return "error";
         }else {
-            // 等待调用cxf进行存储工作
+            // 调用cxf进行存储工作
             htpImage.storeImage(base64,fileName,houseID);
             String path = htpImage.selectUrl(fileName,houseID);
             // 上传数据库
@@ -66,6 +66,22 @@ public class uploadImg {
         }
         //System.out.println(base64);
         //System.out.println(rs.toString());
+    }
+
+    //查验图片
+    @PostMapping("/checkImg")
+    @CrossOrigin
+    public String checkImage(@RequestBody Map<String,Object> map) {
+        String text = (String) map.get("file");
+        String base64 = text.split(",")[1];
+        String index = htpImage.imgClassify(base64);
+        String result = htpImage.departRes(index);
+        System.out.println(result);
+        if (result.equals("no house")) {
+            // 上传的不是房屋图片
+            return "fail";
+        }
+        return "success";
     }
 
     // 返回图片
