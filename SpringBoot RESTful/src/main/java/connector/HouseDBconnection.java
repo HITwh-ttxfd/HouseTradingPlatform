@@ -44,6 +44,7 @@ public class HouseDBconnection{
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         //加上一个查询先有houseID最大值的，给houseID赋值
         house.setHouseID(selectMaxHouseID());
+
         String sql="insert into house(count,village,time,houseID,sellerID, size, locationX, locationY, location, price,score, lift, lastTransaction, houseType, buildingArea, interiorArea, houseOrientation, decoration, heatingMode, floor, houseTypeStructure, buildingType, elevatorProportion, listingTime, housingAge, mortgageInformation, transactionOwnership, housingPurpose, propertyOwnership, housingParts)" +
                 " values("+house.getCount()+",'"
                 +house.getVillage()+"','"+sdf.format(house.getTime())+"','"

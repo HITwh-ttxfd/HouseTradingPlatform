@@ -149,6 +149,7 @@
 
 <script>
     import axios from "axios";
+    import { Message } from 'element-ui'
     export default {
         name: "newHouse",
         data(){
@@ -201,6 +202,42 @@
         methods:{
             upload(){
                 this.newHouse.location=this.province+this.city+this.district+this.street;
+                // 这里是上传图片
+                var size = this.fileList.length
+                var count = 0
+                while (count < size) {
+                    var file = this.fileList[count]
+                    if (file && file.type.match('image.*')) {
+                        this.getBase64(file).then(res => {
+                            // console.log('base', res)
+                            // 传输文件使用base64编码传输，getBase64是把文件转换为编码的函数
+                            axios.get('http://localhost:8080/getHouseID').then(function (response) {
+                                var hid = response.data;
+                                var data = {'file': res, 'fileName': file.name, 'houseID': hid}
+                                console.log(data)
+                                // 此处等待传入houseID
+                                // 测试数据
+                                // 下面传输图片
+                                axios.post('http://localhost:8080/imgManage/uploadImg64', data, { headers: { 'Content-Type': 'application/json' } }).then(function (res) {
+                                    console.log(file.name, res.data)
+                                    if (res.data === 'fail') {
+                                        return false
+                                        // this.$message.success('上传成功')
+                                    } else if (res.data === 'Error') {
+                                        // this.$message.error('上传失败')
+                                        return false
+                                    } else {
+                                        return true
+                                    }
+                                }).catch(err => {
+                                    console.log(err)
+                                })
+                            })
+                        })
+                    }
+                    count = count + 1
+                }
+                // 上传图片结束
                 this.$axios({
                     method: 'POST',
                     url: 'http://localhost:8080/addhouse',
@@ -208,12 +245,12 @@
                         house: this.newHouse
                     }
                 }).then(res=>{
-                    this.$message.success('上传成功');
-                    this.$emit('done');
+                    Message.success('上传成功');
+                    this.$emit('close');
                 }).catch(e=>{
-                    this.$message.error('上传失败');
-                    console.log(e);
+                    Message.error('上传失败');
                 })
+
             },
             searchLocation(level){
                 if (level<0||level>2)
@@ -253,23 +290,15 @@
                 })
             },
             handleRemove (file, fileList) {
-                console.log(file, fileList)
+                // console.log(file, fileList)
             },
             imageRemove (file, fileList) {
                 console.log(file, fileList)
-                var houseID = '000001'
-                // 这个有问题 不能用
-                axios.get('http://localhost:8080/imgManage/delImg/' + houseID + '/' + file.name).then(function (res) {
-                    if (res.data === 'fail') {
-                        return false
-                    }
-                }).catch(function (error) {
-                    console.log(error)
-                })
                 return true
             },
             handleSuccess (response, file, fileList) {
-                this.$message.success('上传成功')
+                // this.$message.success('审核成功')
+                // Message.success('1')
             },
             handlePreview (file) {
                 this.dialogImageUrl = file.url;
@@ -277,35 +306,28 @@
                 // this.$message.info(file.name)
             },
             beforeUpload (file) {
-                console.log('test', file.type)
+                // console.log('test', file.type)
                 const isImage = file.type.indexOf('image') !== -1
                 const isLi4M = file.size / 1024 / 1024 < 4
                 if (!isImage) {
-                    this.$message.error('上传的文件不是图片类型')
+                    Message.error('上传的文件不是图片类型')
                     return false
                 }
                 if (!isLi4M) {
-                    this.$message.error('上传图片大小超过4MB')
+                    Message.error('上传图片大小超过4MB')
                     return false
                 }
-                // 类型匹配
+                // 图片检查
                 if (file && file.type.match('image.*')) {
                     this.getBase64(file).then(res => {
                         // console.log('base', res)
                         // 传输文件使用base64编码传输，getBase64是把文件转换为编码的函数
-                        var houseID = '1'
-                        var data = {'file': res, 'fileName': file.name, 'houseID': houseID}
-                        console.log(data)
-                        // 此处等待传入houseID
-                        // 测试数据
-                        // 下面传输图片
-                        axios.post('http://localhost:8080/imgManage/uploadImg64', data, { headers: { 'Content-Type': 'application/json' } }).then(function (res) {
+                        var data = {'file': res, 'fileName': file.name}
+                        // console.log(data)
+                        axios.post('http://localhost:8080/imgManage/checkImg', data, { headers: { 'Content-Type': 'application/json' } }).then(function (res) {
                             console.log(file.name, res.data)
                             if (res.data === 'fail') {
-                                return false
-                                // this.$message.success('上传成功')
-                            } else if (res.data === 'Error') {
-                                // this.$message.error('上传失败')
+                                Message.error('上传的不是房屋图片')
                                 return false
                             } else {
                                 return true
@@ -314,10 +336,13 @@
                             console.log(err)
                         })
                     })
+                } else {
+                    Message.error('上传图片格式有误')
+                    return false
                 }
             },
             handleExceed (files, fileList) {
-                this.$message.warning(`限制选择 10 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`)
+                Message.warning(`限制选择 10 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`)
             },
             getBase64 (file) {
                 // 把文件转换为base64编码的函数，FileReader类似乎不能直接调用 需要使用Promise封装
