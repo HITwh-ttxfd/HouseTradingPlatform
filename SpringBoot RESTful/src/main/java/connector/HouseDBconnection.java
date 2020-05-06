@@ -89,7 +89,7 @@ public class HouseDBconnection{
         return temp;
     }
 
-    //   删除房源
+    // 删除房源
     public void deleteHouse(String houseID) {
         String sql = "delete from house where houseID='"+houseID+"'";
         try {
