@@ -7,14 +7,13 @@
                         list-type="picture-card"
                         accept="image/png,image/jpg,image/jpeg"
                         :multiple="true"
-                        :limit="3"
+                        :limit="10"
                         name="上传房源图片"
                         :on-exceed="handleExceed"
                         :before-upload="beforeUpload"
-                        :on-success="handleSuccess"
+                        :on-change="handleChange"
                         :on-preview="handlePreview"
-                        :on-remove="handleRemove"
-                        :before-remove="imageRemove"
+                        :auto-upload="false"
                         :file-list="fileList">
                     <i class="el-icon-plus"></i>
                 </el-upload>
@@ -192,7 +191,7 @@
                     price:350000,
                     propertyOwnership:"非公有",
                     score:0,
-                    sellerID:"17861080088",
+                    sellerID:"15534280066",
                     size:80,
                     time:"2001-02-07",
                     transactionOwnership:"商品房",
@@ -203,38 +202,41 @@
             upload(){
                 this.newHouse.location=this.province+this.city+this.district+this.street;
                 // 这里是上传图片
-                var size = this.fileList.length
-                var count = 0
+                let size = this.fileList.length
+                let count = 0
+                let fName = new Array(size)
                 while (count < size) {
-                    var file = this.fileList[count]
-                    if (file && file.type.match('image.*')) {
-                        this.getBase64(file).then(res => {
-                            // console.log('base', res)
-                            // 传输文件使用base64编码传输，getBase64是把文件转换为编码的函数
-                            axios.get('http://localhost:8080/getHouseID').then(function (response) {
-                                var hid = response.data;
-                                var data = {'file': res, 'fileName': file.name, 'houseID': hid}
-                                console.log(data)
-                                // 此处等待传入houseID
-                                // 测试数据
-                                // 下面传输图片
-                                axios.post('http://localhost:8080/imgManage/uploadImg64', data, { headers: { 'Content-Type': 'application/json' } }).then(function (res) {
-                                    console.log(file.name, res.data)
-                                    if (res.data === 'fail') {
-                                        return false
-                                        // this.$message.success('上传成功')
-                                    } else if (res.data === 'Error') {
-                                        // this.$message.error('上传失败')
-                                        return false
-                                    } else {
-                                        return true
-                                    }
-                                }).catch(err => {
-                                    console.log(err)
-                                })
+                    console.log(count + '|' + size)
+                    let file = this.fileList[count]
+                    fName[count] = file.name
+                    this.getBase64(file.raw).then(res => {
+                        // 第一层then 这里在前面的变量已经不能用了
+                        console.log(file.raw)
+                        axios.get('http://localhost:8080/getHouseID').then(function (response) {
+                            // 第二层 更不能用了
+                            let hid = response.data.toString();
+                            console.log(fName[count])
+                            let data = {'file': res, 'fileName': fName[count], 'houseID': hid}
+                            // console.log(data)
+                            // 此处等待传入houseID
+                            // 测试数据
+                            // 下面传输图片
+                            axios.post('http://localhost:8080/imgManage/uploadImg64', data, { headers: { 'Content-Type': 'application/json' } }).then(function (res) {
+                                //console.log(file.name, res.data)
+                                if (res.data === 'fail') {
+                                    Message.error('上传失败')
+                                    this.$emit('close');
+                                } else if (res.data === 'Error') {
+                                    Message.error('上传失败')
+                                    this.$emit('close');
+                                }
+                            }).catch(err => {
+                                console.log(err)
                             })
                         })
-                    }
+                        console.log(hi)
+                    })
+
                     count = count + 1
                 }
                 // 上传图片结束
@@ -250,7 +252,6 @@
                 }).catch(e=>{
                     Message.error('上传失败');
                 })
-
             },
             searchLocation(level){
                 if (level<0||level>2)
@@ -289,16 +290,9 @@
                     console.log(e);
                 })
             },
-            handleRemove (file, fileList) {
-                // console.log(file, fileList)
-            },
-            imageRemove (file, fileList) {
-                console.log(file, fileList)
-                return true
-            },
-            handleSuccess (response, file, fileList) {
-                // this.$message.success('审核成功')
-                // Message.success('1')
+            handleChange (file, fileList) {
+                this.fileList=fileList
+                console.log('add')
             },
             handlePreview (file) {
                 this.dialogImageUrl = file.url;
@@ -340,6 +334,8 @@
                     Message.error('上传图片格式有误')
                     return false
                 }
+                console.log(this.fileList)
+                return true
             },
             handleExceed (files, fileList) {
                 Message.warning(`限制选择 10 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`)
