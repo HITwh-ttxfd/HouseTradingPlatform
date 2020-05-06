@@ -1,13 +1,16 @@
 package com.hit.rest;
 
 
+import connector.DBconnection;
 import connector.HouseDBconnection;
 import entity.House;
+import entity.housePic;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 
 @RestController
 public class HouseService {
@@ -59,6 +62,11 @@ public class HouseService {
     @RequestMapping(value="/deletePastHouse/{houseID}")
     public void deletePastHouse(@PathVariable("houseID")String id) {
         HouseDBconnection p = new HouseDBconnection();
+        ArrayList<housePic> ary = DBconnection.selectImg(id);
+        Iterator<housePic> iterator = ary.iterator();
+        while (iterator.hasNext()) {
+            DBconnection.delImg(iterator.next().getHouseID(),iterator.next().getFileName());
+        }
         p.deleteHouse(id);
     }
 
