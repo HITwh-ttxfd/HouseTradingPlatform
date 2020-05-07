@@ -10,7 +10,6 @@
                         :limit="10"
                         name="上传房源图片"
                         :on-exceed="handleExceed"
-                        :before-upload="beforeUpload"
                         :on-change="handleChange"
                         :on-preview="handlePreview"
                         :auto-upload="false"
@@ -285,40 +284,32 @@
                 })
             },
             handleChange (file, fileList) {
-                this.fileList=fileList
-                console.log('add')
-            },
-            handlePreview (file) {
-                this.dialogImageUrl = file.url;
-                this.dialogVisible = true;
-                // this.$message.info(file.name)
-            },
-            beforeUpload (file) {
-                // console.log('test', file.type)
-                const isImage = file.type.indexOf('image') !== -1
+                // console.log(fileList.indexOf(file))
+                const isImage = (file.raw.type).indexOf('image') !== -1
                 const isLi4M = file.size / 1024 / 1024 < 4
                 if (!isImage) {
                     Message.error('上传的文件不是图片类型')
-                    return false
+                    fileList.splice(fileList.indexOf(file),1)
+                    return;
                 }
                 if (!isLi4M) {
                     Message.error('上传图片大小超过4MB')
-                    return false
+                    fileList.splice(fileList.indexOf(file),1)
+                    return
                 }
                 // 图片检查
-                if (file && file.type.match('image.*')) {
-                    this.getBase64(file).then(res => {
+                if (file && file.raw.type.match('image.*')) {
+                    this.getBase64(file.raw).then(res => {
                         // console.log('base', res)
                         // 传输文件使用base64编码传输，getBase64是把文件转换为编码的函数
                         var data = {'file': res, 'fileName': file.name}
                         // console.log(data)
                         axios.post('http://localhost:8080/imgManage/checkImg', data, { headers: { 'Content-Type': 'application/json' } }).then(function (res) {
-                            console.log(file.name, res.data)
+                            // console.log(file.name, res.data)
                             if (res.data === 'fail') {
                                 Message.error('上传的不是房屋图片')
-                                return false
-                            } else {
-                                return true
+                                fileList.splice(fileList.indexOf(file),1)
+                                return
                             }
                         }).catch(err => {
                             console.log(err)
@@ -326,10 +317,16 @@
                     })
                 } else {
                     Message.error('上传图片格式有误')
-                    return false
+                    fileList.splice(fileList.indexOf(file),1)
+                    return
                 }
-                console.log(this.fileList)
-                return true
+                this.fileList=fileList
+                // console.log('add')
+            },
+            handlePreview (file) {
+                this.dialogImageUrl = file.url;
+                this.dialogVisible = true;
+                // this.$message.info(file.name)
             },
             handleExceed (files, fileList) {
                 Message.warning(`限制选择 10 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`)
@@ -351,12 +348,8 @@
                     }
                     return reader.result
                 })
-            },
-            selectImg () {
-                var houseID = '000001'
-                // 等待传入图片列表
-                axios.get('http://localhost:8080/imgManage/selectImg/' + houseID + '/')
             }
+
         },
         computed:{
             location: function(){
