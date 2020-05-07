@@ -242,7 +242,7 @@
                     }
                 }).then(res=>{
                     Message.success('上传成功');
-                    this.$emit('close');
+                    this.$emit('done');
                 }).catch(e=>{
                     Message.error('上传失败');
                 })
@@ -370,6 +370,7 @@
         },
         mounted() {
             this.searchLocation(0);
+            this.newHouse.sellerID=localStorage.username;
         }
     }
 </script>

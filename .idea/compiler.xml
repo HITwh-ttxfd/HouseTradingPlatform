@@ -15,7 +15,6 @@
     <bytecodeTargetLevel>
       <module name="Apache CXF" target="1.7" />
       <module name="rest" target="1.8" />
-      <module name="SOA" target="1.5" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">

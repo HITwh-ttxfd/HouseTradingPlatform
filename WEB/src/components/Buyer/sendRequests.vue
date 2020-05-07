@@ -88,20 +88,29 @@
         methods: {
             cancel(row){
                 this.loading=true;
-                if(this.changeStatus(localStorage.username,row.receiverID,row.houseID,'5'))
+                this.changeStatus(localStorage.username,row.receiverID,row.houseID,'5').then(res=>{
                     this.$message.success("处理成功");
+                }).catch(e=>{
+                    this.$message.error("处理失败");
+                })
                 this.load();
             },
             defeat(row) {
                 this.loading=true;
                 if (row.status!=='7') {
-                    if (this.changeStatus(localStorage.username, row.receiverID, row.houseID, '6'))
+                    this.changeStatus(localStorage.username,row.receiverID,row.houseID,'6').then(res=>{
                         this.$message.success("处理成功");
+                    }).catch(e=>{
+                        this.$message.error("处理失败");
+                    })
                     this.load();
                 }
                 else{
-                    if (this.changeStatus(localStorage.username, row.receiverID, row.houseID, '8'))
+                    this.changeStatus(localStorage.username,row.receiverID,row.houseID,'8').then(res=>{
                         this.$message.success("处理成功");
+                    }).catch(e=>{
+                        this.$message.error("处理失败");
+                    })
                     this.load();
                 }
             },
@@ -169,18 +178,13 @@
                 this.commentVisible=true;
             },
             changeStatus(buyerID,sellerID,houseID,status){
-                this.$axios({
+                return this.$axios({
                     method: 'GET',
                     url: 'http://localhost:8080/SRservice/changeRequestStatus/'+buyerID+'/'+sellerID+'/'+houseID,
                     params:{
                         status: status
                     }
-                }).then(res=>{
-                    return true;
-                }).catch(e=>{
-                    console.log(e);
-                    return false;
-                });
+                })
             }
         },
         mounted() {

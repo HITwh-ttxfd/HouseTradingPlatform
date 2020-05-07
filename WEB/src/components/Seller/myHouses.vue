@@ -2,37 +2,64 @@
   <div>
     <el-table height="650px" stripe :data="houses" v-loading="loading">
       <el-table-column
-              prop="location"
+              align="center"
               label="位置"
-              align="center">
+              prop="location">
       </el-table-column>
       <el-table-column
-              prop="size"
-              label="面积"
-              align="center">
+              align="center"
+              label="小区名称"
+              prop="village">
       </el-table-column>
       <el-table-column
-              prop="price"
+              align="center"
+              label="大小"
+              prop="size">
+      </el-table-column>
+      <el-table-column
+              align="center"
               label="价格"
-              align="center">
+              prop="price">
       </el-table-column>
       <el-table-column
-              align="center">
+              align="center"
+              label="评分"
+              prop="rank">
+        <template slot-scope="scope">
+          <el-rate
+                  v-if="scope.row.count>0"
+                  disabled
+                  text-color="#ff9900"
+                  v-model="scope.row.score">
+          </el-rate>
+          <p v-else>暂无评分</p>
+        </template>
+      </el-table-column>
+      <el-table-column align="center">
         <template slot="header" slot-scope="scope" style="align-content: center">
           <el-button
                   size="mini"
                   type="primary"
-                  style="width: 40%;"
-                  @click="add()">添加房源</el-button>
+                  @click="add()"><i class="el-icon-circle-plus-outline"></i>
+          </el-button>
         </template>
         <template slot-scope="scope">
           <el-button
-                  size="mini"
-                  @click="detail(scope.row.houseID)">详情</el-button>
+                  type="primary"
+                  @click="detail(scope.row.houseID)"
+                  size="small"><i class="el-icon-more"></i>
+          </el-button>
+          <el-button
+                  v-if="scope.row.count>0"
+                  type="success"
+                  @click="comment(scope.row.houseID)"
+                  size="small"><i class="el-icon-chat-dot-square"></i>
+          </el-button>
           <el-button
                   size="mini"
                   type="danger"
-                  @click="defeat(scope.row.houseID)">删除</el-button>
+                  @click="defeat(scope.row.houseID)"><i class="el-icon-delete"></i>
+          </el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -42,22 +69,28 @@
     <el-dialog width="500px" :visible.sync="configVisible" title="添加房源" destroy-on-close>
       <new-house @close="configVisible=false" @done="done"></new-house>
     </el-dialog>
+    <el-dialog width="500px" :visible.sync="commentVisible" title="评价" destroy-on-close>
+      <comment :comments="comments"></comment>
+    </el-dialog>
   </div>
 </template>
 
 <script>
   import Detail from "../Buyer/detail";
   import NewHouse from "./newHouse";
+  import Comment from "../Buyer/comment";
   let map;
   export default {
     name: "myHouse",
-    components: {NewHouse, Detail},
+    components: {Comment, NewHouse, Detail},
     data(){
       return{
         loading: true,
+        commentVisible: false,
         detailVisible:false,
         configVisible: false,
         searchInfo:'',
+        comments:[],
         houses:[{
           location:'山东省威海市文化西路2号',
           size:'150平米',
@@ -79,6 +112,17 @@
         }).then(res=>{
           this.houses=res.data;
           this.loading = false;
+        }).catch(e=>{
+          console.log(e);
+        })
+      },
+      comment(id){
+        this.$axios({
+          method: 'GET',
+          url: 'http://localhost:8080/SRservice/houseReceiveComments/'+id,
+        }).then(res=>{
+          this.comments=res.data;
+          this.commentVisible=true;
         }).catch(e=>{
           console.log(e);
         })

@@ -64,7 +64,7 @@
                             size="small"><i class="el-icon-more"></i>
                     </el-button>
                     <el-button
-                            v-if="'scope.row.count>0'"
+                            v-if="scope.row.count>0"
                             @click="comment(scope.row.houseID)"
                             size="small"><i class="el-icon-chat-dot-square"></i>
                     </el-button>
