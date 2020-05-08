@@ -33,16 +33,20 @@ public class HouseController {
         ReadUrlUtil.getLocationDetail(house);
 
         //设置时间转化     time
+        System.out.println("开始转化");
+        System.out.println("time");
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         Date dateTemp = sdf.parse(jsonobject.getString("time"));
         house.setTime(dateTemp);
         //         lastTransaction
+        System.out.println("lastTransaction");
         dateTemp = sdf.parse(jsonobject.getString("lastTransaction"));
         house.setLastTransaction(dateTemp);
         //             listingTime
+        System.out.println("listingTime");
         dateTemp = sdf.parse(jsonobject.getString("listingTime"));
         house.setListingTime(dateTemp);
-
+        System.out.println("转化时间完成");
 
         //设置房屋年份
         SimpleDateFormat formatter= new SimpleDateFormat("yyyy");

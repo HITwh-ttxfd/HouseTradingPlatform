@@ -30,6 +30,7 @@ public class House {
 //    private String decorationDescription;  //装修描述
 //    private String  taxAnalysis;          //税费解析
 //    private String coreSellingPoints;     //核心卖点
+    private String  username;              //数量1
     private int count;              //数量1
     private String HouseType;              //房屋户型1
     private double buildingArea;           //证上面积     1                这里可能存在疑问
@@ -55,9 +56,9 @@ public class House {
 
     };
     //最为健全的house，用于向前端发送
-    //29个参数
+    //30个参数
 
-    public House(int count,
+    public House(String  username,int count,
             String village,Date  time,
                  String houseID, String sellerID,
                  double size, double locationX,
@@ -73,6 +74,7 @@ public class House {
                  String mortgageInformation, String transactionOwnership,
                  String housingPurpose, String propertyOwnership,
                  String housingParts) {
+        this.username=username;
         this.count=count;
         this.village=village;
         this.time=time;
@@ -106,50 +108,13 @@ public class House {
     }
 
 
-    //去掉了houseid与score   默认score=0
-    //用于接收前端传过来的房源
+    public String getUsername() {
+        return username;
+    }
 
-//    public House(String sellerID, double size,
-//                 double locationX, double locationY,
-//                 String location, double price,
-//                 int lift, Date lastTransaction,
-//                 String houseType, double buildingArea,
-//                 double interiorArea, String houseOrientation,
-//                 String decoration, String heatingMode,
-//                 String floor, String houseTypeStructure,
-//                 String buildingType, String elevatorProportion,
-//                 Date listingTime, String housingAge,
-//                 String mortgageInformation, String transactionOwnership,
-//                 String housingPurpose, String propertyOwnership,
-//                 String housingParts) {
-//        this.sellerID = sellerID;
-//        this.size = size;
-//        this.locationX = locationX;
-//        this.locationY = locationY;
-//        this.location = location;
-//        this.price = price;
-//        this.score = 0;
-//        this.lift = lift;
-//        this.lastTransaction = lastTransaction;
-//        HouseType = houseType;
-//        this.buildingArea = buildingArea;
-//        this.interiorArea = interiorArea;
-//        this.houseOrientation = houseOrientation;
-//        this.decoration = decoration;
-//        this.heatingMode = heatingMode;
-//        this.floor = floor;
-//        this.houseTypeStructure = houseTypeStructure;
-//        this.buildingType = buildingType;
-//        this.elevatorProportion = elevatorProportion;
-//        ListingTime = listingTime;
-//        this.housingAge = housingAge;
-//        this.mortgageInformation = mortgageInformation;
-//        this.transactionOwnership = transactionOwnership;
-//        this.housingPurpose = housingPurpose;
-//        this.propertyOwnership = propertyOwnership;
-//        this.housingParts = housingParts;
-//    }
-
+    public void setUsername(String username) {
+        this.username = username;
+    }
 
     public int getCount() {
         return count;

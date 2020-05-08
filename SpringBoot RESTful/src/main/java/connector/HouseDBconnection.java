@@ -27,9 +27,10 @@ public class HouseDBconnection{
             Class.forName(driver);
             connection=(Connection) DriverManager.getConnection(url,user,password);
             if(!connection.isClosed()){
-                System.out.println("Successfully connected.");
+                System.out.println("Successfully connected HouseDataBase.");
             }
         }catch (Exception e){
+            System.out.println("failed to connect HouseDataBase.");
             e.printStackTrace();
         }
     }
@@ -44,9 +45,14 @@ public class HouseDBconnection{
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         //加上一个查询先有houseID最大值的，给houseID赋值
         house.setHouseID(selectMaxHouseID());
+        System.out.println("ID is "+selectMaxHouseID());
+        System.out.println(house.getHouseID());
+        //设置house的username
+        house.setUsername(selectUsername(house.getSellerID()));
 
-        String sql="insert into house(count,village,time,houseID,sellerID, size, locationX, locationY, location, price,score, lift, lastTransaction, houseType, buildingArea, interiorArea, houseOrientation, decoration, heatingMode, floor, houseTypeStructure, buildingType, elevatorProportion, listingTime, housingAge, mortgageInformation, transactionOwnership, housingPurpose, propertyOwnership, housingParts)" +
-                " values("+house.getCount()+",'"
+        String sql="insert into house(username,count,village,time,houseID,sellerID, size, locationX, locationY, location, price,score, lift, lastTransaction, houseType, buildingArea, interiorArea, houseOrientation, decoration, heatingMode, floor, houseTypeStructure, buildingType, elevatorProportion, listingTime, housingAge, mortgageInformation, transactionOwnership, housingPurpose, propertyOwnership, housingParts)" +
+                " values('"+house.getUsername()+"',"
+                +house.getCount()+",'"
                 +house.getVillage()+"','"+sdf.format(house.getTime())+"','"
                 +house.getHouseID()+"','"+house.getSellerID()+"',"
                 +house.getSize()+","+house.getLocationX()
@@ -70,6 +76,25 @@ public class HouseDBconnection{
         }catch (Exception e){
             e.printStackTrace();
         }
+    }
+
+    //查询用户名--添加房源--根据sellerID（也就是phone）返回username
+    public String selectUsername(String sellerID){
+        String sql = "select username from users where phone='"+sellerID+"'";
+        String username="";
+        try {
+            Statement statement = this.connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(sql);
+
+            while (resultSet.next()){
+                username = resultSet.getString("username");
+            }
+            statement.close();
+            resultSet.close();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return username;
     }
 
     //查询HouseId最大值
@@ -138,7 +163,8 @@ public class HouseDBconnection{
                 String housingPurpose = resultSet.getString("housingPurpose");
                 String propertyOwnership = resultSet.getString("propertyOwnership");
                 String housingParts = resultSet.getString("housingParts");
-                House housetemp=new House(count,village,time,
+                String username = resultSet.getString("username");
+                House housetemp=new House(username,count,village,time,
                         houseID, sellerID,
                         size,locationX,
                         locationY,location,
@@ -199,7 +225,8 @@ public class HouseDBconnection{
                 String housingPurpose = resultSet.getString("housingPurpose");
                 String propertyOwnership = resultSet.getString("propertyOwnership");
                 String housingParts = resultSet.getString("housingParts");
-                House house=new House(count,village,time,
+                String username = resultSet.getString("username");
+                House house=new House(username,count,village,time,
                         houseID, sellerID,
                         size,locationX,
                         locationY,location,
@@ -239,6 +266,7 @@ public class HouseDBconnection{
                 house.setLocation(resultSet.getString("location"));
                 house.setVillage(resultSet.getString("village"));
                 house.setCount(resultSet.getInt("count"));
+                house.setUsername(resultSet.getString("username"));
                 houses.add(house);
             }
         }catch (Exception e){
@@ -264,6 +292,7 @@ public class HouseDBconnection{
                 house.setLocation(resultSet.getString("location"));
                 house.setVillage(resultSet.getString("village"));
                 house.setCount(resultSet.getInt("count"));
+                house.setUsername(resultSet.getString("username"));
                 //测试用，正式上线删
                 houses.add(house);
             }
