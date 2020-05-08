@@ -13,6 +13,7 @@ import java.util.List;
 public class SRservice {
     //@Autowired
     private HouseDBconnection hdb = new HouseDBconnection();
+
     private User user;
     // 返回用户 ||测试成功
     @RequestMapping(value="/registerBuyer/{id}", method = RequestMethod.GET)

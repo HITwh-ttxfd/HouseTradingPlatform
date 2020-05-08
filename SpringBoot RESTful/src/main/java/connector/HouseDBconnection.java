@@ -99,13 +99,13 @@ public class HouseDBconnection{
 
     //查询HouseId最大值
     public String selectMaxHouseID(){
-        String sql = "select max(houseID) from house ";
+        String sql = "select MAX(CAST(houseID as UNSIGNED INTEGER)) from house ; ";
         String temp="";
         try {
             Statement statement = this.connection.createStatement();
             ResultSet resultSet = statement.executeQuery(sql);
             while (resultSet.next()){
-                temp=resultSet.getString("max(houseID)");
+                temp=resultSet.getString("MAX(CAST(houseID as UNSIGNED INTEGER))");
             }
             temp=String.valueOf(Integer.parseInt(temp)+1);
         }catch (Exception e){
@@ -117,6 +117,7 @@ public class HouseDBconnection{
     // 删除房源
     public void deleteHouse(String houseID) {
         String sql = "delete from house where houseID='"+houseID+"'";
+        System.out.println(sql);
         try {
             PreparedStatement preparedStatement = (PreparedStatement)this.connection.prepareStatement(sql);
             preparedStatement.executeUpdate();

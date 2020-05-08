@@ -20,44 +20,6 @@ public class HouseService {
         return "Hello world";
     }
 
-//    //新增房源
-//    @RequestMapping(value="/addNewHouse/{sellerID}/size/" +
-//            "{location}/price/" +
-//            "{time}/lift/{houseType}/" +
-//            "{buildingArea}/{interiorArea}/" +
-//            "{houseOrientation}/{decoration}/" +
-//            "{heatingMode}/{floor}/" +
-//            "{houseTypeStructure}/{buildingType}/" +
-//            "{elevatorProportion}/" +
-//            "{listingTime}/{lastTransaction}/" +
-//            "{housingAge}/{mortgageInformation}/" +
-//            "{transactionOwnership}/{housingPurpose}/" +
-//            "{propertyOwnership}/{housingParts}")
-//    public void addNewHouse(
-//            @PathVariable("sellerID")String sellerID,@PathVariable("size") double size,
-//            @PathVariable("location")String location,@PathVariable("price") double price,
-//            @PathVariable("time")Date time, @PathVariable("lift")int lift,
-//            @PathVariable("houseType")String houseType,
-//            @PathVariable("buildingArea")double buildingArea, @PathVariable("interiorArea")double interiorArea,
-//            @PathVariable("houseOrientation")String houseOrientation,@PathVariable("decoration") String decoration,
-//            @PathVariable("heatingMode")String heatingMode, @PathVariable("floor")String floor,
-//            @PathVariable("houseTypeStructure")String houseTypeStructure,@PathVariable("buildingType") String buildingType,
-//            @PathVariable("elevatorProportion")String elevatorProportion,
-//            @PathVariable("listingTime")Date listingTime, @PathVariable("lastTransaction")Date lastTransaction,
-//            @PathVariable("housingAge")String housingAge,@PathVariable("mortgageInformation") String mortgageInformation,
-//            @PathVariable("transactionOwnership")String transactionOwnership, @PathVariable("location")String housingPurpose,
-//            @PathVariable("propertyOwnership")String propertyOwnership, @PathVariable("housingParts")String housingParts) {
-//        //这里调用api解析地址产生地理编码
-//        int locationX = 0,locationY = 0;
-////        House house=new House(sellerID,size,price,locationX,locationY,location);
-////        HouseDBconnection p = new HouseDBconnection();
-////        p.addHouse(house);
-//
-//        House house=new House();
-//        HouseDBconnection p = new HouseDBconnection();
-//        p.addHouse(house);
-//    }
-
     //删除房源
     @RequestMapping(value="/deletePastHouse/{houseID}")
     public void deletePastHouse(@PathVariable("houseID")String id) {
