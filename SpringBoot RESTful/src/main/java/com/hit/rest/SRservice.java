@@ -18,8 +18,8 @@ public class SRservice {
     @RequestMapping(value="/registerBuyer/{id}", method = RequestMethod.GET)
     public Buyer registerBuyer(@PathVariable("id")String ID, @RequestParam(value = "password")String password) {
         User u = DBconnection.selectUser(ID,password);
-        System.out.println(u.getUsername()+" read.");
-        System.out.println(u.getType());
+        //System.out.println(u.getUsername()+" read.");
+        //System.out.println(u.getType());
         Buyer buy = new Buyer();
         //Buyer buy = new Buyer(u.getUsername(),u.getPassword(),u.getRealname(),u.getId(),u.getPhone());
         if(u.getType().equals("buyer")){
@@ -61,7 +61,7 @@ public class SRservice {
     @RequestMapping(value = "/houseReceiveComments/{id}", method = RequestMethod.GET)
     public ArrayList<Comment> houseReceiveComments(@PathVariable("id")String houseID){
         House house = hdb.getHouse(houseID);
-        System.out.println(house.getHouseID());
+        //System.out.println(house.getHouseID());
         return DBconnection.selectComments(house);
     }
     @RequestMapping(value = "/delComment/{authorID}/{houseID}")
@@ -143,7 +143,7 @@ public class SRservice {
         // 采取另一个DBconnection类
         Request request = buy.sendRequest(house,sell,date,time,phone,location);
         String check = DBconnection.selectRequest(request);
-        System.out.println(check);
+        //System.out.println(check);
         if(check.equals("exist")){
             return check;
         }else if(check.equals("new")){

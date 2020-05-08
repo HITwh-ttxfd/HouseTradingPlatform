@@ -76,7 +76,7 @@ public class uploadImg {
         String base64 = text.split(",")[1];
         String index = htpImage.imgClassify(base64);
         String result = htpImage.departRes(index);
-        System.out.println(result);
+        //System.out.println(result);
         if (result.equals("no house")) {
             // 上传的不是房屋图片
             return "fail";
@@ -88,7 +88,7 @@ public class uploadImg {
     @CrossOrigin
     @GetMapping(value = "/selectImg/{houseID}")
     public ArrayList<housePic> selectImage(@PathVariable("houseID")String houseID){
-        System.out.println("Return img url.");
+        //System.out.println("Return img url.");
         ArrayList<housePic> bases = DBconnection.selectImg(houseID);
         return bases;
     }

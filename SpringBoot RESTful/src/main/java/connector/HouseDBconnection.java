@@ -55,7 +55,7 @@ public class HouseDBconnection{
                 +house.getCount()+",'"
                 +house.getVillage()+"','"+sdf.format(house.getTime())+"','"
                 +house.getHouseID()+"','"+house.getSellerID()+"',"
-                +house.getSize()+","+house.getLocationX()
+                +house.getBuildingArea()+","+house.getLocationX()
                 +","+house.getLocationY()+",'"+house.getLocation()+"',"
                 +house.getPrice()+","+house.getScore()+","
                 +house.getLift()+",'"+sdf.format(house.getLastTransaction())+"','"
@@ -68,7 +68,7 @@ public class HouseDBconnection{
                 +house.getMortgageInformation()+"','"+house.getTransactionOwnership()+"','"
                 +house.getHousingPurpose()+"','"+house.getPropertyOwnership()+"','"
                 +house.getHousingParts()+"')";
-        System.out.println(sql);
+        //System.out.println(sql);
         try {
             PreparedStatement preparedStatement = (PreparedStatement)this.connection.prepareStatement(sql);
             preparedStatement.executeUpdate();
