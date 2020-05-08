@@ -233,4 +233,7 @@
     padding: 0;
     height: 40px;
   }
+  p{
+    color: rgba(175, 175, 175, 0.83);
+  }
 </style>
