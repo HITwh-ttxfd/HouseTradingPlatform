@@ -22,7 +22,7 @@ public class HouseController {
     @CrossOrigin
     @RequestMapping(value = "/addhouse",method= RequestMethod.POST)
     public void login(@RequestBody JSONObject json) throws IOException, ParseException {//@RequestBody: 接收前端发送的json数据，其中JSONObject是封装好的实体
-        System.out.println(json.toString());
+        //System.out.println(json.toString());
         JSONObject jsonobject=  json.getJSONObject("house");
         House house= (House)JSONObject.toBean(jsonobject,House.class);
 
@@ -62,7 +62,7 @@ public class HouseController {
     public String getNewID(){
         // 在添加房源前用于添加图片
         String id = p.selectMaxHouseID();
-        System.out.println(id);
+        //System.out.println(id);
         return id;
     }
 

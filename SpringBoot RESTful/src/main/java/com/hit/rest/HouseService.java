@@ -64,7 +64,7 @@ public class HouseService {
         HouseDBconnection p = new HouseDBconnection();
         ArrayList<housePic> ary = DBconnection.selectImg(id);
         for (int i = 0; i < ary.size(); i++) {
-            System.out.println(ary.get(i).getHouseID());
+            //System.out.println(ary.get(i).getHouseID());
             DBconnection.delImg(ary.get(i).getHouseID(),ary.get(i).getFileName());
         }
         p.deleteHouse(id);
