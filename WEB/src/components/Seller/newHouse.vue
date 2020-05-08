@@ -138,6 +138,13 @@
                 <p class="content">{{location}}</p>
             </div>
         </div>
+        <div class="infoBlock">
+            <p class="title">价格属性</p>
+            <div class="infoLine" style="width: 410px;margin-left: 5%;">
+                <p class="content label">房屋价格:</p>
+                <el-input placeholder="请输入5-10位阿拉伯数字（单位：元）" style="width: 300px" v-model="newHouse.price"></el-input>
+            </div>
+        </div>
         <div class="dialog-footer" slot="footer">
             <el-button @click="$emit('close')">取 消</el-button>
             <el-button @click="upload" type="primary">确 定</el-button>
