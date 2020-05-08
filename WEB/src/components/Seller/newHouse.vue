@@ -85,8 +85,8 @@
                     <el-input v-model="newHouse.lastTransaction"></el-input>
                 </div>
                 <div class="infoLine">
-                    <p class="content label">房屋年限:</p>
-                    <el-input v-model="newHouse.housingAge"></el-input>
+                    <p class="content label">建造时间:</p>
+                    <el-input v-model="newHouse.time"></el-input>
                 </div>
                 <div class="infoLine">
                     <p class="content label">抵押信息:</p>
@@ -230,7 +230,6 @@
                             })
                         })
                     })
-
                     count = count + 1
                 }
                 // 上传图片结束
