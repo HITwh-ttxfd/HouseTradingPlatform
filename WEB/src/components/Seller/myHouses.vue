@@ -35,7 +35,7 @@
           <p v-else>暂无评分</p>
         </template>
       </el-table-column>
-      <el-table-column align="center">
+      <el-table-column align="center" width="250px">
         <template slot="header" slot-scope="scope" style="align-content: center">
           <el-button
                   size="mini"
@@ -54,6 +54,11 @@
                   type="success"
                   @click="comment(scope.row.houseID)"
                   size="small"><i class="el-icon-chat-dot-square"></i>
+          </el-button>
+          <el-button
+                  type="info"
+                  @click="setPrice(scope.row.houseID)"
+                  size="small"><i class="el-icon-edit"></i>
           </el-button>
           <el-button
                   size="mini"
@@ -105,6 +110,35 @@
       }
     },
     methods:{
+      setPrice(id){
+        this.$prompt('请输入新价格', '修改价格', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          inputPattern: /^\d{5,10}$/,
+          inputErrorMessage: '请输入5-10位阿拉伯数字（单位：元）'
+        }).then(({ value }) => {
+          this.$axios({
+            method: 'GET',
+            url: 'http://localhost:8080/changeHousePrice/'+id+'/'+value
+          }).then(res=>{
+            this.$message({
+              type: 'success',
+              message: '新价格: ' + value + '元'
+            });
+            this.load();
+          }).catch(e=>{
+            this.$message({
+              type: 'error',
+              message: '修改失败'
+            });
+          })
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '取消输入'
+          });
+        });
+      },
       load() {
         this.$axios({
           url: 'http://localhost:8080/sellerHouse/'+localStorage.username,
