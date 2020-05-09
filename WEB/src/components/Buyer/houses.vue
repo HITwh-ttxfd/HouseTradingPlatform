@@ -91,7 +91,7 @@
             <search :form="filter" @selectionEnabled="selectionConfirmed" @close="closeFilter"></search>
         </el-dialog>
         <el-dialog width="500px" :visible.sync="commentVisible" title="评价" destroy-on-close>
-            <comment :comments="comments"></comment>
+            <comment :comments="comments" @clear="comments=[]"></comment>
         </el-dialog>
         <el-dialog width="500px" :visible.sync="chattingVisible" :title="conversation.username" @close="clear">
             <chatting v-if="loaded" :username="conversation.username" :id="conversation.id"></chatting>

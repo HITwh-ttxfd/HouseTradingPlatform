@@ -16,6 +16,9 @@
         name: "comment",
         props:{
             comments: Array
+        },
+        beforeDestroy() {
+            this.$emit('clear');
         }
     }
 </script>
