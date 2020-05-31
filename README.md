@@ -1,2 +1,3 @@
 # 二手房交易系统
-面向服务的软件系统课程设计
+后端使用Apache CXF和（Apache CXF）SpringBoot(SpringBoot RESTful)搭建
+前端(WEB)使用Vue+Webpack搭建
