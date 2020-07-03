@@ -1,15 +1,13 @@
 <template>
     <div>
         <el-main id="messageList">
-            <!--      <div v-if="loaded">-->
-            <div :class="{wrapper: true,me: isMine(message.senderID),other: !isMine(message.senderID)}"
+            <div :class="{box: true,me: isMine(message.senderID),other: !isMine(message.senderID)}"
                  v-for="message in messages.messageList">
                 <p class="time">{{message.date}}</p>
                 <div class="content">
                     <pre>{{message.content}}</pre>
                 </div>
             </div>
-            <!--      </div>-->
         </el-main>
         <el-footer>
             <p @keydown.enter="sendMessage" @keydown.shift.enter="enter" class="input"
@@ -46,13 +44,6 @@
                         this.entered = false;
                     else {
                         $event.target.innerText = $event.target.innerText.slice(0, -2);
-                        // this.messages.messageList.push({
-                        //   senderID: localStorage['username'],
-                        //   receiverID: this.messages.id,
-                        //   date: '2020-4-28 11:00',
-                        //   content: $event.target.innerText,
-                        //   status: false
-                        // });
                         this.$axios({
                             method: 'GET',
                             url: 'http://localhost:8080/SRservice/sendMessage/' + localStorage.username + '/' + this.id,
@@ -104,7 +95,6 @@
                 })
             },
         },
-        computed: {},
         beforeMount() {
             this.load();
         },
@@ -162,7 +152,7 @@
         overflow: scroll;
     }
 
-    .wrapper {
+    .box {
         display: block;
         clear: both;
     }
