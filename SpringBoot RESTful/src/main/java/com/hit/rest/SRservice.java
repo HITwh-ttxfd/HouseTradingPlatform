@@ -13,8 +13,6 @@ import java.util.List;
 public class SRservice {
     //@Autowired
     private HouseDBconnection hdb = new HouseDBconnection();
-
-    private User user;
     // 返回用户 ||测试成功
     @RequestMapping(value="/registerBuyer/{id}", method = RequestMethod.GET)
     public Buyer registerBuyer(@PathVariable("id")String ID, @RequestParam(value = "password")String password) {
@@ -91,7 +89,7 @@ public class SRservice {
         User u1 = DBconnection.selectUser(senderID);
         User u2 = DBconnection.selectUser(receiverID);
         List<Message> messages;
-        messages = DBconnection.selectMessages(u1,u2);
+            messages = DBconnection.selectMessages(u1,u2);
 /*        if(u.getType().equals("seller")){
             Seller sell = new Seller(u.getUsername(),u.getPassword(),u.getRealname(),u.getId(),u.getPhone());
             messages = DBconnection.selectMessages(sell);

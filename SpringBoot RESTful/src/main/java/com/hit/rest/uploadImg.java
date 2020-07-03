@@ -75,7 +75,7 @@ public class uploadImg {
         String text = (String) map.get("file");
         String base64 = text.split(",")[1];
         String index = htpImage.imgClassify(base64);
-        String result = htpImage.departRes(index);
+        String result = htpImage.   departRes(index);
         //System.out.println(result);
         if (result.equals("no house")) {
             // 上传的不是房屋图片

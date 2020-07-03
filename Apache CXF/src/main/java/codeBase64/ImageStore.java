@@ -14,7 +14,7 @@ public class ImageStore {
     static BASE64Decoder decoder = new BASE64Decoder();  // 解码
     static BASE64Encoder encoder = new BASE64Encoder();  // 编码
     //private String path = "./houseImg/";
-    private String path = "G://Code_Program/IntellJ/AliyunImageStore/houseImg/";
+    private String path = "C://Program Files/MySQL/houseImg/";
 
     public String base64ToImage(String base64String, String fileName, String houseID) {
         // 接收的图片base64不需要带表头

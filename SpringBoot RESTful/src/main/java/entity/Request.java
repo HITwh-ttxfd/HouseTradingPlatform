@@ -12,7 +12,7 @@ public class Request {
     private String time;
     private String sendTime;
     private String status;
-    // 0-等待审核 1-卖家拒绝 2-卖家同意 3-已完成
+    // 0-等待审核 1-卖家拒绝 2-卖家同意 3-已完成 5
     public Request(){}
 
     public Request(String houseID, String senderID, String receiverID, String date, String time,String sendTime,String phone,String location,String status) {

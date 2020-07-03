@@ -14,6 +14,8 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
       '/api':{
+        // http://localhost:8090/Apache_CXF_war_exploded/
+        // http://192.168.11.1:10080
         target: 'http://localhost:8090/Apache_CXF_war_exploded/',
         changeOrigin: true,
         pathRewrite: {

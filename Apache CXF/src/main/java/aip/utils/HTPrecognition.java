@@ -1,5 +1,6 @@
 package aip.utils;
 
+import aip.auth.AuthService;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
@@ -20,8 +21,12 @@ public class HTPrecognition {
      * https://ai.baidu.com/file/470B3ACCA3FE43788B5A963BF0B625F3
      * 下载
      */
+    /**
+     *
+     * @param imgbase-图片base64编码
+     * @return 识别结果, json数组
+     */
     public static String easydlImageClassify(String imgbase) {
-        // 请求url
         String url = "https://aip.baidubce.com/rpc/2.0/ai_custom/v1/classification/htprecognition";
         try {
             Map<String, Object> map = new HashMap<>();
@@ -31,9 +36,8 @@ public class HTPrecognition {
             String param = GsonUtils.toJson(map);
 
             // 注意这里仅为了简化编码每一次请求都去获取access_token，线上环境access_token有过期时间， 客户端可自行缓存，过期后重新获取。
-            String accessToken = "24.fc570ce5bf5a0110582657a618354926.2592000.1589635472.282335-19462141";
-            //String accessToken = AuthService.getAuth();
-            //System.out.println(accessToken);
+            //String accessToken = "24.ca33cbbde7545bb4d14a90d8e776f7e7.2592000.1592460286.282335-19462141";
+            String accessToken = AuthService.getAuth();
             String result = HttpUtil.post(url, accessToken, "application/json", param);
             System.out.println(result);
             return result;
@@ -42,7 +46,12 @@ public class HTPrecognition {
         }
         return null;
     }
-    // 对结果进行解码
+
+    /** 
+     *
+     * @param result-识别结果
+     * @return 拆分出优先识别结果-no house / Chinese / Europe
+     */
     public static String departBase64(String result){
         String json = result.substring(result.indexOf("{"));
         JSONObject obj = JSONObject.fromObject(json);

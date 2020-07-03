@@ -154,6 +154,7 @@
 
 <script>
     import axios from "axios";
+    //   import ajax from "ajax";
     import { Message } from 'element-ui'
     export default {
         name: "newHouse",
@@ -309,9 +310,11 @@
                         // console.log('base', res)
                         // 传输文件使用base64编码传输，getBase64是把文件转换为编码的函数
                         var data = {'file': res, 'fileName': file.name}
-                        // console.log(data)
-                        axios.post('http://localhost:8080/imgManage/checkImg', data, { headers: { 'Content-Type': 'application/json' } }).then(function (res) {
-                            // console.log(file.name, res.data)
+                        console.log(data)
+                        // http://localhost:8080/imgManage/checkImg
+                        // http://192.168.11.1:10080/imgManage/checkImg
+                        axios.post('http://192.168.11.1:10080/imgManage/checkImg', data, { headers: { 'Content-Type': 'application/json' } }).then(function (res) {
+                            console.log(file.name, res.data)
                             if (res.data === 'fail') {
                                 Message.error('上传的不是房屋图片')
                                 fileList.splice(fileList.indexOf(file),1)
