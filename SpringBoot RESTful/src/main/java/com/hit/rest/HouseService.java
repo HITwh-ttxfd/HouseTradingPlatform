@@ -36,7 +36,8 @@ public class HouseService {
     @RequestMapping(value="/houseList")
     public ArrayList<House> getPastHouses(){
         HouseDBconnection p = new HouseDBconnection();
-        return p.getBasicHouses();
+        return p.getHouses();
+                /*getBasicHouses*/
     }
 
     //返回卖家房源

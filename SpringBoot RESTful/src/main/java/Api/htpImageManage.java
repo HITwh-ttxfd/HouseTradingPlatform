@@ -13,6 +13,7 @@ public class htpImageManage {
         try {
             objects = client.invoke("imgClassify",base);
             //closeClient();
+            System.out.println(objects[0].toString());
             return objects[0].toString();
         }catch (Exception e){
             e.printStackTrace();
