@@ -29,19 +29,30 @@
             <el-row>
                 <el-col v-for="(o, index) in houses.length" :key="o">
                     <el-card>
-                        <!--<el-row>
-                            <el-col>
-                                <p>{{houses[index].houseID}}</p>
-                            </el-col>
-                        </el-row>-->
                         <el-row>
                             <el-col :span="7">
                                 <!--走马灯-->
-                                <el-carousel height="200px" direction="vertical" :autoplay="false">
-                                    <el-carousel-item v-for="item in 3" :key="item">
-                                        <h3 class="medium">{{ item }}</h3>
-                                    </el-carousel-item>
-                                </el-carousel>
+                                <!--houses[index].imgs!== undefined && houses[index].imgs.length>0-->
+                                <div v-if="!houses[index].imgFlag">
+                                    <el-carousel height="200px" direction="vertical" :autoplay="false">
+                                        <el-carousel-item :key="img.fileName" v-for="img in houses[index].imgs">
+                                            <h3 class="medium">
+                                                <el-image :src="img.path" fit="contain"/>
+                                            </h3>
+                                        </el-carousel-item>
+                                    </el-carousel>
+                                </div>
+                                <!--houses[index].imgs.length === 0-->
+                                <div v-if="houses[index].imgFlag">
+                                    <el-carousel height="200px" direction="vertical" :autoplay="false">
+                                        <el-carousel-item v-for="item in 3" :key="item">
+                                            <h3 class="medium">
+<!--                                                {{item}}-->
+                                                <el-image src='http://39.98.48.34:2233/houseImg/noImg2.png' fit="contain"/>
+                                            </h3>
+                                        </el-carousel-item>
+                                    </el-carousel>
+                                </div>
                             </el-col>
                             <!--基本信息-->
                             <el-col :span="10" style="padding-left: 15px; padding-top: 15px">
@@ -131,7 +142,7 @@
             </el-row>
 
         </div>
-        <el-table
+<!--        <el-table
                 height="650px"
                 v-loading="loading"
                 :data="houses">
@@ -207,7 +218,7 @@
                     </el-button>
                 </template>
             </el-table-column>
-        </el-table>
+        </el-table>-->
         <el-dialog :visible.sync="detailVisible" title="详细信息" destroy-on-close @closed="destroyMap">
             <detail :house-detail="houseDetail"></detail>
         </el-dialog>
@@ -287,6 +298,7 @@
                     time: ''
                 },
                 houseDetail: {},
+                houseIndex: [],
                 displayHouseImg: [],
             }
         },
@@ -361,15 +373,47 @@
                 }).then(res => {
                     this.loading = false;
                     this.houses = res.data;
+                    for (var i in this.houses) {
+                        this.houseIndex[i] = this.houses[i].houseID
+                    }
+                    // console.log(this.houseIndex)
+                    var i = 0         /*this.houseIndex.length*/
+                    /*递归调用*/
+                    this.loadImg(i)
                     // for循环异步请求问题
                     // this.loadImg(0, this.houses.length)
-
                 }).catch(e => {
                     console.log(e);
                 })
             },
-            loadImg(i, size) {
-                setTimeout(function () {
+            loadImg(i) {
+                this.$axios({
+                    url: 'http://localhost:8080/imgManage/selectImg/' + this.houseIndex[i],
+                    method: 'GET',
+                }).then(res => {
+                    if (i == this.houseIndex.length) {
+                        console.log(this.houses)
+                        return;
+                    }
+                    /*递归调用*/
+                    // console.log(res.data)
+                    this.$set(this.houses[i], 'imgFlag', true)
+                    if(res.data.length === 0){
+                        let index = {fileName: 'noImg.jpg', path: 'http://39.98.48.34:2233/houseImg/noImg.jpg'}
+                        this.$set(this.houses[i], 'imgs', index)
+                    }
+                    else{
+                        this.$set(this.houses[i], 'imgFlag', false)
+                        this.$set(this.houses[i], 'imgs', res.data);
+                    }
+                    this.loadImg(++i)
+                    /*                    if (i == 10) {
+                                            console.log(this.houses)
+                                        }*/
+                }).catch(e => {
+                    console.log(e);
+                })
+                /*setTimeout(function () {
 
                     console.log(this.houses===undefined)
                     while (this.houses===undefined);
@@ -390,7 +434,7 @@
                         }
                     }
 
-                })
+                })*/
             },
             requestConfirmed(id) {
                 this.requestVisible = false;
@@ -437,6 +481,11 @@
                     }
                 }).then(res => {
                     this.houses = res.data;
+                    for (var i in this.houses) {
+                        this.houseIndex[i] = this.houses[i].houseID
+                    }
+                    var i = 0;
+                    this.loadImg(i)
                 }).catch(e => {
                     this.$message({
                         message: '筛选失败',

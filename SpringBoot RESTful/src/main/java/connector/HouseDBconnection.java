@@ -392,6 +392,11 @@ public class HouseDBconnection{
                 house.setSize(resultSet.getDouble("size"));
                 house.setLocation(resultSet.getString("location"));
                 house.setVillage(resultSet.getString("village"));
+                house.setUsername(resultSet.getString("username"));
+                house.setCount(Integer.parseInt(resultSet.getString("count")));
+                house.setScore(Float.parseFloat(resultSet.getString("score")));
+                house.setDecoration(resultSet.getString("decoration"));
+                house.setHouseType(resultSet.getString("houseType"));
                 houses.add(house);
             }
         }catch (Exception e){
