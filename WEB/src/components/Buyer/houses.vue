@@ -32,7 +32,6 @@
                         <el-row>
                             <el-col :span="7">
                                 <!--走马灯-->
-                                <!--houses[index].imgs!== undefined && houses[index].imgs.length>0-->
                                 <div v-if="!houses[index].imgFlag">
                                     <el-carousel height="200px" direction="vertical" :autoplay="false">
                                         <el-carousel-item :key="img.fileName" v-for="img in houses[index].imgs">
