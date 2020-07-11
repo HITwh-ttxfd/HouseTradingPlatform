@@ -378,7 +378,6 @@ public class HouseDBconnection{
         str1 = String.valueOf(m);
         temp=str1+'-'+str2;
 
-
         sql+=" and time >='"+temp+"'";
         try {
             Statement statement = (Statement)this.connection.createStatement();
