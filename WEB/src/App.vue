@@ -17,6 +17,18 @@ export default {
   color: #2c3e50;
   height: 100%;
 }
+::-webkit-scrollbar{
+    width: 5px;
+    height: 5px;
+}
+::-webkit-scrollbar-thumb{
+    border-radius: 1em;
+    background-color: rgba(50,50,50,.3);
+}
+::-webkit-scrollbar-track{
+    border-radius: 1em;
+    background-color: rgba(50,50,50,.1);
+}
 *{
   padding: 0;
   margin: 0;
