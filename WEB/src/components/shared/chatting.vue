@@ -113,6 +113,7 @@
         max-width: 200px;
         width: auto;
         background-color: rgba(231, 231, 231, 0.8);
+        border-radius: 5px;
     }
 
     .content pre {
@@ -128,12 +129,20 @@
         float: left;
     }
 
+    .other .content{
+        background: rgba(243, 243, 243, 1.000);
+    }
+
     .other .time {
         text-align: left;
     }
 
     .me {
         float: right;
+    }
+
+    .me .content{
+        background: rgba(218, 245, 254, 1.000);
     }
 
     .me .time {

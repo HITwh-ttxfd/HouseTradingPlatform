@@ -1,5 +1,5 @@
 <template>
-    <div class="wrapper">
+    <div class="wrapper" v-loading="loading">
         <div class="sideBar">
             <div :class="{'preview':true,'selectedPreview': item.chosen}" :key="item.id" @click="detail(item)"
                  v-for="item of conversations">
@@ -12,7 +12,7 @@
                             {{item.username}}
                         </div>
                         <div class="time">
-                            {{displayTime(item.date)}}
+                            {{item.date}}
                         </div>
                     </div>
                     <div class="content">
@@ -22,9 +22,10 @@
             </div>
         </div>
         <div class="detail">
-            <div class="messages" id="messageList">
+            <div class="messages" id="messageList"
+                 v-loading="messageList.length === 0 || messageList[0].receiverID !== selectedConversation.id">
                 <div :class="{box: true,me: isMine(message.senderID),other: !isMine(message.senderID)}"
-                     v-for="message in messages.messageList">
+                     v-for="message in messageList">
                     <p class="messageTime">{{message.date}}</p>
                     <div class="messageContent">
                         <pre>{{message.content}}</pre>
@@ -47,14 +48,10 @@
         data() {
             return {
                 entered: false,
-                messages: {
-                    name: '',
-                    id: '',
-                    messageList: []
-                },
+                messageList: [],
                 loaded: false,
                 loading: true,
-                messageVisible: false,
+                messageListLoading: false,
                 username: '',
                 id: '',
                 searchInfo: '',
@@ -78,24 +75,24 @@
                 }).then(res => {
                     this.conversations = res.data.map(item => {
                         item.date = new Date(item.date);
+                        item.date = item.date.toLocaleDateString() === new Date().toLocaleDateString() ? item.date.toLocaleTimeString() : item.date.toLocaleDateString();
                         item['chosen'] = false;
                         return item;
                     });
+                    this.detail(this.conversations[0]);
                     this.loading = false;
                 })
             },
             detail(item) {
-                this.id = item.id;
-                this.username = item.username;
-                this.messageVisible = true;
-                this.selectedConversation.chosen = false;
-                item.chosen = true;
-                this.selectedConversation = item;
-            },
-            displayTime(time) {
-                if (time.toLocaleDateString() === new Date().toLocaleDateString())
-                    return time.toLocaleTimeString()
-                return time.toLocaleDateString()
+                setTimeout(() => {
+                    this.id = item.id;
+                    this.username = item.username;
+                    this.selectedConversation.chosen = false;
+                    item.chosen = true;
+                    this.messageList = [];
+                    this.selectedConversation = item;
+                    this.messageListLoading = true;
+                }, 0);
             },
             clear() {
                 this.username = '';
@@ -136,34 +133,27 @@
                 this.innerText += '\n';
                 this.entered = true;
             },
-            reload() {
-                this.$axios({
-                    method: 'GET',
-                    url: 'http://localhost:8080/SRservice/receiveMessages/' + localStorage.username + '/' + this.id
-                }).then(res => {
-                    this.messages.messageList = res.data.reverse();
-                    setTimeout(() => {
-                        this.reload();
-                    }, 500);
-                }).catch(e => {
-                    console.log(e);
-                })
-            },
             loadMessages() {
+                if (!this.selectedConversation.id)
+                    setTimeout(() => {
+                        this.loadMessages();
+                    }, 1000);
                 this.$axios({
                     method: 'GET',
-                    url: 'http://localhost:8080/SRservice/receiveMessages/' + localStorage.username + '/' + this.id
+                    url: 'http://localhost:8080/SRservice/receiveMessages/' + localStorage.username + '/' + this.selectedConversation.id
                 }).then(res => {
-                    this.messages.name = this.username;
-                    this.messages.id = this.id;
-                    this.messages.messageList = res.data.reverse();
+                    this.messageList = res.data.reverse();
+                    setTimeout(() => {
+                        this.loadMessages();
+                    }, 4000);
                 }).catch(e => {
                     console.log(e);
                 })
             },
         },
-        mounted() {
+        beforeMount() {
             this.load();
+            this.loadMessages();
         }
     }
 </script>
@@ -171,9 +161,9 @@
 <style lang="scss" scoped>
     .wrapper {
         display: flex;
-        height: 95%;
+        height: 100%;
         background: rgba(255, 255, 255, 1.000);
-        /*border-radius: 5px;*/
+        border-radius: 10px;
         /*padding: 20px 0;*/
 
         .sideBar {
@@ -186,6 +176,7 @@
                 text-align: left;
                 position: relative;
                 cursor: default;
+                border-bottom: rgba(230, 230, 230, 1.000) 1px solid;
 
                 .left {
                     opacity: 0;
@@ -195,20 +186,19 @@
                     font-size: 23px;
 
                     &:hover {
-                        color: #ff0000;
+                        color: rgba(0, 181, 246, 1.000);
                     }
                 }
 
-                &:hover {
+                /*&:hover {*/
 
-                    .left {
-                        opacity: 1;
-                    }
-                }
+                /*    .left {*/
+                /*        opacity: 1;*/
+                /*    }*/
+                /*}*/
 
                 .context {
                     margin-left: 20px;
-                    border-bottom: rgba(230, 230, 230, 1.000) 1px solid;
                     padding: 5px 5px 5px 5px;
                     font-size: 16px;
 
@@ -242,25 +232,7 @@
             }
 
             .selectedPreview {
-                background: rgb(0, 100, 224);
-
-                .context {
-                    border-bottom: rgba(0, 100, 224, 1.000) 1px solid;
-
-                    .head {
-                        .sender {
-                            color: rgba(255, 255, 255, 1.000);
-                        }
-
-                        .time {
-                            color: rgba(255, 255, 255, 1.000);
-                        }
-                    }
-
-                    .content {
-                        color: rgba(139, 177, 241, 1.000);
-                    }
-                }
+                background: rgba(227, 228, 228, 1.000);
             }
         }
 
@@ -278,6 +250,7 @@
                 max-width: 200px;
                 width: auto;
                 background-color: rgba(231, 231, 231, 0.8);
+                border-radius: 5px;
             }
 
             .messageContent pre {
@@ -297,6 +270,11 @@
                 text-align: left;
             }
 
+            .other .messageContent {
+                background: rgba(243, 243, 243, 1.000);
+            }
+
+
             .me {
                 float: right;
             }
@@ -305,15 +283,23 @@
                 text-align: right;
             }
 
+            .me .messageContent {
+                background: rgba(218, 245, 254, 1.000);
+            }
+
+
             .messages {
                 flex: 4;
                 overflow: scroll;
+                padding: 10px;
             }
 
             .textArea {
                 flex: 1;
                 border-top: 1px solid #e1e8ec;
                 overflow: scroll;
+                white-space: pre;
+                padding: 15px;
             }
 
             .box {
