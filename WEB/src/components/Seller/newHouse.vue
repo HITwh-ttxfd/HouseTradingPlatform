@@ -313,7 +313,7 @@
                         console.log(data)
                         // http://localhost:8080/imgManage/checkImg
                         // http://192.168.11.1:10080/imgManage/checkImg
-                        axios.post('http://192.168.11.1:10080/imgManage/checkImg', data, { headers: { 'Content-Type': 'application/json' } }).then(function (res) {
+                        axios.post('http://localhost:8080/imgManage/checkImg', data, { headers: { 'Content-Type': 'application/json' } }).then(function (res) {
                             console.log(file.name, res.data)
                             if (res.data === 'fail') {
                                 Message.error('上传的不是房屋图片')
