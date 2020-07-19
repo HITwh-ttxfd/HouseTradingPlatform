@@ -23,7 +23,7 @@
         </div>
         <div class="detail">
             <div class="messages" id="messageList"
-                 v-loading="messageList.length === 0 || messageList[0].receiverID !== selectedConversation.id">
+                 v-loading="messageList.length === 0">
                 <div :class="{box: true,me: isMine(message.senderID),other: !isMine(message.senderID)}"
                      v-for="message in messageList">
                     <p class="messageTime">{{message.date}}</p>
