@@ -10,6 +10,7 @@ import connector.UserDao;
 
 @RestController
 public class LoginControl<Allow> {
+    //登录
     @RequestMapping(value = "/login/{id}",method = RequestMethod.GET)
     public res verify(@RequestParam(value = "password",required = true)String password, @PathVariable("id")String id){
         UserDao dao=new JdbcUserDao();
@@ -23,6 +24,7 @@ public class LoginControl<Allow> {
           return new res(null,null,"error");
         }
     }
+    //判断用户是否可用
     @RequestMapping(value = "/verify",method = RequestMethod.GET)
     public res verify(@RequestParam(value = "username",required = true)String username,
                         @RequestParam(value = "password",required = true)String password,
@@ -41,6 +43,7 @@ public class LoginControl<Allow> {
             return new res(null, null, "id engaged");
         }
     }
+    //注册用户
     @RequestMapping(value = "/register",method = RequestMethod.GET)
     public int register(@RequestParam(value = "username",required = true)String username,
                         @RequestParam(value = "password",required = true)String password,
